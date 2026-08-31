@@ -70,6 +70,17 @@ function KitchenPage() {
       return
     }
 
+    if (
+      evaluation.decision === 'edited' &&
+      evaluation.editedReflection.trim() ===
+        developingAIResponse.reflection.trim()
+    ) {
+      setSaveError(
+        'Change the AI reflection into your own words before saving an edited trace.',
+      )
+      return
+    }
+
     const activeCard = kitchenCards.find((card) => card.id === activeCardId)
 
     if (!activeCard) {

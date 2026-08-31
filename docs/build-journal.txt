@@ -23,3 +23,14 @@ Choices made and why: The user memory comes before AI output. The model produces
 What failed, changed, or surprised me: The original proposal planned three functional domains. The narrower milestone better matches the assessment requirement for one reliable core interaction.
 Evidence, such as commit, screenshot, prompt output, or bug: docs/prototype-prd.txt and docs/interaction-prompt-spec.txt. Commit to be added.
 Next small step: Review and commit the planning documents, then remove the Vite demonstration content and create the unstyled landing-page shell.
+
+
+ENTRY 002
+
+Date: 31 August 2026
+Planned task: Review the complete static interaction from the landing page to a saved Living Archive entry.
+What was completed: The landing, Kitchen form, empty validation, static AI response, keep/edit/reject controls, local saving, Archive rendering, and persistence after refresh were tested as one continuous browser flow.
+Choices made and why: The test used fictional memory text. The original AI response remained visible while user-authored revisions and corrections were displayed first in the Archive.
+What failed, changed, or surprised me: An edited trace could initially be saved without changing the AI text because the edit field was prefilled. This could incorrectly label unchanged AI writing as the user's version. Save validation was changed so an edited trace must differ from the original AI reflection.
+Evidence, such as commit, screenshot, prompt output, or bug: Browser review completed with no console warnings or errors. The validation change is in src/pages/Kitchen/KitchenPage.jsx. Commit to be added.
+Next small step: Define and apply the prototype visual system to the complete static loop.
