@@ -268,9 +268,11 @@ Final palette, type choices, and component styling will be resolved in the style
 
 ### AI boundary
 
-The browser will call an internal `/api/reflect` endpoint. The endpoint will call a Groq-hosted open-weight text model available on its free plan. The exact model identifier will be isolated in configuration so it can be replaced if availability changes.
+The browser will call a local `/api/reflect` endpoint. The endpoint will call a Gemini text model through the free Gemini Developer API. Google AI Studio is the primary provider for the prototype, following supervisor feedback. Groq Cloud is the documented fallback if Gemini becomes unavailable. The exact model identifier and provider-specific code will be isolated in configuration so they can be replaced if availability changes.
 
-The API key must remain server-side and must never use a `VITE_` environment variable. The provider response must be normalised into the application's three-field response shape so the interface is not coupled to one provider.
+The Gemini API supports an OpenAI-compatible interface, but the implementation may use either that interface or Google's direct JavaScript SDK, depending on which produces the simplest reliable local setup. The API key must remain in a local server environment variable and must never use a `VITE_` environment variable. The provider response must be normalised into the application's three-field response shape so the interface is not coupled to one provider.
+
+Deployment is optional for the prototype. The required outcome is a reliable local demonstration with a live AI response. A serverless deployment will be considered only after the complete local build works and only if time and energy allow.
 
 ### Proposed source structure
 
@@ -299,9 +301,9 @@ api/
 
 docs/
 ├── prototype-prd.txt
-├── prompt-design.md
-├── decisions.md
-└── build-journal.md
+├── interaction-prompt-spec.txt
+├── decisions.txt
+└── build-journal.txt
 ```
 
 The structure may be adjusted after the AbsaNextGen repository is available locally for direct comparison. Reuse and clarity are more important than reproducing folders that the prototype does not need.
@@ -396,22 +398,56 @@ The prototype milestone is done when:
 - keyboard focus and labels make the primary interaction operable;
 - at least five varied memory inputs have been used to review tone and overclaiming;
 - one network-failure and one malformed-response path have been checked;
-- the deployed build produces real model output; and
+- the locally running build produces real model output; and
 - the build journal contains enough evidence to write an honest Process reflection.
 
 ## 13. Build sequence
 
-Development will proceed through small, reviewable increments:
+Development will proceed through very small, reviewable increments. Each numbered step ends with inspection, one commit, and one push before the next step begins.
 
-1. Repository and documentation foundation
-2. Application routes and shared layout
-3. Static Kitchen card and memory form
-4. Static end-to-end response states
-5. Server-side AI endpoint and structured response
-6. Keep/edit/reject interaction
-7. Conditional family correction
-8. `localStorage` persistence
-9. Living Archive page
-10. Responsive styling, accessibility, failure handling, and deployment
+1. Documentation foundation
+   Review and commit the PRD, interaction specification, decision log, and build journal.
 
-Each increment should be checked locally before its own commit and push. The style guide, wireframes, prompt specification, and build journal are supporting artifacts, but the working Kitchen loop remains the priority.
+2. Clean landing-page shell
+   Remove the Vite demonstration content and create only the semantic landing-page component structure. Use temporary browser-default or minimal reset styling.
+
+3. Routing foundation
+   Install React Router and create routes for Home, Kitchen, and Living Archive. Kitchen and Archive remain simple placeholders at this stage.
+
+4. Landing-page content
+   Add the final first-draft heading, project explanation, AI limitation statement, and Enter the Kitchen action. Do not perform the full visual treatment yet.
+
+5. Kitchen-page shell
+   Create the Kitchen page, local seed-card data, and one reusable static MemoryCard component.
+
+6. Memory-entry state
+   Add the primary prompt, textarea, validation, character count, and submission control using local state only.
+
+7. Static AI-response state
+   Use clearly marked temporary response data to build the reflection, limitation, and question display. This temporary data exists only to build and inspect the interface before connecting a provider.
+
+8. Keep, edit, and reject states
+   Build the three evaluation paths and preserve the original temporary AI response when it is edited or rejected.
+
+9. Save confirmation and local persistence
+   Define archive-entry creation, save completed traces to `localStorage`, prevent duplicate saves, and preserve user text through recoverable errors.
+
+10. Living Archive page
+    Display saved traces with the user memory and correction before the quieter provisional AI response.
+
+11. Complete static loop review
+    Manually test the complete interaction from landing page to saved archive entry without a live model. Fix state and content problems before visual polish.
+
+12. Styling and responsive treatment
+    Establish the colour, typography, spacing, button, form, authorship, focus, loading, and error systems. Apply the visual design to the completed loop.
+
+13. Local Gemini API server
+    Create the local server endpoint, keep `GEMINI_API_KEY` outside source control, send the live model request, validate the three-field response, and replace temporary response data.
+
+14. Live prompt testing and failure handling
+    Run the documented prompt tests, check cultural overclaiming, test rate-limit and malformed-response handling, and verify that failures never erase the user's memory.
+
+15. Final local demonstration review
+    Run lint and production build checks, confirm no key appears in client code, and rehearse the complete live interaction locally. Deployment remains optional.
+
+The visual system can be revised after implementation reveals practical needs. The PRD and interaction specification remain working documents, and material changes are recorded in decisions.txt.

@@ -1,0 +1,25 @@
+THAWING MEMORY
+BUILD JOURNAL
+
+This journal records the actual development process for the Critical Reflection. Add one entry after each meaningful work session or implementation step. Record problems and changes honestly rather than rewriting the process as a smooth sequence.
+
+Entry template
+
+Date:
+Planned task:
+What was completed:
+Choices made and why:
+What failed, changed, or surprised me:
+Evidence, such as commit, screenshot, prompt output, or bug:
+Next small step:
+
+
+ENTRY 001
+
+Date: 31 August 2026
+Planned task: Define the prototype scope before visual design or implementation.
+What was completed: A lean prototype PRD and an interaction and prompt specification were created. The assessed milestone was reduced to one complete Kitchen memory loop.
+Choices made and why: The user memory comes before AI output. The model produces only a provisional reflection, limitation note, and follow-up question. Keep, edit, and reject choices keep the user active, while the original model response remains visible for accountability.
+What failed, changed, or surprised me: The original proposal planned three functional domains. The narrower milestone better matches the assessment requirement for one reliable core interaction.
+Evidence, such as commit, screenshot, prompt output, or bug: docs/prototype-prd.txt and docs/interaction-prompt-spec.txt. Commit to be added.
+Next small step: Review and commit the planning documents, then remove the Vite demonstration content and create the unstyled landing-page shell.

@@ -1,0 +1,53 @@
+THAWING MEMORY
+DECISION LOG
+
+Use this file to record decisions that materially change the prototype, PRD, interaction specification, visual system, scope, or technical approach.
+
+Template
+
+Date:
+Decision:
+Reason:
+Alternatives considered:
+Effect on scope or research argument:
+Related commit:
+
+
+ENTRY 001
+
+Date: 31 August 2026
+Decision: Limit the assessed prototype to one complete Kitchen Memory Reconstruction Loop.
+Reason: A narrow vertical slice demonstrates the core research argument more reliably than three incomplete domains.
+Alternatives considered: Partial Kitchen, Garden, and Ritual spaces; a visually complete Kitchen without a real model interaction.
+Effect on scope or research argument: Garden and Ritual are deferred. The prototype prioritises real AI output, visible model limitation, user evaluation, correction, and local preservation.
+Related commit: To be added after this document is committed.
+
+
+ENTRY 002
+
+Date: 31 August 2026
+Decision: Use plain text files for planning and process documentation.
+Reason: The project owner prefers portable, directly readable .txt documents.
+Alternatives considered: PDF and Markdown documentation.
+Effect on scope or research argument: No effect on the research argument. Documentation remains easy to revise during development.
+Related commit: To be added after this document is committed.
+
+
+ENTRY 003
+
+Date: 31 August 2026
+Decision: Use the free Gemini Developer API as the primary live model provider, with Groq Cloud as a fallback, and require only a successful local demonstration.
+Reason: Supervisor feedback recommends Google AI Studio because it is free, reliable, easy to configure, and supports an OpenAI-compatible interface. The assessment requires live AI output but does not require deployment.
+Alternatives considered: Groq Cloud as the primary provider; deploying a serverless function before testing locally; using a paid API.
+Effect on scope or research argument: The live AI requirement remains unchanged. Deployment is removed from the prototype definition of done, reducing technical risk without changing the core interaction or research argument.
+Related commit: To be added after this document is committed.
+
+
+ENTRY 004
+
+Date: 31 August 2026
+Decision: Build in small inspect, commit, and push increments, with styling after the complete static interaction loop and Gemini integration after styling.
+Reason: This matches the project owner's preferred workflow and makes each change easy to monitor, verify, and reverse.
+Alternatives considered: Designing the full visual system first; building several routes and features in one implementation phase; connecting the API before the interaction states exist.
+Effect on scope or research argument: No change to the argument. The sequence reduces implementation risk and creates clearer process evidence for the Critical Reflection.
+Related commit: To be added after this document is committed.
