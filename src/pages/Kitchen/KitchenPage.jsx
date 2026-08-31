@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
+import developmentAIResponse from '../../data/developingAIResponse.js'
 import kitchenCards from '../../data/kitchenCards.js'
 
 function KitchenPage() {
@@ -44,10 +46,7 @@ function KitchenPage() {
           </div>
 
           {submittedMemory && (
-            <p role="status">
-              Your memory is ready. The AI reflection will be added in the
-              next prototype step.
-            </p>
+            <AIResponse response={developmentAIResponse} />
           )}
         </section>
 
