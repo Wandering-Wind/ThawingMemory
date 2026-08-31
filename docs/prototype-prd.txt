@@ -322,6 +322,7 @@ The structure may be adjusted after the AbsaNextGen repository is available loca
   aiQuestion: string,
   decision: 'kept' | 'edited' | 'rejected',
   userRevision: string,
+  userCorrection: string,
   createdAt: string
 }
 ```

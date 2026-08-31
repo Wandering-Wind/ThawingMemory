@@ -319,6 +319,7 @@ Error messages must explain what happened without implying that the user's memor
   "aiQuestion": "Original AI question",
   "decision": "kept | edited | rejected",
   "userRevision": "User revision or correction, otherwise empty string",
+  "userCorrection": "Family-specific correction, otherwise empty string",
   "createdAt": "ISO 8601 timestamp"
 }
 

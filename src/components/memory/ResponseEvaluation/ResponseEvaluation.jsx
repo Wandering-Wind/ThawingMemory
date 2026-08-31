@@ -4,7 +4,16 @@ const decisions = [
   { value: 'rejected', label: 'This does not fit' },
 ]
 
-function ResponseEvaluation({ evaluation, onChange, response }) {
+import { Link } from 'react-router-dom'
+
+function ResponseEvaluation({
+  evaluation,
+  isSaved,
+  onChange,
+  onSave,
+  response,
+  saveError,
+}) {
   function selectDecision(decision) {
     onChange({
       decision,
@@ -91,6 +100,31 @@ function ResponseEvaluation({ evaluation, onChange, response }) {
             value={evaluation.correction}
             onChange={(event) => updateField('correction', event.target.value)}
           />
+        </section>
+      )}
+
+      {evaluation.decision && (
+        <section aria-labelledby="save-trace-title">
+          <h3 id="save-trace-title">Save this trace</h3>
+          <p>
+            This saves the interaction in this browser on this device. It does
+            not upload the trace to a public archive.
+          </p>
+
+          {saveError && <p role="alert">{saveError}</p>}
+
+          <button type="button" disabled={isSaved} onClick={onSave}>
+            {isSaved ? 'Trace saved' : 'Save trace'}
+          </button>
+
+          {isSaved && (
+            <div role="status">
+              <p>
+                Your trace has been added to the Living Archive on this device.
+              </p>
+              <Link to="/archive">View Living Archive</Link>
+            </div>
+          )}
         </section>
       )}
     </section>

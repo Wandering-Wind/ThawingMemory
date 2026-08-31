@@ -5,6 +5,10 @@ import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
 import ResponseEvaluation from '../../components/memory/ResponseEvaluation/ResponseEvaluation.jsx'
 import developingAIResponse from '../../data/developingAIResponse.js'
 import kitchenCards from '../../data/kitchenCards.js'
+import {
+  createArchiveEntry,
+  saveArchiveEntry,
+} from '../../services/archiveStorage.js'
 
 const emptyEvaluation = {
   decision: '',
@@ -16,21 +20,79 @@ function KitchenPage() {
   const [activeCardId, setActiveCardId] = useState(null)
   const [submittedMemory, setSubmittedMemory] = useState('')
   const [evaluation, setEvaluation] = useState(emptyEvaluation)
+  const [savedEntryId, setSavedEntryId] = useState('')
+  const [saveError, setSaveError] = useState('')
+
+  function resetSaveState() {
+    setSavedEntryId('')
+    setSaveError('')
+  }
 
   function handleOpenMemory(cardId) {
     setActiveCardId(cardId)
     setSubmittedMemory('')
     setEvaluation(emptyEvaluation)
+    resetSaveState()
   }
 
   function handleMemoryChange() {
     setSubmittedMemory('')
     setEvaluation(emptyEvaluation)
+    resetSaveState()
   }
 
   function handleMemorySubmit(memory) {
     setSubmittedMemory(memory)
     setEvaluation(emptyEvaluation)
+    resetSaveState()
+  }
+
+  function handleEvaluationChange(nextEvaluation) {
+    setEvaluation(nextEvaluation)
+    resetSaveState()
+  }
+
+  function handleSaveTrace() {
+    if (savedEntryId) {
+      return
+    }
+
+    if (!evaluation.decision) {
+      setSaveError('Choose how you want to respond before saving this trace.')
+      return
+    }
+
+    if (
+      evaluation.decision === 'edited' &&
+      !evaluation.editedReflection.trim()
+    ) {
+      setSaveError('Add your version before saving an edited trace.')
+      return
+    }
+
+    const activeCard = kitchenCards.find((card) => card.id === activeCardId)
+
+    if (!activeCard) {
+      setSaveError('The memory card could not be found. Please reopen it.')
+      return
+    }
+
+    try {
+      const entry = createArchiveEntry({
+        card: activeCard,
+        evaluation,
+        memory: submittedMemory,
+        response: developingAIResponse,
+      })
+
+      saveArchiveEntry(entry)
+      setSavedEntryId(entry.id)
+      setSaveError('')
+    } catch {
+      setSaveError(
+        'This trace could not be saved in the browser. Your current memory is still here.',
+      )
+    }
   }
 
   return (
@@ -69,8 +131,11 @@ function KitchenPage() {
               <AIResponse response={developingAIResponse} />
               <ResponseEvaluation
                 evaluation={evaluation}
-                onChange={setEvaluation}
+                isSaved={Boolean(savedEntryId)}
+                onChange={handleEvaluationChange}
+                onSave={handleSaveTrace}
                 response={developingAIResponse}
+                saveError={saveError}
               />
             </>
           )}
