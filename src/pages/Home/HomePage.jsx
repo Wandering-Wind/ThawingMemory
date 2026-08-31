@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom'
+
 function HomePage() {
   return (
     <div className="site-shell">
       <header className="site-header">
-        <a href="/" aria-label="Thawing Memory home">
+        <Link to="/" aria-label="Thawing Memory home">
           Thawing Memory
-        </a>
+        </Link>
       </header>
 
       <main>
@@ -18,9 +20,7 @@ function HomePage() {
         </section>
 
         <section className="landing-entry" aria-label="Enter the prototype">
-          <button type="button" disabled>
-            Enter the Kitchen
-          </button>
+          <Link to="/kitchen">Enter the Kitchen</Link>
         </section>
       </main>
 
