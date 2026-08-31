@@ -51,3 +51,13 @@ Reason: This matches the project owner's preferred workflow and makes each chang
 Alternatives considered: Designing the full visual system first; building several routes and features in one implementation phase; connecting the API before the interaction states exist.
 Effect on scope or research argument: No change to the argument. The sequence reduces implementation risk and creates clearer process evidence for the Critical Reflection.
 Related commit: To be added after this document is committed.
+
+
+ENTRY 005
+
+Date: 31 August 2026
+Decision: Connect and test the live Gemini model before completing page-specific visual styling.
+Reason: Live generative output is the assessed prototype requirement. Testing real response length, latency, errors, and tone before visual polish will allow the interface to be styled around actual model behavior rather than temporary sample content.
+Alternatives considered: Complete all page styling before creating the local server and Gemini integration.
+Effect on scope or research argument: The prototype scope does not change. The implementation order changes so functional and theoretical risk is addressed before visual polish.
+Related commit: To be added after this document is committed.
