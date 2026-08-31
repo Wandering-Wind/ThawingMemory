@@ -7,4 +7,4 @@ const developingAIResponse = {
     'What sound, smell, texture, or gesture would help you recognise this moment again?',
 }
 
-export default developmentAIResponse
+export default developingAIResponse

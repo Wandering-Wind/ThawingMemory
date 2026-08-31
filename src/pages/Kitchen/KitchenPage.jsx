@@ -2,16 +2,35 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
-import developmentAIResponse from '../../data/developingAIResponse.js'
+import ResponseEvaluation from '../../components/memory/ResponseEvaluation/ResponseEvaluation.jsx'
+import developingAIResponse from '../../data/developingAIResponse.js'
 import kitchenCards from '../../data/kitchenCards.js'
+
+const emptyEvaluation = {
+  decision: '',
+  editedReflection: '',
+  correction: '',
+}
 
 function KitchenPage() {
   const [activeCardId, setActiveCardId] = useState(null)
   const [submittedMemory, setSubmittedMemory] = useState('')
+  const [evaluation, setEvaluation] = useState(emptyEvaluation)
 
   function handleOpenMemory(cardId) {
     setActiveCardId(cardId)
     setSubmittedMemory('')
+    setEvaluation(emptyEvaluation)
+  }
+
+  function handleMemoryChange() {
+    setSubmittedMemory('')
+    setEvaluation(emptyEvaluation)
+  }
+
+  function handleMemorySubmit(memory) {
+    setSubmittedMemory(memory)
+    setEvaluation(emptyEvaluation)
   }
 
   return (
@@ -38,15 +57,22 @@ function KitchenPage() {
                 key={card.id}
                 card={card}
                 isOpen={activeCardId === card.id}
-                onMemoryChange={() => setSubmittedMemory('')}
+                onMemoryChange={handleMemoryChange}
                 onOpen={handleOpenMemory}
-                onSubmit={setSubmittedMemory}
+                onSubmit={handleMemorySubmit}
               />
             ))}
           </div>
 
           {submittedMemory && (
-            <AIResponse response={developmentAIResponse} />
+            <>
+              <AIResponse response={developingAIResponse} />
+              <ResponseEvaluation
+                evaluation={evaluation}
+                onChange={setEvaluation}
+                response={developingAIResponse}
+              />
+            </>
           )}
         </section>
 
