@@ -1,0 +1,417 @@
+# Thawing Memory
+
+## Lean Prototype Product Requirements Document
+
+**Document status:** Final for prototype build  
+**Version:** 1.0  
+**Date:** 29 August 2026  
+**Prototype milestone:** Kitchen Memory Reconstruction Loop
+
+---
+
+## 1. Product summary
+
+Thawing Memory is a proof-of-concept web application for first-generation Malayalis in South Africa who hold partial, sensory, or family-specific cultural memories. The application uses generative AI as a deliberately limited reflective prompt system rather than as an authority on Malayali culture.
+
+The prototype will demonstrate one complete interaction in the Kitchen domain. A user begins with their own fragment of memory, receives a visibly provisional AI-generated reflection, and can accept, edit, or reject it. Editing or rejecting the reflection prompts the user to explain what is different in their family's version. The resulting memory, AI response, and user correction are saved locally as a trace in a small Living Archive.
+
+The core product principle is:
+
+> The safeguard is not the AI itself, but the interaction design around the AI.
+
+The prototype does not claim that AI can retrieve authentic culture, understand embodied practice, or reliably diagnose its own bias. It tests whether interface design can expose those limitations while returning interpretive authority to the user.
+
+## 2. Research question and prototype argument
+
+### Research question
+
+How can an open-web generative AI application help first-generation Malayalis reconnect culturally while exposing the tool's biases and limits?
+
+### Prototype argument
+
+A generative model's imperfect cultural response can become productive material when the interface requires the user to evaluate, correct, or reject it. Cultural reconstruction therefore happens through the user's active interpretation, not through passive receipt of AI-generated knowledge.
+
+### What the prototype must prove
+
+The build must show that:
+
+1. A real generative model can respond to a user-authored memory fragment.
+2. AI and user authorship can remain visibly and conceptually distinct.
+3. The user can challenge the generated response rather than merely consume it.
+4. The user's correction can become the final authoritative account within the interaction.
+5. The interaction can preserve traces around embodied memory without claiming to archive culture itself.
+
+## 3. Intended user and context
+
+### Primary user
+
+A first-generation Malayali adult raised in South Africa who has partial memories of family cooking but may not possess a written recipe or complete explanation of the practice.
+
+The prototype assumes that the user has some fragment to contribute. This may be a smell, texture, gesture, phrase, utensil, family habit, ingredient, or moment of observation. The application cannot reconstruct family-specific knowledge from nothing.
+
+### Use context
+
+The prototype is a single-user reflective experience used on a laptop or mobile browser. It is intended for a short, self-directed session and for assessment demonstration. No participant study or public release is included.
+
+### Language
+
+The interface will operate primarily in English while accepting Malayalam script, transliterated Malayalam, South African English, and family-specific terms. The system must not force unfamiliar words into English equivalents.
+
+## 4. Prototype scope
+
+### In scope
+
+- A concise landing page introducing the application's purpose and limitations.
+- A Kitchen page containing one to three curated memory cards.
+- One fully functional memory-card interaction.
+- User entry of a sensory or fragmentary cooking memory.
+- A real server-side call to a hosted generative AI model.
+- A structured AI response containing a reflection, limitation note, and gentle question.
+- Clear visual separation between user-authored and AI-generated text.
+- Accept, edit, and reject controls for the AI reflection.
+- A conditional follow-up when the user edits or rejects the response.
+- Browser-local persistence using `localStorage`.
+- A Living Archive page showing the completed trace.
+- Loading, error, retry, and malformed-response states.
+- Responsive and keyboard-accessible interaction at proof-of-concept level.
+
+### Explicitly out of scope
+
+- Functional Garden and Ritual domains.
+- A full domain-selection experience.
+- Authentication or user accounts.
+- A cloud or production database.
+- Community, sharing, commenting, or collaboration features.
+- Human participant testing.
+- Public collection of cultural or personal data.
+- A comprehensive Malayali cultural knowledge base.
+- AI-generated recipes presented as authentic or complete.
+- AI-generated images or complex room illustrations.
+- Voice, audio, image upload, or multilingual interface translation.
+- Production-level security, scalability, analytics, or moderation.
+
+Garden and Ritual may appear only as clearly labelled future spaces if doing so helps communicate the wider project without distracting from the assessed interaction.
+
+## 5. Core experience
+
+### Primary memory-card prompt
+
+> Think of a dish someone in your family prepared without written measurements. What do you remember about its smell, texture, sound, or the way they knew it was ready?
+
+The final wording may be refined during prompt testing, but it must begin with the user's experience rather than asking the AI to supply cultural facts.
+
+### Primary flow
+
+1. The user opens the landing page and reads a short statement explaining that the AI may be incomplete, biased, or wrong.
+2. The user chooses **Enter the Kitchen**.
+3. The user opens a memory card.
+4. The user enters a fragment of family cooking memory.
+5. The application sends that fragment to the server-side AI endpoint.
+6. The interface displays the structured AI response as provisional machine-generated text.
+7. The user chooses one of three actions:
+   - **Keep as a prompt:** retain the AI reflection without treating it as verified.
+   - **Edit:** revise the AI reflection in their own words.
+   - **Reject:** mark the reflection as not fitting their memory.
+8. If the user edits or rejects, the application asks: **What is different in your family's version?**
+9. The user may add a correction or clarification.
+10. The application saves the complete trace locally.
+11. The Living Archive displays the user's original memory, the provisional AI response, the user's decision, and any correction.
+
+### Routes
+
+- `/`: landing and project framing
+- `/kitchen`: Kitchen cards and the core interaction
+- `/archive`: locally saved traces
+
+## 6. Functional requirements
+
+### FR-01: Project framing
+
+The landing page must explain in plain language that the application uses AI to prompt reflection and that generated responses may be incomplete, flattened, or wrong.
+
+### FR-02: Seed memory cards
+
+The Kitchen must load its cards from a small local data file rather than hard-coded page markup. Only one card must be fully operational for prototype success.
+
+### FR-03: Memory submission
+
+The user must be able to enter a non-empty memory containing English, Malayalam, transliteration, punctuation, and diacritics. The interface must not imply that polished or complete writing is required.
+
+### FR-04: Real AI generation
+
+Submitting a memory must call a real hosted generative model through a server-side endpoint. A hard-coded response does not satisfy this requirement.
+
+### FR-05: Structured response
+
+The AI response must be converted into this application-level shape:
+
+```js
+{
+  reflection: string,
+  limitation: string,
+  question: string
+}
+```
+
+The application must validate this shape before presenting the result.
+
+### FR-06: User evaluation
+
+The user must be able to keep, edit, or reject the AI reflection. These actions must be equally available; keeping the response must not be styled as the preferred or correct choice.
+
+### FR-07: Conditional correction
+
+Editing or rejecting the response must reveal a follow-up field asking what differs in the user's family version. The user correction must be labelled as user-authored.
+
+### FR-08: Local persistence
+
+Completed traces must persist in `localStorage` across browser refreshes on the same device.
+
+### FR-09: Living Archive
+
+The Living Archive must show:
+
+- the original user memory;
+- the provisional AI reflection;
+- the AI limitation note;
+- the user's keep/edit/reject decision;
+- the user's final wording or correction, when supplied; and
+- the creation date.
+
+The interface must call these records traces, fragments, reflections, or entries, not an archive of culture itself.
+
+### FR-10: Failure recovery
+
+The application must provide understandable states for loading, network failure, rate limiting, invalid AI output, and retry. A failed AI call must not erase the user's memory.
+
+## 7. AI behavior and prompt contract
+
+### Model role
+
+The model is a reflective interlocutor with limited context. It is not a cultural expert, historian, family member, therapist, recipe authority, or source of verification.
+
+### Required behavior
+
+The model should:
+
+- respond directly to details supplied by the user;
+- use tentative language;
+- acknowledge that practices vary by family, region, religion, caste, class, migration history, and available ingredients when relevant;
+- avoid filling gaps with invented specifics;
+- identify what it cannot know from the user's fragment;
+- ask one gentle, specific question that returns attention to sensory or embodied memory;
+- preserve Malayalam and transliterated terms as written; and
+- keep its response concise enough to remain secondary to the user's writing.
+
+### Prohibited behavior
+
+The model must not:
+
+- declare a practice authentic, correct, traditional, or universally Malayali;
+- present one family or regional version as the cultural standard;
+- infer sensitive identity details not supplied by the user;
+- claim to remember, feel, smell, taste, or understand embodied experience;
+- provide citations or factual certainty it cannot verify;
+- rewrite the user's memory as though the generated version were authoritative; or
+- describe its uncertainty note as an objective measure of confidence.
+
+### Generation constraints
+
+- One model call per submitted memory for the core prototype.
+- Short output, targeting approximately 120 to 220 words in total.
+- Low-to-moderate generation variability for demonstration reliability.
+- Structured JSON requested from the model and validated by the server.
+- No conversation history beyond the current card, system instructions, and current user memory.
+- No user entry logged or stored by the application server.
+
+## 8. Content and visual direction
+
+### Content principles
+
+- User voice appears first and carries the greatest visual weight.
+- AI copy uses labels such as **AI reflection** and **Why this may be incomplete**.
+- Copy is gentle and curious without becoming sentimental or falsely reassuring.
+- The interface avoids phrases such as “recover your authentic roots” or “rediscover the correct tradition.”
+- The Living Archive introduction explains that written traces cannot replace embodied transmission.
+
+### Visual principles
+
+- Warm, muted, domestic, and reflective.
+- Kerala-informed references must be restrained and specific rather than generically “Indian.”
+- Text-forward card interaction with strong typographic hierarchy.
+- User-authored text and AI-generated text must differ through more than colour alone.
+- Status must be communicated with labels and icons as well as styling.
+- Decorative illustration must never obstruct reading or the core interaction.
+
+### Initial design tokens to define later
+
+- Primary background and surface colours
+- Body and display typefaces
+- Text and muted-text colours
+- User, AI, uncertainty, success, and error treatments
+- Button hierarchy
+- Spacing and border-radius scale
+- Focus and keyboard states
+
+Final palette, type choices, and component styling will be resolved in the style-guide step rather than fixed in this PRD.
+
+## 9. Technical approach
+
+### Front end
+
+- React with Vite
+- React Router for the three routes
+- Reusable, feature-oriented components
+- Plain CSS using shared design tokens
+- Local data for seed cards
+- `localStorage` for demonstration persistence
+
+### AI boundary
+
+The browser will call an internal `/api/reflect` endpoint. The endpoint will call a Groq-hosted open-weight text model available on its free plan. The exact model identifier will be isolated in configuration so it can be replaced if availability changes.
+
+The API key must remain server-side and must never use a `VITE_` environment variable. The provider response must be normalised into the application's three-field response shape so the interface is not coupled to one provider.
+
+### Proposed source structure
+
+```text
+src/
+├── assets/
+├── components/
+│   ├── common/
+│   ├── memory/
+│   └── archive/
+├── data/
+├── hooks/
+├── pages/
+│   ├── Home/
+│   ├── Kitchen/
+│   └── LivingArchive/
+├── prompts/
+├── services/
+├── styles/
+├── utils/
+├── App.jsx
+└── main.jsx
+
+api/
+└── reflect.js
+
+docs/
+├── prototype-prd.txt
+├── prompt-design.md
+├── decisions.md
+└── build-journal.md
+```
+
+The structure may be adjusted after the AbsaNextGen repository is available locally for direct comparison. Reuse and clarity are more important than reproducing folders that the prototype does not need.
+
+### Archive entry shape
+
+```js
+{
+  id: string,
+  cardId: string,
+  domain: 'kitchen',
+  prompt: string,
+  userMemory: string,
+  aiReflection: string,
+  aiLimitation: string,
+  aiQuestion: string,
+  decision: 'kept' | 'edited' | 'rejected',
+  userRevision: string,
+  createdAt: string
+}
+```
+
+## 10. Requirements, assumptions, constraints, and success criteria
+
+### Requirements
+
+- The full core loop must run in a modern browser.
+- At least one real model call must reliably return visible generated output.
+- User and AI authorship must remain distinct.
+- The user must be able to keep, edit, or reject the output.
+- A user correction must be preserved as the final account.
+- A completed interaction must persist and appear in the Living Archive.
+- The build must be demonstrable without real participant data.
+
+### Assumptions
+
+- The user has at least one partial cultural memory to contribute.
+- Reflective writing can demonstrate the interaction concept without replacing embodied practice.
+- The selected model contains some Kerala- or Malayali-related patterns, although these may be incomplete, biased, or regionally flattened.
+- AI-generated limitation statements are interface cues, not reliable proof that the model understands its limitations.
+- English-medium interaction with Malayalam and transliteration support is sufficient for this prototype.
+- A stable internet connection will be available for the assessed demonstration.
+
+### Constraints
+
+- One student is responsible for research, interaction design, visual design, development, documentation, and demonstration.
+- The prototype must fit the module timeline.
+- No human testing or public data collection will occur.
+- Free-model availability, latency, rate limits, and output quality may change.
+- A client-side application cannot safely hold an external API key.
+- `localStorage` is suitable only for demonstration data, not production personal data.
+- The prototype uses curated seed cards rather than a cultural knowledge base.
+- Illustration work must remain secondary to completing and testing the core loop.
+
+### Success criteria
+
+The prototype is successful when all of the following can be demonstrated in one uninterrupted session:
+
+1. The user moves from the landing page to the Kitchen.
+2. The user submits a memory fragment.
+3. A real model returns a reflection, limitation note, and question.
+4. The interface clearly identifies the response as AI-generated and provisional.
+5. The user keeps, edits, or rejects the response.
+6. Edit and reject actions invite a family-specific correction.
+7. The user's final account remains visibly authoritative.
+8. The completed trace persists after refresh.
+9. The trace appears correctly in the Living Archive.
+10. A failed model request can be retried without losing the user entry.
+
+## 11. Risks and mitigations
+
+| Risk | Effect | Prototype mitigation |
+| --- | --- | --- |
+| Model produces a flattened cultural claim | Undermines the research argument | Constrained system prompt, visible provisional label, edit/reject controls, and documented test cases |
+| Model invents family-specific detail | Presents speculation as memory | Instruct model to use only supplied details and state what it cannot know |
+| Free API is unavailable or rate-limited | Demonstration cannot complete | Keep provider logic isolated, show recoverable error state, confirm quota before submission, and prepare a documented backup provider |
+| AI output is not valid JSON | Interface cannot render it | Server-side validation, one repair attempt if appropriate, then a clear retry state |
+| API key is exposed | Security failure | Server-side environment variable only |
+| Styling consumes build time | Core interaction remains incomplete | Build and verify the unstyled vertical slice before illustration and polish |
+| Living Archive overclaims preservation | Contradicts Taylor's framework | Describe entries as provisional traces around repertoire |
+| User text is lost after failure | Breaks trust and demonstration flow | Keep form state locally until a completed trace is explicitly saved |
+
+## 12. Definition of done
+
+The prototype milestone is done when:
+
+- all ten success criteria pass manually;
+- the production build completes without errors;
+- linting reports no unresolved errors;
+- no secret appears in client source or the built bundle;
+- the core flow works at desktop and mobile widths;
+- keyboard focus and labels make the primary interaction operable;
+- at least five varied memory inputs have been used to review tone and overclaiming;
+- one network-failure and one malformed-response path have been checked;
+- the deployed build produces real model output; and
+- the build journal contains enough evidence to write an honest Process reflection.
+
+## 13. Build sequence
+
+Development will proceed through small, reviewable increments:
+
+1. Repository and documentation foundation
+2. Application routes and shared layout
+3. Static Kitchen card and memory form
+4. Static end-to-end response states
+5. Server-side AI endpoint and structured response
+6. Keep/edit/reject interaction
+7. Conditional family correction
+8. `localStorage` persistence
+9. Living Archive page
+10. Responsive styling, accessibility, failure handling, and deployment
+
+Each increment should be checked locally before its own commit and push. The style guide, wireframes, prompt specification, and build journal are supporting artifacts, but the working Kitchen loop remains the priority.
