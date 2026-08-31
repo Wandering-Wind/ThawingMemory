@@ -12,6 +12,7 @@ export function createArchiveEntry({ card, evaluation, memory, response }) {
   return {
     id: createEntryId(),
     cardId: card.id,
+    cardTitle: card.title,
     domain: 'kitchen',
     prompt: card.prompt,
     userMemory: memory,
@@ -26,19 +27,28 @@ export function createArchiveEntry({ card, evaluation, memory, response }) {
   }
 }
 
-export function readArchiveEntries() {
-  const storedEntries = localStorage.getItem(ARCHIVE_STORAGE_KEY)
-
-  if (!storedEntries) {
-    return []
-  }
-
+export function readArchiveData() {
   try {
+    const storedEntries = localStorage.getItem(ARCHIVE_STORAGE_KEY)
+
+    if (!storedEntries) {
+      return { entries: [], hasUnreadableData: false }
+    }
+
     const entries = JSON.parse(storedEntries)
-    return Array.isArray(entries) ? entries : []
+
+    if (!Array.isArray(entries)) {
+      return { entries: [], hasUnreadableData: true }
+    }
+
+    return { entries, hasUnreadableData: false }
   } catch {
-    return []
+    return { entries: [], hasUnreadableData: true }
   }
+}
+
+export function readArchiveEntries() {
+  return readArchiveData().entries
 }
 
 export function saveArchiveEntry(entry) {

@@ -314,6 +314,7 @@ The structure may be adjusted after the AbsaNextGen repository is available loca
 {
   id: string,
   cardId: string,
+  cardTitle: string,
   domain: 'kitchen',
   prompt: string,
   userMemory: string,

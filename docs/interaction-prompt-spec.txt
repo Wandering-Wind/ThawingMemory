@@ -311,6 +311,7 @@ Error messages must explain what happened without implying that the user's memor
 {
   "id": "generated unique ID",
   "cardId": "kitchen-instinctive-measures",
+  "cardTitle": "Measured by Memory",
   "domain": "kitchen",
   "prompt": "Original memory-card prompt",
   "userMemory": "Original user-authored memory",
