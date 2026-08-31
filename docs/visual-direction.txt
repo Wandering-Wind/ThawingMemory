@@ -1,0 +1,110 @@
+THAWING MEMORY
+VISUAL DIRECTION AND DESIGN TOKENS
+
+Status: Initial direction for implementation
+Version: 1.0
+Date: 31 August 2026
+
+
+1. VISUAL INTENTION
+
+Thawing Memory should feel quiet, domestic, reflective, and provisional. It should not resemble a chatbot, recipe database, productivity dashboard, or cultural tourism website.
+
+The interface should support slow reading and deliberate correction. User-authored content must feel primary. AI content must remain legible but visually quieter and clearly labelled.
+
+This direction is a working foundation. Colours, proportions, and component treatments may change when they are tested in the complete interaction.
+
+
+2. CULTURAL APPROACH
+
+The visual language should be Kerala-informed without presenting a generic or decorative idea of Indian culture.
+
+The initial palette draws from restrained domestic materials and environments:
+
+- Coconut cream for the main background
+- Paper white for readable surfaces
+- Clay red for primary actions
+- Leaf green for secondary and reflective states
+- Sand for borders and quiet separation
+- Dark brown ink instead of pure black
+
+The design should avoid using visual shorthand such as mandalas, spice collages, ornamental scripts, temple imagery, or decorative patterns without a specific relationship to the project.
+
+Illustration, if added later, should support the Kitchen as a remembered domestic space rather than attempt to represent one authentic Kerala home.
+
+
+3. AUTHORSHIP SYSTEM
+
+User-authored content uses the warm user surface token.
+
+AI-generated content uses the pale green AI surface token.
+
+Uncertainty and limitation notes use the muted sand uncertainty surface.
+
+Authorship must never rely on colour alone. Every area will also use persistent text labels such as:
+
+- Your memory
+- Your version
+- Your family correction
+- Provisional AI reflection
+- Why this may be incomplete
+- AI question
+
+
+4. TYPOGRAPHY
+
+Display type uses Georgia with Times New Roman as a fallback. The serif face introduces a reflective and editorial quality without requiring a remote font download.
+
+Body and interface type use Aptos, Segoe UI, Helvetica, Arial, and the system sans-serif fallback chain. This keeps forms, longer passages, and controls familiar and readable across devices.
+
+The type scale ranges from 12 pixels for small labels to a responsive landing title that grows from approximately 40 to 88 pixels.
+
+
+5. COLOUR TOKENS
+
+Main background: #f7f1e6
+Readable surface: #fffaf2
+Sand and quiet borders: #eadcc7 and #cdbda7
+Primary clay: #8a3f30
+Dark clay: #662b21
+Leaf green: #49624e
+Dark leaf: #304537
+Main ink: #2d2924
+Muted ink: #665d53
+User surface: #fff2d8
+AI surface: #e7eee7
+Uncertainty surface: #f2e5c8
+Error: #8f2929
+Error surface: #fae8e5
+Keyboard focus: #176b87
+
+
+6. SPACING AND SHAPE
+
+The spacing system uses a four-pixel base and expands through 8, 12, 16, 24, 32, 48, 64, and 96 pixels.
+
+Small controls use restrained corners. Cards and reflective panels use softer 12 to 24 pixel corners. Fully rounded shapes are reserved for small status labels rather than every component.
+
+Shadows should remain warm and subtle. Borders and spacing should establish hierarchy before stronger shadows are introduced.
+
+
+7. ACCESSIBILITY RULES
+
+- Main text must retain strong contrast against cream and paper surfaces.
+- Keyboard focus uses a distinct blue token that is not otherwise part of the brand palette.
+- Status and authorship are communicated through labels and structure as well as colour.
+- Body text should not be smaller than 16 pixels.
+- Controls inherit the body font and must remain readable when zoomed.
+- Motion must remain brief and nonessential.
+- The layout must work from a 320-pixel viewport upward.
+
+
+8. IMPLEMENTATION ORDER
+
+1. Apply tokens and base typography.
+2. Style the shared page shell and navigation.
+3. Style the landing page.
+4. Style the Kitchen card and memory form.
+5. Style AI response and evaluation states.
+6. Style Living Archive entries.
+7. Review responsive behavior, keyboard focus, contrast, and reduced motion.

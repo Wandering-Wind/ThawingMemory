@@ -1,0 +1,60 @@
+:root {
+  color-scheme: light;
+
+  --color-coconut: #f7f1e6;
+  --color-paper: #fffaf2;
+  --color-sand: #eadcc7;
+  --color-clay: #8a3f30;
+  --color-clay-dark: #662b21;
+  --color-leaf: #49624e;
+  --color-leaf-dark: #304537;
+  --color-ink: #2d2924;
+  --color-ink-muted: #665d53;
+  --color-border: #cdbda7;
+  --color-user-surface: #fff2d8;
+  --color-ai-surface: #e7eee7;
+  --color-uncertainty-surface: #f2e5c8;
+  --color-error: #8f2929;
+  --color-error-surface: #fae8e5;
+  --color-focus: #176b87;
+  --color-white: #ffffff;
+
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: Aptos, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: clamp(2.5rem, 7vw, 5.5rem);
+
+  --line-height-tight: 1.15;
+  --line-height-body: 1.65;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.5rem;
+  --radius-round: 999px;
+
+  --shadow-soft: 0 1rem 3rem rgb(74 53 36 / 10%);
+  --shadow-raised: 0 0.75rem 1.75rem rgb(74 53 36 / 14%);
+
+  --content-width: 72rem;
+  --reading-width: 42rem;
+  --control-height: 2.75rem;
+
+  --transition-fast: 140ms ease;
+  --transition-standard: 220ms ease;
+}

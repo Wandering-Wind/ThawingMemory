@@ -1,9 +1,46 @@
+@import './styles/tokens.css';
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  min-width: 20rem;
+  background: var(--color-coconut);
+}
+
 body {
   margin: 0;
+  min-width: 20rem;
+  min-height: 100vh;
+  color: var(--color-ink);
+  background: var(--color-coconut);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  line-height: var(--line-height-tight);
+}
+
+::selection {
+  color: var(--color-white);
+  background: var(--color-clay);
 }
