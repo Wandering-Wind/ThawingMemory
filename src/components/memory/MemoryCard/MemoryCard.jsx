@@ -1,12 +1,23 @@
-function MemoryCard({ card }) {
+import MemoryEntryForm from '../MemoryEntryForm/MemoryEntryForm.jsx'
+
+function MemoryCard({ card, isOpen, onMemoryChange, onOpen, onSubmit }) {
   return (
     <article className="memory-card">
       <p className="memory-card__status">{card.status}</p>
       <h2>{card.title}</h2>
       <p>{card.introduction}</p>
-      <button type="button" disabled>
-        Open memory
-      </button>
+
+      {isOpen ? (
+        <MemoryEntryForm
+          card={card}
+          onMemoryChange={onMemoryChange}
+          onSubmit={onSubmit}
+        />
+      ) : (
+        <button type="button" onClick={() => onOpen(card.id)}>
+          Open memory
+        </button>
+      )}
     </article>
   )
 }

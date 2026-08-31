@@ -1,8 +1,17 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
 import kitchenCards from '../../data/kitchenCards.js'
 
 function KitchenPage() {
+  const [activeCardId, setActiveCardId] = useState(null)
+  const [submittedMemory, setSubmittedMemory] = useState('')
+
+  function handleOpenMemory(cardId) {
+    setActiveCardId(cardId)
+    setSubmittedMemory('')
+  }
+
   return (
     <div className="site-shell">
       <header className="site-header">
@@ -23,9 +32,23 @@ function KitchenPage() {
           <h2 id="memory-cards-title">Choose a memory</h2>
           <div className="memory-card-list">
             {kitchenCards.map((card) => (
-              <MemoryCard key={card.id} card={card} />
+              <MemoryCard
+                key={card.id}
+                card={card}
+                isOpen={activeCardId === card.id}
+                onMemoryChange={() => setSubmittedMemory('')}
+                onOpen={handleOpenMemory}
+                onSubmit={setSubmittedMemory}
+              />
             ))}
           </div>
+
+          {submittedMemory && (
+            <p role="status">
+              Your memory is ready. The AI reflection will be added in the
+              next prototype step.
+            </p>
+          )}
         </section>
 
         <nav aria-label="Kitchen links">
