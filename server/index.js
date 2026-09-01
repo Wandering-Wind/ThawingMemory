@@ -1,5 +1,5 @@
 import { createServer } from 'node:http'
-import developingReflection from './developingReflection.js'
+import { generateReflection } from './geminiClient.js'
 
 const DEFAULT_PORT = 3001
 const MAX_MEMORY_LENGTH = 2000
@@ -106,7 +106,8 @@ async function handleReflectionRequest(request, response) {
       return
     }
 
-    sendJson(response, 200, developingReflection)
+    const reflection = await generateReflection(body.memory)
+    sendJson(response, 200, reflection)
   } catch (error) {
     if (error.code === 'PAYLOAD_TOO_LARGE') {
       sendError(
@@ -128,6 +129,43 @@ async function handleReflectionRequest(request, response) {
       return
     }
 
+    if (error.code === 'RATE_LIMITED') {
+      sendError(
+        response,
+        429,
+        'RATE_LIMITED',
+        'The free AI service is temporarily at its limit. Your memory is still here. Please try again shortly.',
+      )
+      return
+    }
+
+    if (error.code === 'MODEL_UNAVAILABLE') {
+      if (Number.isInteger(error.providerStatus)) {
+        console.error(
+          `Gemini request failed with provider status ${error.providerStatus}.`,
+        )
+      }
+
+      sendError(
+        response,
+        503,
+        'MODEL_UNAVAILABLE',
+        'The AI service is unavailable right now. Your memory has not been lost.',
+      )
+      return
+    }
+
+    if (error.code === 'INVALID_MODEL_RESPONSE') {
+      sendError(
+        response,
+        502,
+        'INVALID_MODEL_RESPONSE',
+        'The AI response could not be displayed safely. Your memory is still here, and you can try again.',
+      )
+      return
+    }
+
+    console.error('Reflection request failed with a sanitised unknown error.')
     sendError(
       response,
       500,
