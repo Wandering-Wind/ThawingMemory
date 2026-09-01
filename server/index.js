@@ -1,10 +1,9 @@
 import { createServer } from 'node:http'
 import { generateReflection } from './geminiClient.js'
+import { validateLegacyReflectionRequest } from './reflectionRequest.js'
 
 const DEFAULT_PORT = 3001
-const MAX_MEMORY_LENGTH = 2000
 const MAX_REQUEST_SIZE = 12000
-const KNOWN_CARD_IDS = new Set(['kitchen-instinctive-measures'])
 const configuredPort = Number.parseInt(process.env.AI_SERVER_PORT, 10)
 const port = Number.isInteger(configuredPort) ? configuredPort : DEFAULT_PORT
 
@@ -63,43 +62,10 @@ function readJsonBody(request) {
   })
 }
 
-function validateReflectionRequest(body) {
-  if (!body || typeof body !== 'object' || Array.isArray(body)) {
-    return {
-      code: 'INVALID_JSON',
-      message: 'Send a JSON object containing cardId and memory.',
-    }
-  }
-
-  if (!KNOWN_CARD_IDS.has(body.cardId)) {
-    return {
-      code: 'INVALID_CARD',
-      message: 'The requested memory card is not available.',
-    }
-  }
-
-  if (typeof body.memory !== 'string' || !body.memory.trim()) {
-    return {
-      code: 'INVALID_MEMORY',
-      message: 'Add a memory fragment before asking for a reflection.',
-    }
-  }
-
-  if (body.memory.length > MAX_MEMORY_LENGTH) {
-    return {
-      code: 'MEMORY_TOO_LONG',
-      message:
-        'This memory is too long for the prototype. Shorten it to 2,000 characters or fewer.',
-    }
-  }
-
-  return null
-}
-
 async function handleReflectionRequest(request, response) {
   try {
     const body = await readJsonBody(request)
-    const validationError = validateReflectionRequest(body)
+    const validationError = validateLegacyReflectionRequest(body)
 
     if (validationError) {
       sendError(response, 400, validationError.code, validationError.message)
