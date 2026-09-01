@@ -34,3 +34,14 @@ Choices made and why: The test used fictional memory text. The original AI respo
 What failed, changed, or surprised me: An edited trace could initially be saved without changing the AI text because the edit field was prefilled. This could incorrectly label unchanged AI writing as the user's version. Save validation was changed so an edited trace must differ from the original AI reflection.
 Evidence, such as commit, screenshot, prompt output, or bug: Browser review completed with no console warnings or errors. The validation change is in src/pages/Kitchen/KitchenPage.jsx. Commit to be added.
 Next small step: Define and apply the prototype visual system to the complete static loop.
+
+
+ENTRY 003
+
+Date: 1 September 2026
+Planned task: Establish and verify the local reflection endpoint before connecting Gemini.
+What was completed: A Node HTTP server now accepts POST requests at /api/reflect, validates the known card ID and memory, enforces request and memory limits, and returns a clearly temporary three-field response.
+Choices made and why: Node's built-in HTTP and fetch-compatible environment were selected to avoid adding a server framework for one prototype endpoint. The React client remains disconnected until the server contract and Gemini response are independently reliable.
+What failed, changed, or surprised me: A previous test server continued holding port 3001 after its terminal session ended. Windows blocked detailed process inspection without elevated access, so the updated endpoint was safely verified on port 3002 instead of expanding permissions.
+Evidence, such as commit, screenshot, prompt output, or bug: Valid request returned 200. Empty memory, unknown card, overlong memory, invalid JSON, oversized payload, and wrong HTTP method returned the intended structured errors. The server log did not contain submitted memory text. Commit to be added.
+Next small step: Create a Gemini API key locally and replace the temporary server response with validated live model output.

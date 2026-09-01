@@ -1,6 +1,10 @@
 import { createServer } from 'node:http'
+import developingReflection from './developingReflection.js'
 
 const DEFAULT_PORT = 3001
+const MAX_MEMORY_LENGTH = 2000
+const MAX_REQUEST_SIZE = 12000
+const KNOWN_CARD_IDS = new Set(['kitchen-instinctive-measures'])
 const configuredPort = Number.parseInt(process.env.AI_SERVER_PORT, 10)
 const port = Number.isInteger(configuredPort) ? configuredPort : DEFAULT_PORT
 
@@ -11,18 +15,156 @@ function sendJson(response, statusCode, body) {
   response.end(JSON.stringify(body))
 }
 
-const server = createServer((request, response) => {
+function sendError(response, statusCode, code, message) {
+  sendJson(response, statusCode, {
+    error: {
+      code,
+      message,
+    },
+  })
+}
+
+function readJsonBody(request) {
+  return new Promise((resolve, reject) => {
+    let body = ''
+    let receivedBytes = 0
+
+    request.setEncoding('utf8')
+
+    request.on('data', (chunk) => {
+      receivedBytes += Buffer.byteLength(chunk)
+
+      if (receivedBytes > MAX_REQUEST_SIZE) {
+        const error = new Error('Request body is too large.')
+        error.code = 'PAYLOAD_TOO_LARGE'
+        reject(error)
+        request.resume()
+        return
+      }
+
+      body += chunk
+    })
+
+    request.on('end', () => {
+      if (receivedBytes > MAX_REQUEST_SIZE) {
+        return
+      }
+
+      try {
+        resolve(JSON.parse(body))
+      } catch {
+        const error = new Error('Request body is not valid JSON.')
+        error.code = 'INVALID_JSON'
+        reject(error)
+      }
+    })
+
+    request.on('error', reject)
+  })
+}
+
+function validateReflectionRequest(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return {
+      code: 'INVALID_JSON',
+      message: 'Send a JSON object containing cardId and memory.',
+    }
+  }
+
+  if (!KNOWN_CARD_IDS.has(body.cardId)) {
+    return {
+      code: 'INVALID_CARD',
+      message: 'The requested memory card is not available.',
+    }
+  }
+
+  if (typeof body.memory !== 'string' || !body.memory.trim()) {
+    return {
+      code: 'INVALID_MEMORY',
+      message: 'Add a memory fragment before asking for a reflection.',
+    }
+  }
+
+  if (body.memory.length > MAX_MEMORY_LENGTH) {
+    return {
+      code: 'MEMORY_TOO_LONG',
+      message:
+        'This memory is too long for the prototype. Shorten it to 2,000 characters or fewer.',
+    }
+  }
+
+  return null
+}
+
+async function handleReflectionRequest(request, response) {
+  try {
+    const body = await readJsonBody(request)
+    const validationError = validateReflectionRequest(body)
+
+    if (validationError) {
+      sendError(response, 400, validationError.code, validationError.message)
+      return
+    }
+
+    sendJson(response, 200, developingReflection)
+  } catch (error) {
+    if (error.code === 'PAYLOAD_TOO_LARGE') {
+      sendError(
+        response,
+        413,
+        'PAYLOAD_TOO_LARGE',
+        'The request is too large for the prototype.',
+      )
+      return
+    }
+
+    if (error.code === 'INVALID_JSON') {
+      sendError(
+        response,
+        400,
+        'INVALID_JSON',
+        'Send a valid JSON object containing cardId and memory.',
+      )
+      return
+    }
+
+    sendError(
+      response,
+      500,
+      'UNKNOWN_ERROR',
+      'Something interrupted the reflection request. Please try again.',
+    )
+  }
+}
+
+const server = createServer(async (request, response) => {
   if (request.method === 'GET' && request.url === '/health') {
     sendJson(response, 200, { status: 'ok' })
     return
   }
 
-  sendJson(response, 404, {
-    error: {
-      code: 'NOT_FOUND',
-      message: 'The requested server route does not exist.',
-    },
-  })
+  if (request.url === '/api/reflect') {
+    if (request.method !== 'POST') {
+      response.setHeader('Allow', 'POST')
+      sendError(
+        response,
+        405,
+        'METHOD_NOT_ALLOWED',
+        'Use POST to request a reflection.',
+      )
+      return
+    }
+
+    await handleReflectionRequest(request, response)
+    return
+  }
+
+  sendError(
+    response,
+    404,
+    'NOT_FOUND',
+    'The requested server route does not exist.',
+  )
 })
 
 server.listen(port, '127.0.0.1', () => {

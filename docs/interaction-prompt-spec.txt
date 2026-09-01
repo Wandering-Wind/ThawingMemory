@@ -279,6 +279,14 @@ Error response shape:
 
 Required application errors:
 
+INVALID_CARD
+
+Message: "The requested memory card is not available."
+
+INVALID_JSON
+
+Message: "Send a valid JSON object containing cardId and memory."
+
 INVALID_MEMORY
 
 Message: "Add a memory fragment before asking for a reflection."
@@ -286,6 +294,14 @@ Message: "Add a memory fragment before asking for a reflection."
 MEMORY_TOO_LONG
 
 Message: "This memory is too long for the prototype. Shorten it to 2,000 characters or fewer."
+
+PAYLOAD_TOO_LARGE
+
+Message: "The request is too large for the prototype."
+
+METHOD_NOT_ALLOWED
+
+Message: "Use POST to request a reflection."
 
 RATE_LIMITED
 
