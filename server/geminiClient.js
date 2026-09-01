@@ -7,6 +7,9 @@ const GEMINI_API_BASE_URL =
   'https://generativelanguage.googleapis.com/v1beta/models'
 const DEFAULT_MODEL = 'gemini-3-flash-preview'
 const REQUEST_TIMEOUT_MS = 30000
+const RETRY_DELAY_MS = 750
+const MAX_REQUEST_ATTEMPTS = 2
+const RETRYABLE_PROVIDER_STATUSES = new Set([500, 502, 503, 504])
 
 const responseSchema = {
   type: 'OBJECT',
@@ -41,6 +44,47 @@ function createGeminiError(code, providerStatus) {
   error.code = code
   error.providerStatus = providerStatus
   return error
+}
+
+function wait(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+async function requestGemini(apiUrl, apiKey, requestBody) {
+  for (let attempt = 1; attempt <= MAX_REQUEST_ATTEMPTS; attempt += 1) {
+    let response
+
+    try {
+      response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
+        },
+        body: requestBody,
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      })
+    } catch {
+      if (attempt < MAX_REQUEST_ATTEMPTS) {
+        await wait(RETRY_DELAY_MS)
+        continue
+      }
+
+      throw createGeminiError('MODEL_UNAVAILABLE')
+    }
+
+    if (
+      RETRYABLE_PROVIDER_STATUSES.has(response.status) &&
+      attempt < MAX_REQUEST_ATTEMPTS
+    ) {
+      await wait(RETRY_DELAY_MS)
+      continue
+    }
+
+    return response
+  }
+
+  throw createGeminiError('MODEL_UNAVAILABLE')
 }
 
 function extractOutputText(payload) {
@@ -92,35 +136,22 @@ export async function generateReflection(memory) {
 
   const model = process.env.GEMINI_MODEL || DEFAULT_MODEL
   const apiUrl = `${GEMINI_API_BASE_URL}/${encodeURIComponent(model)}:generateContent`
-  let providerResponse
-
-  try {
-    providerResponse = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey,
+  const requestBody = JSON.stringify({
+    systemInstruction: {
+      parts: [{ text: REFLECTION_SYSTEM_INSTRUCTION }],
+    },
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: createReflectionInput(memory) }],
       },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: REFLECTION_SYSTEM_INSTRUCTION }],
-        },
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: createReflectionInput(memory) }],
-          },
-        ],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          responseSchema,
-        },
-      }),
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    })
-  } catch {
-    throw createGeminiError('MODEL_UNAVAILABLE')
-  }
+    ],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema,
+    },
+  })
+  const providerResponse = await requestGemini(apiUrl, apiKey, requestBody)
 
   if (providerResponse.status === 429) {
     throw createGeminiError('RATE_LIMITED', providerResponse.status)

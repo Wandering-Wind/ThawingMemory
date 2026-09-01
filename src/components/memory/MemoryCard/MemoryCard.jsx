@@ -1,6 +1,13 @@
 import MemoryEntryForm from '../MemoryEntryForm/MemoryEntryForm.jsx'
 
-function MemoryCard({ card, isOpen, onMemoryChange, onOpen, onSubmit }) {
+function MemoryCard({
+  card,
+  isOpen,
+  isSubmitting,
+  onMemoryChange,
+  onOpen,
+  onSubmit,
+}) {
   return (
     <article className="memory-card">
       <p className="memory-card__status">{card.status}</p>
@@ -10,6 +17,7 @@ function MemoryCard({ card, isOpen, onMemoryChange, onOpen, onSubmit }) {
       {isOpen ? (
         <MemoryEntryForm
           card={card}
+          isSubmitting={isSubmitting}
           onMemoryChange={onMemoryChange}
           onSubmit={onSubmit}
         />

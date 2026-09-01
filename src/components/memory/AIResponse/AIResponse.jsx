@@ -1,11 +1,11 @@
 function AIResponse({ response }) {
   return (
     <section aria-labelledby="ai-response-title">
-      <p role="status">Temporary sample response for interface development</p>
+      <p role="status">Live AI response generated from your memory</p>
       <h2 id="ai-response-title">AI response</h2>
       <p>
-        This content is static. It does not come from a live model or respond
-        to the memory you entered.
+        This is a provisional reflection, not a verification or cultural
+        authority.
       </p>
 
       <section aria-labelledby="ai-reflection-title">

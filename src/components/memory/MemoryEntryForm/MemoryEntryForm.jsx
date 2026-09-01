@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const MEMORY_LIMIT = 2000
 
-function MemoryEntryForm({ card, onMemoryChange, onSubmit }) {
+function MemoryEntryForm({ card, isSubmitting, onMemoryChange, onSubmit }) {
   const [memory, setMemory] = useState('')
   const [error, setError] = useState('')
 
@@ -64,7 +64,9 @@ function MemoryEntryForm({ card, onMemoryChange, onSubmit }) {
         </p>
       )}
 
-      <button type="submit">Reflect with AI</button>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Reflecting...' : 'Reflect with AI'}
+      </button>
     </form>
   )
 }

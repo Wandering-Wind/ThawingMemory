@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
 import ResponseEvaluation from '../../components/memory/ResponseEvaluation/ResponseEvaluation.jsx'
-import developingAIResponse from '../../data/developingAIResponse.js'
 import kitchenCards from '../../data/kitchenCards.js'
 import {
   createArchiveEntry,
   saveArchiveEntry,
 } from '../../services/archiveStorage.js'
+import { requestReflection } from '../../services/reflectionApi.js'
 
 const emptyEvaluation = {
   decision: '',
@@ -19,6 +19,9 @@ const emptyEvaluation = {
 function KitchenPage() {
   const [activeCardId, setActiveCardId] = useState(null)
   const [submittedMemory, setSubmittedMemory] = useState('')
+  const [aiResponse, setAIResponse] = useState(null)
+  const [isReflecting, setIsReflecting] = useState(false)
+  const [reflectionError, setReflectionError] = useState('')
   const [evaluation, setEvaluation] = useState(emptyEvaluation)
   const [savedEntryId, setSavedEntryId] = useState('')
   const [saveError, setSaveError] = useState('')
@@ -31,20 +34,39 @@ function KitchenPage() {
   function handleOpenMemory(cardId) {
     setActiveCardId(cardId)
     setSubmittedMemory('')
+    setAIResponse(null)
+    setReflectionError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
   }
 
   function handleMemoryChange() {
     setSubmittedMemory('')
+    setAIResponse(null)
+    setReflectionError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
   }
 
-  function handleMemorySubmit(memory) {
+  async function handleMemorySubmit(memory) {
     setSubmittedMemory(memory)
+    setAIResponse(null)
+    setReflectionError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
+
+    try {
+      setIsReflecting(true)
+      const response = await requestReflection({
+        cardId: activeCardId,
+        memory,
+      })
+      setAIResponse(response)
+    } catch (error) {
+      setReflectionError(error.message)
+    } finally {
+      setIsReflecting(false)
+    }
   }
 
   function handleEvaluationChange(nextEvaluation) {
@@ -73,7 +95,7 @@ function KitchenPage() {
     if (
       evaluation.decision === 'edited' &&
       evaluation.editedReflection.trim() ===
-        developingAIResponse.reflection.trim()
+        aiResponse?.reflection.trim()
     ) {
       setSaveError(
         'Change the AI reflection into your own words before saving an edited trace.',
@@ -83,7 +105,7 @@ function KitchenPage() {
 
     const activeCard = kitchenCards.find((card) => card.id === activeCardId)
 
-    if (!activeCard) {
+    if (!activeCard || !aiResponse) {
       setSaveError('The memory card could not be found. Please reopen it.')
       return
     }
@@ -93,7 +115,7 @@ function KitchenPage() {
         card: activeCard,
         evaluation,
         memory: submittedMemory,
-        response: developingAIResponse,
+        response: aiResponse,
       })
 
       saveArchiveEntry(entry)
@@ -130,6 +152,7 @@ function KitchenPage() {
                 key={card.id}
                 card={card}
                 isOpen={activeCardId === card.id}
+                isSubmitting={isReflecting && activeCardId === card.id}
                 onMemoryChange={handleMemoryChange}
                 onOpen={handleOpenMemory}
                 onSubmit={handleMemorySubmit}
@@ -137,15 +160,19 @@ function KitchenPage() {
             ))}
           </div>
 
-          {submittedMemory && (
+          {isReflecting && <p role="status">Generating a reflection...</p>}
+
+          {reflectionError && <p role="alert">{reflectionError}</p>}
+
+          {aiResponse && (
             <>
-              <AIResponse response={developingAIResponse} />
+              <AIResponse response={aiResponse} />
               <ResponseEvaluation
                 evaluation={evaluation}
                 isSaved={Boolean(savedEntryId)}
                 onChange={handleEvaluationChange}
                 onSave={handleSaveTrace}
-                response={developingAIResponse}
+                response={aiResponse}
                 saveError={saveError}
               />
             </>
