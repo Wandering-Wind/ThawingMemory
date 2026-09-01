@@ -61,3 +61,13 @@ Reason: Live generative output is the assessed prototype requirement. Testing re
 Alternatives considered: Complete all page styling before creating the local server and Gemini integration.
 Effect on scope or research argument: The prototype scope does not change. The implementation order changes so functional and theoretical risk is addressed before visual polish.
 Related commit: To be added after this document is committed.
+
+
+ENTRY 006
+
+Date: 1 September 2026
+Decision: Expand the one-shot reflection into a bounded conversational reconstruction with up to three follow-up answers and a user-triggered working recipe.
+Reason: Live testing showed that the model's sensory question could prompt useful memory, but the interface did not allow the user to answer it. A bounded conversation better demonstrates cultural reconstruction as an active process while keeping the user, rather than the model, as the source of recipe knowledge.
+Alternatives considered: Keep the one-shot loop unchanged; allow unlimited chatbot conversation; let the model provide regional recipes; add a single follow-up only.
+Effect on scope or research argument: The Kitchen remains the only domain, but its core interaction becomes deeper. The model may organise user fragments but may not fill missing recipe details. Unlimited chat and AI-authored regional recipes remain outside scope because they would increase model drift and reposition the AI as a cultural authority.
+Related commit: To be added after this document is committed.

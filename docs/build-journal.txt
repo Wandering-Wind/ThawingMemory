@@ -45,3 +45,25 @@ Choices made and why: Node's built-in HTTP and fetch-compatible environment were
 What failed, changed, or surprised me: A previous test server continued holding port 3001 after its terminal session ended. Windows blocked detailed process inspection without elevated access, so the updated endpoint was safely verified on port 3002 instead of expanding permissions.
 Evidence, such as commit, screenshot, prompt output, or bug: Valid request returned 200. Empty memory, unknown card, overlong memory, invalid JSON, oversized payload, and wrong HTTP method returned the intended structured errors. The server log did not contain submitted memory text. Commit to be added.
 Next small step: Create a Gemini API key locally and replace the temporary server response with validated live model output.
+
+
+ENTRY 004
+
+Date: 1 September 2026
+Planned task: Connect the static Kitchen loop to a live free generative model and verify the assessed core interaction.
+What was completed: Gemini 3 Flash Preview now returns a validated reflection, limitation, and sensory question. The React interface calls the local server, preserves memory through failures, retries temporary provider errors once, and saves completed traces to the Living Archive.
+Choices made and why: The API key remains in the local server environment. Gemini 3 Flash Preview was selected because it worked through the free AI Studio project. A second provider was deferred because a reliable primary loop, clear error handling, and source separation were more important than adding another integration.
+What failed, changed, or surprised me: Gemini 2.5 Flash-Lite appeared in the model list but generation returned provider errors for the project. Gemini 3 Flash Preview initially returned temporary 503 errors, so one controlled retry was added. A general recipe question also showed that the model could infer user intention from very little evidence.
+Evidence, such as commit, screenshot, prompt output, or bug: Successful live outputs included a yogurt chicken-curry memory and a Chettinad recipe request. Multiple traces persisted in the Living Archive. Lint and production build passed.
+Next small step: Decide whether the AI follow-up question should become a real conversational turn or remain a one-shot prompt.
+
+
+ENTRY 005
+
+Date: 1 September 2026
+Planned task: Resolve the conceptual gap between the AI's follow-up question and the user's inability to answer it.
+What was completed: A bounded conversational reconstruction was specified. The user may answer or skip up to three AI questions, then ask the system to organise only their fragments into a Working Family Recipe with visible unknowns.
+Choices made and why: The conversation is bounded rather than unlimited. Previous AI text is never treated as recipe evidence. The model acts as interviewer and organiser, while the user remains the source and final authority.
+What failed, changed, or surprised me: A conventional regional recipe assistant initially seemed like a useful extension, but it would shift the model into the role of cultural authority and conflict with the research argument. The revised design supports recipe formulation without allowing the model to invent missing cultural knowledge.
+Evidence, such as commit, screenshot, prompt output, or bug: docs/conversational-reconstruction-spec.txt and decision-log entry 006.
+Next small step: Implement the conversation data model and pure helper functions without changing the visible interface.
