@@ -5,7 +5,6 @@ function ResponseEvaluation({
   isSaved,
   onChange,
   onSave,
-  response,
   saveError,
   workingRecipe,
 }) {
@@ -19,20 +18,10 @@ function ResponseEvaluation({
     { value: 'edited', label: 'Edit in my words' },
     { value: 'rejected', label: 'This does not fit' },
   ]
-  const evaluatedText = workingRecipe
-    ? [
-        workingRecipe.dishName,
-        ...workingRecipe.rememberedIngredients,
-        ...workingRecipe.rememberedMethod,
-        ...workingRecipe.sensoryCues,
-        ...workingRecipe.familyNotes,
-      ].join('\n')
-    : response.reflection
-
   function selectDecision(decision) {
     onChange({
       decision,
-      editedReflection: decision === 'edited' ? evaluatedText : '',
+      editedReflection: '',
       correction: '',
     })
   }
@@ -85,7 +74,7 @@ function ResponseEvaluation({
           className="response-evaluation__user-panel"
           aria-labelledby="edit-response-title"
         >
-          <h3 id="edit-response-title">Edit in your words</h3>
+          <h3 id="edit-response-title">Write your reconstruction</h3>
 
           <label htmlFor="edited-reflection">Your version</label>
           <textarea

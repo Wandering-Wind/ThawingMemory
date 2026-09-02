@@ -133,3 +133,25 @@ Choices made and why: A single measured guide creates spatial continuity that se
 What failed, changed, or surprised me: Recreating flowers on each card made the destination visible but did not communicate movement through the process. Preserving one guide across state changes makes the transition itself legible.
 Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests, lint, and the production build passed.
 Next small step: Inspect the moving guide during a successful live conversation after Gemini quota becomes available.
+
+
+ENTRY 012
+
+Date: 2 September 2026
+Planned task: Complete the conversational payoff and make live generation reliable enough to demonstrate.
+What was completed: Working Family Recipe generation now organises only user-authored fragments into remembered ingredients, method, sensory cues, family notes, and visible unknowns. Groq now provides automatic fallback after temporary Gemini failures. The travelling loading flower and its artificial delay were removed after the interface became visually overloaded.
+Choices made and why: A recipe is an organisation of remembered evidence, not a model-completed recipe. Provider fallback is invisible to the interaction but disclosed in the privacy copy. Malformed output is not hidden by fallback.
+What failed, changed, or surprised me: Gemini quota failures blocked repeated live tests. A live model also misread ammiikkal as something added to chammanthi, demonstrating that fluent follow-up questions can still misunderstand family terminology.
+Evidence, such as commit, screenshot, prompt output, or bug: The chammanthi conversation is preserved as a demonstration archive entry. Automated tests cover provider fallback and user-only recipe evidence.
+Next small step: Save complete version 2 conversations, clarify the three-stage hierarchy, and prepare the repository and reflection for submission.
+
+
+ENTRY 013
+
+Date: 2 September 2026
+Planned task: Complete archive persistence and submission documentation.
+What was completed: New traces preserve all fragments, AI turns, skipped questions, the working recipe, and the user's decision. Version 1 entries remain readable. The Kitchen shows a three-stage progress model. The default Vite README was replaced with project, setup, privacy, architecture, testing, and limitation documentation. A critical reflection draft was created from recorded build evidence.
+Choices made and why: Existing user data is read rather than silently migrated or deleted. The README distinguishes demonstrated behaviour from future scope, and the reflection explicitly states that no participant testing occurred.
+What failed, changed, or surprised me: The previous archive technically saved a result but omitted the conversation that now carries the project's argument. Persistence had to change when the conceptual core changed.
+Evidence, such as commit, screenshot, prompt output, or bug: Version compatibility and complete trace construction are covered by automated tests. Lint and production build results are recorded in the final verification run.
+Next small step: Conduct the final end-to-end verification and address any defects found.

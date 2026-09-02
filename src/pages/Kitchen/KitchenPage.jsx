@@ -39,7 +39,6 @@ const emptyEvaluation = {
 
 function KitchenPage() {
   const [activeCardId, setActiveCardId] = useState(null)
-  const [submittedMemory, setSubmittedMemory] = useState('')
   const [aiResponse, setAIResponse] = useState(null)
   const [conversation, setConversation] = useState(null)
   const [pendingTurn, setPendingTurn] = useState(false)
@@ -53,6 +52,11 @@ function KitchenPage() {
   const [savedEntryId, setSavedEntryId] = useState('')
   const [saveError, setSaveError] = useState('')
   const focusTimer = useRef(null)
+  const currentStage = conversation?.workingRecipe
+    ? 3
+    : conversation
+      ? 2
+      : 1
 
   useEffect(() => {
     return () => clearTimeout(focusTimer.current)
@@ -71,7 +75,6 @@ function KitchenPage() {
 
   function handleOpenMemory(cardId) {
     setActiveCardId(cardId)
-    setSubmittedMemory('')
     setAIResponse(null)
     setConversation(null)
     setPendingTurn(false)
@@ -84,7 +87,6 @@ function KitchenPage() {
   }
 
   function handleMemoryChange() {
-    setSubmittedMemory('')
     setAIResponse(null)
     setConversation(null)
     setPendingTurn(false)
@@ -97,7 +99,6 @@ function KitchenPage() {
   }
 
   async function handleMemorySubmit(memory) {
-    setSubmittedMemory(memory)
     setAIResponse(null)
     setReflectionError('')
     setEvaluation(emptyEvaluation)
@@ -207,6 +208,7 @@ function KitchenPage() {
       setConversation(addWorkingRecipe(conversation, response.recipe))
       setFocusArea('recipe')
       setIsEvaluating(true)
+      focusTimer.current = setTimeout(() => setFocusArea('evaluation'), 4000)
 
       requestAnimationFrame(() => {
         document.getElementById('working-recipe')?.scrollIntoView({
@@ -265,17 +267,6 @@ function KitchenPage() {
       return
     }
 
-    if (
-      evaluation.decision === 'edited' &&
-      evaluation.editedReflection.trim() ===
-        aiResponse?.reflection.trim()
-    ) {
-      setSaveError(
-        'Change the AI reflection into your own words before saving an edited trace.',
-      )
-      return
-    }
-
     const activeCard = kitchenCards.find((card) => card.id === activeCardId)
 
     if (!activeCard || !aiResponse) {
@@ -286,9 +277,8 @@ function KitchenPage() {
     try {
       const entry = createArchiveEntry({
         card: activeCard,
+        conversation,
         evaluation,
-        memory: submittedMemory,
-        response: aiResponse,
       })
 
       saveArchiveEntry(entry)
@@ -333,8 +323,23 @@ function KitchenPage() {
           </div>
         </section>
 
+        <nav className="reconstruction-progress" aria-label="Reconstruction progress">
+          {['Share a memory', 'Reconstruct together', 'Review and save'].map(
+            (label, index) => (
+              <span
+                key={label}
+                className={currentStage >= index + 1 ? 'is-reached' : ''}
+                aria-current={currentStage === index + 1 ? 'step' : undefined}
+              >
+                <strong>{index + 1}</strong> {label}
+              </span>
+            ),
+          )}
+        </nav>
+
         <section aria-labelledby="memory-cards-title">
-          <h2 id="memory-cards-title">Choose a memory</h2>
+          <p className="section-step">Step 1: Share what you remember</p>
+          <h2 id="memory-cards-title">Start with a memory</h2>
           <div className="reconstruction-workspace reconstruction-workspace--memory">
             <div className="memory-card-list">
               {kitchenCards.map((card) => (
@@ -383,7 +388,13 @@ function KitchenPage() {
               )}
 
               {isEvaluating && (
-                <>
+                <section className="reconstruction-review" aria-labelledby="review-next-title">
+                  <p className="section-step">Step 3: Review and save</p>
+                  <h2 id="review-next-title">Decide what fits your memory</h2>
+                  <p>
+                    Review the organised recipe, then keep it provisionally,
+                    rewrite it in your own words, or reject it.
+                  </p>
                   <button
                     className="button--gold-edge"
                     type="button"
@@ -396,11 +407,10 @@ function KitchenPage() {
                     isSaved={Boolean(savedEntryId)}
                     onChange={handleEvaluationChange}
                     onSave={handleSaveTrace}
-                    response={aiResponse}
                     saveError={saveError}
                     workingRecipe={conversation.workingRecipe}
                   />
-                </>
+                </section>
               )}
             </>
           )}

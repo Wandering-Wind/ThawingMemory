@@ -1,4 +1,5 @@
-export const ARCHIVE_STORAGE_KEY = 'thawingMemory.archive.v1'
+export const ARCHIVE_STORAGE_KEY = 'thawingMemory.archive.v2'
+export const LEGACY_ARCHIVE_STORAGE_KEY = 'thawingMemory.archive.v1'
 
 function createEntryId() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -8,17 +9,41 @@ function createEntryId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-export function createArchiveEntry({ card, evaluation, memory, response }) {
+export function createArchiveEntry({ card, conversation, evaluation }) {
+  const latestResponse = conversation.aiResponses.at(-1)
+
   return {
     id: createEntryId(),
     cardId: card.id,
     cardTitle: card.title,
     domain: 'kitchen',
     prompt: card.prompt,
-    userMemory: memory,
-    aiReflection: response.reflection,
-    aiLimitation: response.limitation,
-    aiQuestion: response.question,
+    memoryFragments: conversation.memoryFragments.map((fragment) => ({
+      text: fragment.text,
+      questionAnswered: fragment.questionAnswered,
+    })),
+    aiResponses: conversation.aiResponses.map((response) => ({
+      reflection: response.reflection,
+      limitation: response.limitation,
+      question: response.question,
+    })),
+    skippedQuestions: [...conversation.skippedQuestions],
+    workingRecipe: conversation.workingRecipe
+      ? {
+          dishName: conversation.workingRecipe.dishName,
+          rememberedIngredients: [
+            ...conversation.workingRecipe.rememberedIngredients,
+          ],
+          rememberedMethod: [...conversation.workingRecipe.rememberedMethod],
+          sensoryCues: [...conversation.workingRecipe.sensoryCues],
+          familyNotes: [...conversation.workingRecipe.familyNotes],
+          stillUnknown: [...conversation.workingRecipe.stillUnknown],
+        }
+      : null,
+    userMemory: conversation.memoryFragments[0].text,
+    aiReflection: latestResponse?.reflection || '',
+    aiLimitation: latestResponse?.limitation || '',
+    aiQuestion: latestResponse?.question || '',
     decision: evaluation.decision,
     userRevision:
       evaluation.decision === 'edited' ? evaluation.editedReflection : '',
@@ -28,23 +53,32 @@ export function createArchiveEntry({ card, evaluation, memory, response }) {
 }
 
 export function readArchiveData() {
-  try {
-    const storedEntries = localStorage.getItem(ARCHIVE_STORAGE_KEY)
+  let hasUnreadableData = false
+  const entries = []
 
-    if (!storedEntries) {
-      return { entries: [], hasUnreadableData: false }
+  for (const key of [ARCHIVE_STORAGE_KEY, LEGACY_ARCHIVE_STORAGE_KEY]) {
+    try {
+      const storedEntries = localStorage.getItem(key)
+
+      if (!storedEntries) continue
+
+      const parsedEntries = JSON.parse(storedEntries)
+      if (!Array.isArray(parsedEntries)) {
+        hasUnreadableData = true
+        continue
+      }
+
+      for (const entry of parsedEntries) {
+        if (!entries.some((savedEntry) => savedEntry.id === entry?.id)) {
+          entries.push(entry)
+        }
+      }
+    } catch {
+      hasUnreadableData = true
     }
-
-    const entries = JSON.parse(storedEntries)
-
-    if (!Array.isArray(entries)) {
-      return { entries: [], hasUnreadableData: true }
-    }
-
-    return { entries, hasUnreadableData: false }
-  } catch {
-    return { entries: [], hasUnreadableData: true }
   }
+
+  return { entries, hasUnreadableData }
 }
 
 export function readArchiveEntries() {

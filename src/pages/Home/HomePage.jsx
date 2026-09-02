@@ -41,8 +41,9 @@ function HomePage() {
           <h2 id="process-title">What happens in the Kitchen</h2>
           <ol>
             <li>You describe a remembered sound, smell, texture, or gesture.</li>
-            <li>The AI offers a provisional reflection and a question.</li>
-            <li>You keep, edit, or reject it in favour of your own version.</li>
+            <li>The AI asks up to three focused questions to help you add detail.</li>
+            <li>Your fragments are organised into a working family recipe with visible gaps.</li>
+            <li>You keep, edit, or reject the reconstruction in favour of your own version.</li>
           </ol>
         </section>
 
