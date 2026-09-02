@@ -72,11 +72,22 @@ function MemoryEntryForm({ card, isSubmitting, onMemoryChange, onSubmit }) {
       )}
 
       <button
-        className="primary-action--ornate"
+        className={`primary-action--ornate${isSubmitting ? ' primary-action--reflecting' : ''}`}
         type="submit"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Reflecting...' : 'Reflect with AI'}
+        {isSubmitting ? (
+          <>
+            Reflecting
+            <span className="thinking-dots" aria-hidden="true">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </span>
+          </>
+        ) : (
+          'Reflect with AI'
+        )}
       </button>
     </form>
   )

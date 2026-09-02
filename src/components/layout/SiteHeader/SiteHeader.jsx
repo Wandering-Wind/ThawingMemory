@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
 import logo from '../../../assets/decorations/logo.svg'
+import BackToTop from '../BackToTop/BackToTop.jsx'
 
 const navigationItems = [
   { label: 'Kitchen', to: '/kitchen' },
@@ -32,6 +33,7 @@ function SiteHeader() {
           </NavLink>
         ))}
       </nav>
+      <BackToTop />
     </header>
   )
 }

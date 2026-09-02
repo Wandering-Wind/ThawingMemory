@@ -17,12 +17,12 @@ body {
   min-height: 100vh;
   color: var(--color-ink);
   background:
-    radial-gradient(circle at 15% 25%, rgb(195 149 36 / 24%), transparent 28%),
-    radial-gradient(circle at 85% 70%, rgb(138 63 48 / 55%), transparent 32%),
-    linear-gradient(125deg, #51271f, #75402e 48%, #48231d);
+    radial-gradient(circle at 15% 25%, rgb(195 149 36 / 32%), transparent 30%),
+    radial-gradient(circle at 85% 70%, rgb(153 77 51 / 68%), transparent 34%),
+    linear-gradient(125deg, #3f1d18, #75402e 35%, #9a5736 55%, #48231d);
   background-attachment: fixed;
-  background-size: 180% 180%;
-  animation: background-gradient-pulse 18s ease-in-out infinite alternate;
+  background-size: 190% 190%, 210% 210%, 400% 400%;
+  animation: background-gradient-pulse 16s ease-in-out infinite;
   font-family: var(--font-body);
   font-size: var(--font-size-md);
   line-height: var(--line-height-body);
@@ -144,6 +144,30 @@ button:disabled {
   box-shadow:
     inset 0 0 0 1px var(--color-gold-light),
     0 0.2rem 0.55rem rgb(141 100 17 / 14%);
+}
+
+.primary-action--reflecting {
+  animation: reflecting-border-pulse 1.8s ease-in-out infinite;
+}
+
+.thinking-dots {
+  display: inline-flex;
+  align-items: baseline;
+  width: 1.25rem;
+  margin-left: 0.08rem;
+}
+
+.thinking-dots span {
+  display: inline-block;
+  animation: thinking-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.thinking-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.thinking-dots span:nth-child(3) {
+  animation-delay: 0.3s;
 }
 
 textarea,
@@ -348,12 +372,44 @@ li + li {
 }
 
 @keyframes background-gradient-pulse {
-  0% {
-    background-position: 0% 20%;
+  0%,
+  100% {
+    background-position: 0% 15%, 100% 85%, 0% 50%;
+    background-size: 190% 190%, 210% 210%, 400% 400%;
   }
 
+  50% {
+    background-position: 85% 70%, 15% 25%, 100% 50%;
+    background-size: 235% 235%, 175% 175%, 320% 320%;
+  }
+}
+
+@keyframes reflecting-border-pulse {
+  0%,
   100% {
-    background-position: 100% 80%;
+    border-color: var(--color-gold-dark);
+    box-shadow:
+      inset 0 0 0 1px rgb(240 213 108 / 28%),
+      0 0 0 0 rgb(240 213 108 / 10%);
+  }
+
+  50% {
+    border-color: var(--color-gold-light);
+    box-shadow:
+      inset 0 0 0 2px rgb(240 213 108 / 75%),
+      0 0 0 0.35rem rgb(195 149 36 / 22%);
+  }
+}
+
+@keyframes thinking-dot-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-0.35rem);
   }
 }
 
@@ -391,7 +447,6 @@ li + li {
   padding: var(--space-3) var(--space-4);
   color: var(--color-error);
   background: var(--color-error-surface);
-  border-left: 0.25rem solid var(--color-error);
   border-radius: var(--radius-sm);
 }
 
@@ -470,6 +525,7 @@ li + li {
   width: clamp(4.5rem, 14vw, 7rem);
   height: auto;
   opacity: 0.82;
+  transform: scaleX(-1);
   pointer-events: none;
 }
 
@@ -488,7 +544,6 @@ li + li {
   margin-top: var(--space-5);
   padding: var(--space-4);
   background: color-mix(in srgb, var(--color-paper) 58%, transparent);
-  border-left: 0.25rem solid var(--color-leaf);
   border-radius: var(--radius-sm);
 }
 
@@ -506,11 +561,6 @@ li + li {
 
 .ai-response__section--limitation {
   background: var(--color-uncertainty-surface);
-  border-left-color: var(--color-clay);
-}
-
-.ai-response__section--question {
-  border-left-color: var(--color-focus);
 }
 
 .ai-response__reminder {
@@ -640,6 +690,23 @@ li + li {
   margin-bottom: 0;
 }
 
+.back-to-top {
+  position: fixed;
+  right: clamp(var(--space-4), 4vw, var(--space-6));
+  bottom: clamp(var(--space-4), 4vw, var(--space-6));
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-white);
+  background: var(--color-clay-dark);
+  box-shadow: var(--shadow-raised);
+}
+
+.back-to-top[hidden] {
+  display: none;
+}
+
 @media (max-width: 35rem) {
   .site-shell {
     width: 100%;
@@ -698,6 +765,8 @@ li + li {
 
   .site-brand__name,
   .page-heading__decoration,
+  .primary-action--reflecting,
+  .thinking-dots span,
   body {
     animation: none;
   }
