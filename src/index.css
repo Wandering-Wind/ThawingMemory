@@ -501,8 +501,26 @@ li + li {
   width: 100%;
 }
 
+.site-shell .scene-main,
+.site-shell .kitchen-main {
+  padding-top: clamp(var(--space-4), 3vw, var(--space-6));
+}
+
+.site-shell .scene-main {
+  width: 100%;
+}
+
+.scene-main > section:not(.scene-hero),
+.scene-main > nav {
+  width: min(100%, var(--reading-width));
+}
+
 .kitchen-main > section:first-child {
   width: min(100%, var(--reading-width));
+}
+
+.kitchen-main > section.scene-hero {
+  width: 100%;
 }
 
 .site-shell main > section + section,
@@ -517,6 +535,104 @@ li + li {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.scene-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: clamp(19rem, 40vw, 28rem);
+  display: flex;
+  align-items: flex-start;
+  padding-top: clamp(var(--space-5), 5vw, var(--space-7));
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.scene-hero__content {
+  position: relative;
+  z-index: 2;
+  width: min(52%, var(--reading-width));
+  margin-left: clamp(var(--space-5), 8vw, 7rem);
+}
+
+.scene-hero__content > p:first-child {
+  margin-bottom: var(--space-3);
+  color: var(--color-clay-dark);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scene-hero__leaf,
+.scene-hero__feature {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.scene-hero__leaf--left {
+  top: 3%;
+  bottom: 2%;
+  left: -1.5rem;
+  width: clamp(8rem, 22vw, 15rem);
+  height: 96%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.scene-hero__leaf--right {
+  top: -12%;
+  right: 0;
+  width: clamp(10rem, 26vw, 18rem);
+  height: 70%;
+  object-fit: contain;
+  object-position: right top;
+}
+
+.scene-hero__feature--boat,
+.scene-hero__feature--food,
+.scene-hero__feature--coming-soon {
+  right: -10%;
+  bottom: -1.25rem;
+  width: clamp(13rem, 31vw, 23rem);
+  height: 62%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.scene-hero__feature--boat {
+  right: 0;
+  width: clamp(15rem, 34vw, 26rem);
+}
+
+.scene-hero--kitchen .scene-hero__content {
+  width: min(50%, var(--reading-width));
+}
+
+.scene-hero--kitchen .scene-hero__feature--food {
+  right: 0;
+  width: clamp(12rem, 27vw, 20rem);
+}
+
+.scene-hero--coming-soon {
+  min-height: clamp(20rem, 38vw, 27rem);
+  padding-top: clamp(var(--space-4), 3vw, var(--space-6));
+}
+
+.scene-hero--coming-soon .scene-hero__content {
+  width: min(54%, 34rem);
+  margin-left: clamp(var(--space-4), 7vw, 6rem);
+}
+
+.scene-hero__feature--coming-soon {
+  right: -3%;
+  top: var(--space-3);
+  bottom: auto;
+  width: 55%;
+  height: calc(100% - var(--space-3));
 }
 
 .site-footer {
@@ -1132,6 +1248,21 @@ li + li {
 }
 
 @media (max-width: 55rem) {
+  .scene-hero__content,
+  .scene-hero--kitchen .scene-hero__content,
+  .scene-hero--coming-soon .scene-hero__content {
+    width: min(68%, 32rem);
+    margin-left: clamp(var(--space-5), 9vw, 5rem);
+  }
+
+  .scene-hero__feature--boat,
+  .scene-hero__feature--food,
+  .scene-hero__feature--coming-soon {
+    right: -13%;
+    width: 48%;
+    opacity: 0.88;
+  }
+
   .reconstruction-workspace,
   .reconstruction-workspace--response {
     grid-template-columns: 1fr;
@@ -1156,6 +1287,60 @@ li + li {
       left: 50%;
       opacity: 1;
     }
+  }
+}
+
+@media (max-width: 35rem) {
+  .scene-hero {
+    min-height: 28rem;
+    align-items: flex-start;
+    padding-top: var(--space-7);
+  }
+
+  .scene-hero__content,
+  .scene-hero--kitchen .scene-hero__content,
+  .scene-hero--coming-soon .scene-hero__content {
+    width: calc(100% - (2 * var(--space-5)));
+    margin-inline: var(--space-5);
+  }
+
+  .scene-hero__leaf--left {
+    top: 42%;
+    left: -2rem;
+    width: 10rem;
+    height: 58%;
+    opacity: 0.72;
+  }
+
+  .scene-hero__leaf--right {
+    right: -2rem;
+    width: 11rem;
+    opacity: 0.72;
+  }
+
+  .scene-hero__feature--boat,
+  .scene-hero__feature--food,
+  .scene-hero__feature--coming-soon {
+    right: -6%;
+    bottom: -1rem;
+    width: 72%;
+    height: 48%;
+    opacity: 0.82;
+  }
+
+  .scene-hero__feature--boat {
+    right: 0;
+  }
+
+  .scene-hero--coming-soon {
+    min-height: 25rem;
+    padding-top: var(--space-5);
+  }
+
+  .scene-hero--coming-soon .scene-hero__feature--coming-soon {
+    top: auto;
+    right: -8%;
+    bottom: -1rem;
   }
 }
 

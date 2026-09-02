@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import bananaLeafLeft from '../../assets/decorations/banana-leaf-left-cropped.svg'
+import bananaLeafRight from '../../assets/decorations/banana-leaf-right-cropped.svg'
+import boatRace from '../../assets/decorations/boat-race.svg'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 
@@ -7,15 +10,20 @@ function HomePage() {
     <div className="site-shell">
       <SiteHeader />
 
-      <main>
-        <section className="landing-hero" aria-labelledby="landing-title">
-          <p>A reflective cultural memory prototype</p>
-          <PageHeading id="landing-title">Thawing Memory</PageHeading>
-          <p>
-            Begin with a fragment of family cooking memory. An AI reflection
-            will help you notice, question, and describe what remains, while
-            you decide what fits and what does not.
-          </p>
+      <main className="scene-main">
+        <section className="landing-hero scene-hero scene-hero--home" aria-labelledby="landing-title">
+          <img className="scene-hero__leaf scene-hero__leaf--left" src={bananaLeafLeft} alt="" aria-hidden="true" />
+          <img className="scene-hero__leaf scene-hero__leaf--right" src={bananaLeafRight} alt="" aria-hidden="true" />
+          <img className="scene-hero__feature scene-hero__feature--boat" src={boatRace} alt="" aria-hidden="true" />
+          <div className="scene-hero__content">
+            <p>A reflective cultural memory prototype</p>
+            <PageHeading id="landing-title">Thawing Memory</PageHeading>
+            <p>
+              Begin with a fragment of family cooking memory. An AI reflection
+              will help you notice, question, and describe what remains, while
+              you decide what fits and what does not.
+            </p>
+          </div>
         </section>
 
         <section className="landing-introduction" aria-labelledby="about-title">

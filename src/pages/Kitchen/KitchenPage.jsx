@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import bananaLeafLeft from '../../assets/decorations/banana-leaf-left-cropped.svg'
+import bananaLeafRight from '../../assets/decorations/banana-leaf-right-cropped.svg'
+import kitchenFood from '../../assets/decorations/kitchen-food-cropped.svg'
 import FocusGuide from '../../components/layout/FocusGuide/FocusGuide.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
@@ -286,13 +289,18 @@ function KitchenPage() {
       <SiteHeader />
 
       <main className="kitchen-main">
-        <section aria-labelledby="kitchen-title">
-          <p>Kitchen Memory Reconstruction</p>
-          <PageHeading id="kitchen-title">The Kitchen</PageHeading>
-          <p>
-            Begin with a fragment of cooking knowledge remembered through
-            observation, repetition, or the senses.
-          </p>
+        <section className="scene-hero scene-hero--kitchen" aria-labelledby="kitchen-title">
+          <img className="scene-hero__leaf scene-hero__leaf--left" src={bananaLeafLeft} alt="" aria-hidden="true" />
+          <img className="scene-hero__leaf scene-hero__leaf--right" src={bananaLeafRight} alt="" aria-hidden="true" />
+          <img className="scene-hero__feature scene-hero__feature--food" src={kitchenFood} alt="" aria-hidden="true" />
+          <div className="scene-hero__content">
+            <p>Kitchen Memory Reconstruction</p>
+            <PageHeading id="kitchen-title">The Kitchen</PageHeading>
+            <p>
+              Begin with a fragment of cooking knowledge remembered through
+              observation, repetition, or the senses.
+            </p>
+          </div>
         </section>
 
         <section aria-labelledby="memory-cards-title">
