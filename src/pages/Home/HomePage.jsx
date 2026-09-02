@@ -54,7 +54,10 @@ function HomePage() {
         </section>
 
         <section className="landing-entry" aria-label="Enter the prototype">
-          <Link className="primary-action primary-action--ornate" to="/kitchen">
+          <Link
+            className="primary-action primary-action--ornate primary-action--inviting"
+            to="/kitchen"
+          >
             Enter the Kitchen
           </Link>
         </section>

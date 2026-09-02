@@ -1,6 +1,12 @@
 import { createServer } from 'node:http'
-import { generateReflection } from './geminiClient.js'
-import { validateLegacyReflectionRequest } from './reflectionRequest.js'
+import {
+  generateContinuedReflection,
+  generateReflection,
+} from './geminiClient.js'
+import {
+  validateConversationRequest,
+  validateLegacyReflectionRequest,
+} from './reflectionRequest.js'
 
 const DEFAULT_PORT = 3001
 const MAX_REQUEST_SIZE = 12000
@@ -65,14 +71,34 @@ function readJsonBody(request) {
 async function handleReflectionRequest(request, response) {
   try {
     const body = await readJsonBody(request)
-    const validationError = validateLegacyReflectionRequest(body)
+    const isConversationRequest =
+      Object.hasOwn(body ?? {}, 'action') ||
+      Object.hasOwn(body ?? {}, 'memoryFragments')
+    const validationError = isConversationRequest
+      ? validateConversationRequest(body)
+      : validateLegacyReflectionRequest(body)
 
     if (validationError) {
       sendError(response, 400, validationError.code, validationError.message)
       return
     }
 
-    const reflection = await generateReflection(body.memory)
+    if (isConversationRequest && body.action === 'build') {
+      sendError(
+        response,
+        501,
+        'WORKING_RECIPE_NOT_IMPLEMENTED',
+        'Working recipe generation will be added in the next server step.',
+      )
+      return
+    }
+
+    const reflection = isConversationRequest
+      ? await generateContinuedReflection({
+          memoryFragments: body.memoryFragments,
+          skippedQuestions: body.skippedQuestions,
+        })
+      : await generateReflection(body.memory)
     sendJson(response, 200, reflection)
   } catch (error) {
     if (error.code === 'PAYLOAD_TOO_LARGE') {

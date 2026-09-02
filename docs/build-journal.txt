@@ -67,3 +67,14 @@ Choices made and why: The conversation is bounded rather than unlimited. Previou
 What failed, changed, or surprised me: A conventional regional recipe assistant initially seemed like a useful extension, but it would shift the model into the role of cultural authority and conflict with the research argument. The revised design supports recipe formulation without allowing the model to invent missing cultural knowledge.
 Evidence, such as commit, screenshot, prompt output, or bug: docs/conversational-reconstruction-spec.txt and decision-log entry 006.
 Next small step: Implement the conversation data model and pure helper functions without changing the visible interface.
+
+
+ENTRY 006
+
+Date: 2 September 2026
+Planned task: Add the live server path for a bounded continued reflection.
+What was completed: The reflection endpoint now distinguishes the original one-turn request from the new conversation request. A valid continue action sends labelled user fragments, AI question context, and skipped questions to Gemini and expects a validated reflection response with an explicit type. The original one-turn path remains available.
+Choices made and why: Only user-authored fragment text is presented as memory evidence. Questions previously written by the AI are labelled as context only so the model can avoid repetition without converting its own wording into family knowledge. Working recipe generation returns a clear not-yet-implemented response until its separate prompt and schema are built.
+What failed, changed, or surprised me: The updated local endpoint passed validation and routing checks, but two live Gemini attempts timed out and returned the safe model-unavailable response. The failed call did not log the API key or memory text and did not require changing the continuation contract.
+Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests passed, including new prompt tests for source separation and question repetition. Lint and the production build passed. The health route returned successfully on the temporary test server.
+Next small step: Connect the Kitchen interface to the continued reflection request and add answer, skip, and turn-limit states.

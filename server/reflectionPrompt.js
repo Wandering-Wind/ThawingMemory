@@ -24,3 +24,43 @@ END USER MEMORY
 
 Generate a provisional reflection, one limitation note, and one question.`
 }
+
+export const CONTINUED_REFLECTION_SYSTEM_INSTRUCTION = `${REFLECTION_SYSTEM_INSTRUCTION}
+
+This is a bounded continued reflection. The conversation data distinguishes user-authored memory fragments from AI-authored question context.
+
+Use only the text fields inside memoryFragments as evidence about the user's memory. The questionAnswered fields and skippedQuestions are AI context, not user evidence. Never turn wording from an AI question into a claim about the user's family or practice.
+
+Reflect specifically on what the newest user-authored fragment adds. You may refer carefully to earlier user fragments for context. Ask one new focused question about an ingredient, sequence, gesture, sensory cue, readiness cue, substitution, family term, or transmission detail that remains missing.
+
+Do not repeat any question recorded in questionAnswered or skippedQuestions. Accept uncertainty and statements such as "I do not remember" without pressure. Do not provide a recipe or fill a gap yourself.`
+
+export function createContinuedReflectionInput({
+  memoryFragments,
+  skippedQuestions = [],
+}) {
+  const conversationData = {
+    memoryFragments: memoryFragments.map((fragment, index) => ({
+      source: 'user',
+      sequence: index + 1,
+      text: fragment.text,
+      questionAnswered:
+        index === 0
+          ? null
+          : {
+              source: 'ai_context_only',
+              text: fragment.questionAnswered,
+            },
+    })),
+    skippedQuestions: skippedQuestions.map((question) => ({
+      source: 'ai_context_only',
+      text: question,
+    })),
+  }
+
+  return `BEGIN CONVERSATION DATA
+${JSON.stringify(conversationData, null, 2)}
+END CONVERSATION DATA
+
+Generate a provisional reflection about what the newest user fragment adds, one limitation note, and one new question. Return only the required JSON fields.`
+}

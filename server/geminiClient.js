@@ -1,4 +1,6 @@
 import {
+  CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
+  createContinuedReflectionInput,
   createReflectionInput,
   REFLECTION_SYSTEM_INSTRUCTION,
 } from './reflectionPrompt.js'
@@ -127,7 +129,7 @@ function validateReflection(responseText) {
   return validatedReflection
 }
 
-export async function generateReflection(memory) {
+async function generateStructuredReflection({ systemInstruction, input }) {
   const apiKey = process.env.GEMINI_API_KEY
 
   if (!apiKey) {
@@ -138,12 +140,12 @@ export async function generateReflection(memory) {
   const apiUrl = `${GEMINI_API_BASE_URL}/${encodeURIComponent(model)}:generateContent`
   const requestBody = JSON.stringify({
     systemInstruction: {
-      parts: [{ text: REFLECTION_SYSTEM_INSTRUCTION }],
+      parts: [{ text: systemInstruction }],
     },
     contents: [
       {
         role: 'user',
-        parts: [{ text: createReflectionInput(memory) }],
+        parts: [{ text: input }],
       },
     ],
     generationConfig: {
@@ -170,4 +172,29 @@ export async function generateReflection(memory) {
   }
 
   return validateReflection(extractOutputText(payload))
+}
+
+export function generateReflection(memory) {
+  return generateStructuredReflection({
+    systemInstruction: REFLECTION_SYSTEM_INSTRUCTION,
+    input: createReflectionInput(memory),
+  })
+}
+
+export async function generateContinuedReflection({
+  memoryFragments,
+  skippedQuestions = [],
+}) {
+  const reflection = await generateStructuredReflection({
+    systemInstruction: CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
+    input: createContinuedReflectionInput({
+      memoryFragments,
+      skippedQuestions,
+    }),
+  })
+
+  return {
+    type: 'reflection',
+    ...reflection,
+  }
 }

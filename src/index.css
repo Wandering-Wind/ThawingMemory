@@ -150,6 +150,10 @@ button:disabled {
   animation: reflecting-border-pulse 1.8s ease-in-out infinite;
 }
 
+.primary-action--inviting {
+  animation: inviting-gold-pulse 3.2s ease-in-out infinite;
+}
+
 .thinking-dots {
   display: inline-flex;
   align-items: baseline;
@@ -398,6 +402,21 @@ li + li {
     box-shadow:
       inset 0 0 0 2px rgb(240 213 108 / 75%),
       0 0 0 0.35rem rgb(195 149 36 / 22%);
+  }
+}
+
+@keyframes inviting-gold-pulse {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 1px rgb(240 213 108 / 35%),
+      0 0 0 0 rgb(195 149 36 / 8%);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 0 2px rgb(240 213 108 / 78%),
+      0 0 0 0.4rem rgb(195 149 36 / 20%);
   }
 }
 
@@ -766,6 +785,7 @@ li + li {
   .site-brand__name,
   .page-heading__decoration,
   .primary-action--reflecting,
+  .primary-action--inviting,
   .thinking-dots span,
   body {
     animation: none;
