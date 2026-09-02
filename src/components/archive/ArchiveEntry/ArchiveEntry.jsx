@@ -1,3 +1,6 @@
+import aiResponseDecoration from '../../../assets/decorations/AIResponse.svg'
+import yourMemoryDecoration from '../../../assets/decorations/YourMemory.svg'
+
 const decisionLabels = {
   kept: 'Kept as a prompt',
   edited: 'Edited by user',
@@ -21,7 +24,7 @@ function ArchiveEntry({ entry }) {
   const titleId = `archive-entry-${entry.id}`
 
   return (
-    <article aria-labelledby={titleId}>
+    <article className="archive-entry" aria-labelledby={titleId}>
       <header>
         <p>{decisionLabels[entry.decision] || 'Decision unavailable'}</p>
         <h2 id={titleId}>{entry.cardTitle || 'Kitchen memory trace'}</h2>
@@ -32,27 +35,62 @@ function ArchiveEntry({ entry }) {
         </p>
       </header>
 
-      <section aria-labelledby={`${titleId}-memory`}>
+      <section
+        className="archive-entry__user-content"
+        aria-labelledby={`${titleId}-memory`}
+      >
+        <img
+          className="archive-entry__decoration"
+          src={yourMemoryDecoration}
+          alt=""
+          aria-hidden="true"
+        />
         <h3 id={`${titleId}-memory`}>Your memory</h3>
         <p>{entry.userMemory}</p>
       </section>
 
       {entry.userRevision && (
-        <section aria-labelledby={`${titleId}-revision`}>
+        <section
+          className="archive-entry__user-content"
+          aria-labelledby={`${titleId}-revision`}
+        >
+          <img
+            className="archive-entry__decoration"
+            src={yourMemoryDecoration}
+            alt=""
+            aria-hidden="true"
+          />
           <h3 id={`${titleId}-revision`}>Your version</h3>
           <p>{entry.userRevision}</p>
         </section>
       )}
 
       {entry.userCorrection && (
-        <section aria-labelledby={`${titleId}-correction`}>
+        <section
+          className="archive-entry__user-content"
+          aria-labelledby={`${titleId}-correction`}
+        >
+          <img
+            className="archive-entry__decoration"
+            src={yourMemoryDecoration}
+            alt=""
+            aria-hidden="true"
+          />
           <h3 id={`${titleId}-correction`}>Your family correction</h3>
           <p>{entry.userCorrection}</p>
         </section>
       )}
 
       <details>
-        <summary>View provisional AI response</summary>
+        <summary>
+          <img
+            className="archive-entry__ai-decoration"
+            src={aiResponseDecoration}
+            alt=""
+            aria-hidden="true"
+          />
+          <span>View provisional AI response</span>
+        </summary>
 
         <section aria-labelledby={`${titleId}-ai-reflection`}>
           <h3 id={`${titleId}-ai-reflection`}>Provisional AI reflection</h3>

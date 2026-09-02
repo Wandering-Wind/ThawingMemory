@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import yourMemoryDecoration from '../../../assets/decorations/YourMemory.svg'
 
 const MEMORY_LIMIT = 2000
 
@@ -34,7 +35,13 @@ function MemoryEntryForm({ card, isSubmitting, onMemoryChange, onSubmit }) {
     .join(' ')
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form className="memory-entry-form" onSubmit={handleSubmit} noValidate>
+      <img
+        className="memory-entry-form__decoration"
+        src={yourMemoryDecoration}
+        alt=""
+        aria-hidden="true"
+      />
       <p>{card.prompt}</p>
 
       <label htmlFor={inputId}>What do you remember?</label>
@@ -64,7 +71,11 @@ function MemoryEntryForm({ card, isSubmitting, onMemoryChange, onSubmit }) {
         </p>
       )}
 
-      <button type="submit" disabled={isSubmitting}>
+      <button
+        className="primary-action--ornate"
+        type="submit"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? 'Reflecting...' : 'Reflect with AI'}
       </button>
     </form>

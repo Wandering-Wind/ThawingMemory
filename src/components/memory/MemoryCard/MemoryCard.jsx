@@ -22,7 +22,11 @@ function MemoryCard({
           onSubmit={onSubmit}
         />
       ) : (
-        <button type="button" onClick={() => onOpen(card.id)}>
+        <button
+          className="primary-action--ornate"
+          type="button"
+          onClick={() => onOpen(card.id)}
+        >
           Open memory
         </button>
       )}
