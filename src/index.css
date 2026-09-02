@@ -225,11 +225,82 @@ li + li {
   border-bottom: 1px solid var(--color-sand);
 }
 
-.site-header a {
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   color: var(--color-ink);
   font-family: var(--font-display);
   font-size: var(--font-size-lg);
   text-decoration: none;
+}
+
+.site-brand__logo {
+  width: 2.75rem;
+  height: 2.75rem;
+  filter: sepia(0.85) saturate(1.35) brightness(0.58);
+  object-fit: contain;
+}
+
+.site-brand__name {
+  color: var(--color-ink);
+  background-image: linear-gradient(
+    105deg,
+    var(--color-ink) 0%,
+    var(--color-ink) 43%,
+    var(--color-gold-light) 48%,
+    var(--color-gold) 51%,
+    var(--color-ink) 57%,
+    var(--color-ink) 100%
+  );
+  background-position: 120% center;
+  background-size: 250% 100%;
+  background-clip: text;
+  animation: brand-gold-shine 9s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-heading {
+  position: relative;
+}
+
+.page-heading h1 {
+  margin-bottom: 0;
+}
+
+.page-heading__decoration {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + var(--space-1));
+  width: 1.5rem;
+  height: 3.5rem;
+  transform: translateY(-50%);
+  object-fit: contain;
+  animation: heading-decoration-drift 4s ease-in-out infinite;
+}
+
+@keyframes brand-gold-shine {
+  0%,
+  82% {
+    background-position: 120% center;
+  }
+
+  94%,
+  100% {
+    background-position: -120% center;
+  }
+}
+
+@keyframes heading-decoration-drift {
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 0.2rem));
+  }
 }
 
 .site-shell main {
@@ -547,6 +618,11 @@ li + li {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .site-brand__name,
+  .page-heading__decoration {
+    animation: none;
   }
 }
 

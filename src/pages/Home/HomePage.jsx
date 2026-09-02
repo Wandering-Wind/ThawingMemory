@@ -1,18 +1,16 @@
 import { Link } from 'react-router-dom'
+import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 
 function HomePage() {
   return (
     <div className="site-shell">
-      <header className="site-header">
-        <Link to="/" aria-label="Thawing Memory home">
-          Thawing Memory
-        </Link>
-      </header>
+      <SiteHeader />
 
       <main>
         <section className="landing-hero" aria-labelledby="landing-title">
           <p>A reflective cultural memory prototype</p>
-          <h1 id="landing-title">Thawing Memory</h1>
+          <PageHeading id="landing-title">Thawing Memory</PageHeading>
           <p>
             Begin with a fragment of family cooking memory. An AI reflection
             will help you notice, question, and describe what remains, while

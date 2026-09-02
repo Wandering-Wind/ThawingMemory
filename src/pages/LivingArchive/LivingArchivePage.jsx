@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ArchiveEntry from '../../components/archive/ArchiveEntry/ArchiveEntry.jsx'
+import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import { readArchiveData } from '../../services/archiveStorage.js'
 
 function LivingArchivePage() {
@@ -8,14 +10,12 @@ function LivingArchivePage() {
 
   return (
     <div className="site-shell">
-      <header className="site-header">
-        <Link to="/">Thawing Memory</Link>
-      </header>
+      <SiteHeader />
 
       <main>
         <section aria-labelledby="archive-title">
           <p>Traces around memory</p>
-          <h1 id="archive-title">Living Archive</h1>
+          <PageHeading id="archive-title">Living Archive</PageHeading>
           <p>
             This is not an archive of culture itself. It gathers written
             fragments, provisional AI responses, and the corrections that

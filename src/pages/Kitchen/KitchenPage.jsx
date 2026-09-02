@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
 import ResponseEvaluation from '../../components/memory/ResponseEvaluation/ResponseEvaluation.jsx'
@@ -130,14 +132,12 @@ function KitchenPage() {
 
   return (
     <div className="site-shell">
-      <header className="site-header">
-        <Link to="/">Thawing Memory</Link>
-      </header>
+      <SiteHeader />
 
       <main>
         <section aria-labelledby="kitchen-title">
           <p>Kitchen Memory Reconstruction</p>
-          <h1 id="kitchen-title">The Kitchen</h1>
+          <PageHeading id="kitchen-title">The Kitchen</PageHeading>
           <p>
             Begin with a fragment of cooking knowledge remembered through
             observation, repetition, or the senses.
