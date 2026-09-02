@@ -41,6 +41,7 @@ function ConversationContinuation({
   return (
     <section
       className="conversation-continuation"
+      id="conversation-continuation"
       aria-labelledby="continue-reflection-title"
     >
       <p className="conversation-continuation__step">

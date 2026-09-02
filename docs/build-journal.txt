@@ -122,3 +122,14 @@ Choices made and why: The flower path and the request result are coordinated so 
 What failed, changed, or surprised me: A rate-limit response could arrive before the original looping animation reached its destination, making the guide appear broken. Waiting for one bounded visual handoff resolves that mismatch while keeping the user's fragment preserved.
 Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests, lint, and the production build passed.
 Next small step: Retry a live continuation after the free Gemini limit resets, then implement Working Family Recipe generation.
+
+
+ENTRY 011
+
+Date: 2 September 2026
+Planned task: Turn the corner flowers into a continuous guide between interaction stages.
+What was completed: One persistent focus guide now measures the active card and animates both flower corners between the memory card, AI response, continuation controls, and evaluation. After a successful response, the guide rests on the AI response for four seconds before moving to the next user action.
+Choices made and why: A single measured guide creates spatial continuity that separate decorations could not provide. The active target remains determined by interaction state, and the flowers remain decorative, non-interactive, and excluded from the accessibility tree.
+What failed, changed, or surprised me: Recreating flowers on each card made the destination visible but did not communicate movement through the process. Preserving one guide across state changes makes the transition itself legible.
+Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests, lint, and the production build passed.
+Next small step: Inspect the moving guide during a successful live conversation after Gemini quota becomes available.

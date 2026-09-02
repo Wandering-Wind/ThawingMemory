@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import FocusGuide from '../../components/layout/FocusGuide/FocusGuide.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
@@ -44,11 +45,23 @@ function KitchenPage() {
   const [conversation, setConversation] = useState(null)
   const [pendingTurn, setPendingTurn] = useState(false)
   const [isEvaluating, setIsEvaluating] = useState(false)
+  const [focusArea, setFocusArea] = useState('memory')
   const [isReflecting, setIsReflecting] = useState(false)
   const [reflectionError, setReflectionError] = useState('')
   const [evaluation, setEvaluation] = useState(emptyEvaluation)
   const [savedEntryId, setSavedEntryId] = useState('')
   const [saveError, setSaveError] = useState('')
+  const focusTimer = useRef(null)
+
+  useEffect(() => {
+    return () => clearTimeout(focusTimer.current)
+  }, [])
+
+  function focusOnResponseThenContinue() {
+    clearTimeout(focusTimer.current)
+    setFocusArea('ai')
+    focusTimer.current = setTimeout(() => setFocusArea('continue'), 4000)
+  }
 
   function resetSaveState() {
     setSavedEntryId('')
@@ -62,6 +75,7 @@ function KitchenPage() {
     setConversation(null)
     setPendingTurn(false)
     setIsEvaluating(false)
+    setFocusArea('memory')
     setReflectionError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
@@ -73,6 +87,7 @@ function KitchenPage() {
     setConversation(null)
     setPendingTurn(false)
     setIsEvaluating(false)
+    setFocusArea('memory')
     setReflectionError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
@@ -94,6 +109,7 @@ function KitchenPage() {
       })
       setAIResponse(response)
       setConversation(addAIResponse(createConversation(memory), response))
+      focusOnResponseThenContinue()
     } catch (error) {
       setReflectionError(error.message)
     } finally {
@@ -105,6 +121,8 @@ function KitchenPage() {
     setReflectionError('')
     setEvaluation(emptyEvaluation)
     setIsEvaluating(false)
+    clearTimeout(focusTimer.current)
+    setFocusArea('ai')
     resetSaveState()
 
     try {
@@ -131,9 +149,11 @@ function KitchenPage() {
       setConversation(completedConversation)
       setAIResponse(response)
       setPendingTurn(false)
+      focusOnResponseThenContinue()
     } catch (error) {
       setReflectionError(error.message)
       setPendingTurn(true)
+      setFocusArea('continue')
     } finally {
       setIsReflecting(false)
     }
@@ -174,6 +194,8 @@ function KitchenPage() {
 
   function handleFinishReconstruction() {
     setIsEvaluating(true)
+    clearTimeout(focusTimer.current)
+    setFocusArea('evaluation')
 
     requestAnimationFrame(() => {
       const prefersReducedMotion = window.matchMedia(
@@ -250,6 +272,17 @@ function KitchenPage() {
 
   return (
     <div className="site-shell">
+      <FocusGuide
+        targetId={
+          focusArea === 'ai'
+            ? 'ai-response'
+            : focusArea === 'continue'
+              ? 'conversation-continuation'
+              : focusArea === 'evaluation'
+                ? 'response-evaluation'
+                : `memory-card-${activeCardId || kitchenCards[0].id}`
+        }
+      />
       <SiteHeader />
 
       <main className="kitchen-main">

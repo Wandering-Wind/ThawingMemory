@@ -14,6 +14,7 @@ function AIResponse({ isLoading = false, response }) {
   return (
     <section
       className={`ai-response${isLoading ? ' ai-response--loading' : ''}`}
+      id="ai-response"
       aria-labelledby="ai-response-title"
       aria-busy={isLoading}
     >

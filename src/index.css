@@ -158,6 +158,54 @@ button:disabled {
     0 0.2rem 0.55rem rgb(141 100 17 / 14%);
 }
 
+.focus-guide {
+  position: fixed;
+  z-index: 7;
+  border: 1px solid transparent;
+  pointer-events: none;
+  transition:
+    top 1.4s cubic-bezier(0.4, 0, 0.2, 1),
+    left 1.4s cubic-bezier(0.4, 0, 0.2, 1),
+    width 1.4s cubic-bezier(0.4, 0, 0.2, 1),
+    height 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.focus-guide__flower {
+  position: absolute;
+  width: clamp(3.5rem, 8vw, 5.5rem);
+  aspect-ratio: 1;
+  filter:
+    sepia(0.9)
+    saturate(1.4)
+    brightness(0.72)
+    drop-shadow(0 0 0.65rem rgb(240 213 108 / 45%));
+  opacity: 0.72;
+  animation: focus-flower-pulse 3.2s ease-in-out infinite;
+}
+
+.focus-guide__flower--start {
+  top: -2rem;
+  left: -2rem;
+}
+
+.focus-guide__flower--end {
+  right: -2rem;
+  bottom: -2rem;
+  animation-delay: 0.7s;
+  transform: rotate(180deg);
+}
+
+@keyframes focus-flower-pulse {
+  0%,
+  100% {
+    opacity: 0.58;
+  }
+
+  50% {
+    opacity: 0.92;
+  }
+}
+
 .primary-action--reflecting {
   animation: reflecting-border-pulse 1.8s ease-in-out infinite;
 }
@@ -1129,6 +1177,8 @@ li + li {
   .ai-response--loading .ai-response__section,
   .reflection-guide__path,
   .reflection-guide img,
+  .focus-guide,
+  .focus-guide__flower,
   .reconstruction-workspace--memory .conversation-trail,
   .reconstruction-workspace--response .ai-response,
   body {
