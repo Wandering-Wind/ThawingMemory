@@ -71,3 +71,13 @@ Reason: Live testing showed that the model's sensory question could prompt usefu
 Alternatives considered: Keep the one-shot loop unchanged; allow unlimited chatbot conversation; let the model provide regional recipes; add a single follow-up only.
 Effect on scope or research argument: The Kitchen remains the only domain, but its core interaction becomes deeper. The model may organise user fragments but may not fill missing recipe details. Unlimited chat and AI-authored regional recipes remain outside scope because they would increase model drift and reposition the AI as a cultural authority.
 Related commit: To be added after this document is committed.
+
+
+ENTRY 007
+
+Date: 2 September 2026
+Decision: Prioritise practical reconstruction questions over broad sensory or atmospheric questions.
+Reason: Live output showed that a question about surrounding sounds or smells could be cautious without helping the user recover a usable family method. Questions should first target counts, preparation, sequence, heat, texture, readiness, substitutions, or family terms. Sensory recall remains useful when it identifies a cooking decision.
+Alternatives considered: Keep the original sensory-first prompt; allow Gemini to supply generic quantities and timings; turn the experience into a regional recipe assistant.
+Effect on scope or research argument: The AI becomes more useful as an interviewer without becoming the source of family knowledge. Generic cooking guidance remains outside the remembered recipe unless a later, separately labelled and sourced comparison feature is deliberately added.
+Related commit: To be added after this document is committed.

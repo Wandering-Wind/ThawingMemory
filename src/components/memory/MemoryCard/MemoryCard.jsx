@@ -23,7 +23,7 @@ function MemoryCard({
         />
       ) : (
         <button
-          className="primary-action--ornate"
+          className="primary-action--ornate primary-action--inviting"
           type="button"
           onClick={() => onOpen(card.id)}
         >

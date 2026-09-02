@@ -30,7 +30,11 @@ function ResponseEvaluation({
   }
 
   return (
-    <section className="response-evaluation" aria-labelledby="evaluation-title">
+    <section
+      className="response-evaluation"
+      id="response-evaluation"
+      aria-labelledby="evaluation-title"
+    >
       <h2 id="evaluation-title">What would you like to do with this?</h2>
       <p>
         Keeping the response does not verify it. Editing or rejecting it keeps

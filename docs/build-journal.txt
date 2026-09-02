@@ -78,3 +78,47 @@ Choices made and why: Only user-authored fragment text is presented as memory ev
 What failed, changed, or surprised me: The updated local endpoint passed validation and routing checks, but two live Gemini attempts timed out and returned the safe model-unavailable response. The failed call did not log the API key or memory text and did not require changing the continuation contract.
 Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests passed, including new prompt tests for source separation and question repetition. Lint and the production build passed. The health route returned successfully on the temporary test server.
 Next small step: Connect the Kitchen interface to the continued reflection request and add answer, skip, and turn-limit states.
+
+
+ENTRY 007
+
+Date: 2 September 2026
+Planned task: Connect the Kitchen interface to the server-side continued reflection path.
+What was completed: The user can now answer or skip the latest AI question, submit up to three follow-up memory fragments, retry a failed turn without duplicating it, and review earlier user fragments and provisional AI responses. The Open memory button now carries the same gold call-to-action pulse as the landing-page entry button.
+Choices made and why: User fragments are stored before the request begins so a provider failure cannot erase them. Earlier AI turns are available for review but remain visually and structurally separate from user-authored evidence. The question prompt was narrowed toward operational recipe details after the original sensory-first wording produced a question that did not materially advance reconstruction.
+What failed, changed, or surprised me: The technically successful one-turn interaction still felt conceptually inactive because paraphrasing and broad sensory prompting did not help formulate a method. Adding another model turn only becomes meaningful when its question targets a practical gap.
+Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests, lint, and the production build passed. A live browser test still requires restarting the server process on port 3001 so it loads the new continuation route.
+Next small step: Restart both local processes and test one complete two-turn reconstruction with fictional text, then implement the Working Family Recipe server response.
+
+
+ENTRY 008
+
+Date: 2 September 2026
+Planned task: Reduce visual overload after a continued reflection and clarify the user's next action.
+What was completed: On wider screens, the memory card now sits beside the accumulated user reconstruction, while the current AI response sits beside the continuation controls. The controls explicitly ask the user to choose one next step: answer, skip, or finish and evaluate. Evaluation remains hidden until requested.
+Choices made and why: Pairing source material with its accumulation and model output with its controls makes the relationships easier to scan. Hiding evaluation prevents two different decision stages from competing at once. The layout returns to a single column below 55rem.
+What failed, changed, or surprised me: Adding continuation functionality increased conceptual value but also made the original vertical page difficult to parse. The interface needed progressive disclosure, not simply more controls beneath the existing ones.
+Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests, lint, and the production build passed.
+Next small step: Test the paired layout with a successful two-turn live response, then implement Working Family Recipe generation.
+
+
+ENTRY 009
+
+Date: 2 September 2026
+Planned task: Teach the conversational model through archive examples and make continued-request progress unmistakable.
+What was completed: The Living Archive now includes separate demonstration conversations for kept, edited, and rejected outcomes. Each example exposes its user fragments, the practical AI question answered by each fragment, and expandable provisional AI turns. During a continued request, the existing AI response softens and pulses, its sections display staggered thinking dots, and the supplied loading flower travels from the continuation controls toward the response.
+Choices made and why: Demonstrations are static project examples rather than records inserted into local storage, preventing fictional data from being presented as the visitor's archive. Loading motion is tied to the real request state and supplemented by a screen-reader status message. Reduced-motion preferences disable all guiding animation.
+What failed, changed, or surprised me: The interface needed to demonstrate not only outcomes but also what a useful answer to an AI question looks like. Showing the questions beside the user fragments makes the intended reconstruction behaviour more legible than three isolated final cards.
+Evidence, such as commit, screenshot, prompt output, or bug: The archive structure was reviewed in a browser. Fifteen automated tests, lint, and the production build passed.
+Next small step: Live-test the full follow-up transition after restarting the server, then implement Working Family Recipe generation.
+
+
+ENTRY 010
+
+Date: 2 September 2026
+Planned task: Make the visual handoff between a submitted follow-up and the next AI response complete and directional.
+What was completed: The loading flower now travels once over 5.5 seconds from the continuation controls into the AI response and remains pulsing at its destination if the request takes longer. A minimum transition duration prevents fast provider errors from removing the guide halfway through. The reconstruction card slides from behind the memory card, and the first AI response slides down from beneath the memory area.
+Choices made and why: The flower path and the request result are coordinated so motion communicates a complete transfer rather than functioning as an unrelated looping decoration. The response reveal runs only when the response area first appears, while later requests use pulse and loading feedback without repeatedly sliding the whole card.
+What failed, changed, or surprised me: A rate-limit response could arrive before the original looping animation reached its destination, making the guide appear broken. Waiting for one bounded visual handoff resolves that mismatch while keeping the user's fragment preserved.
+Evidence, such as commit, screenshot, prompt output, or bug: Fifteen automated tests, lint, and the production build passed.
+Next small step: Retry a live continuation after the free Gemini limit resets, then implement Working Family Recipe generation.

@@ -8,7 +8,7 @@ Produce three short fields:
 
 2. limitation: State one relevant thing you cannot know from the memory. This may concern family variation, regional practice, migration, ingredients, language, religion, caste, class, or personal meaning, but mention only factors genuinely relevant to the supplied text. Do not present this as a confidence score or proof that you understand your own bias.
 
-3. question: Ask one gentle and specific question that invites the user to recall an embodied, sensory, or family-specific detail. Do not test their knowledge or ask them to verify a general cultural fact.
+3. question: Ask one gentle and specific question that helps reconstruct the practical method. Prioritise a missing quantity or count, preparation step, ingredient sequence, heat change, texture test, readiness cue, substitution, or family term. Ask about sound, smell, or atmosphere only when it could help identify an operational cooking decision. Do not ask a broad atmospheric question, test the user's knowledge, or ask them to verify a general cultural fact.
 
 Preserve Malayalam words and transliterations exactly as supplied. Do not translate them unless the user already provides a translation. Avoid universal statements about Malayalis, Kerala, Indian culture, tradition, or authenticity. Avoid praise, nostalgia clichés, and therapeutic language.
 

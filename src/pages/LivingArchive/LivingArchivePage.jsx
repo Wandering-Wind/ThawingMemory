@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import ArchiveEntry from '../../components/archive/ArchiveEntry/ArchiveEntry.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
+import archiveExamples from '../../data/archiveExamples.js'
 import { readArchiveData } from '../../services/archiveStorage.js'
 
 function LivingArchivePage() {
@@ -29,6 +30,19 @@ function LivingArchivePage() {
             shown as empty, and you can return to the Kitchen to begin again.
           </p>
         )}
+
+        <section aria-labelledby="example-conversations-title">
+          <h2 id="example-conversations-title">Example conversations</h2>
+          <p>
+            These demonstration traces show how keeping, editing, and
+            rejecting can work. They are examples, not memories saved by you.
+          </p>
+          <div className="archive-entry-list">
+            {archiveExamples.map((entry) => (
+              <ArchiveEntry key={entry.id} entry={entry} />
+            ))}
+          </div>
+        </section>
 
         {archiveData.entries.length === 0 ? (
           <section aria-labelledby="empty-archive-title">
