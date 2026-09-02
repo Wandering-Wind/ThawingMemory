@@ -10,8 +10,8 @@ import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import ConversationContinuation from '../../components/memory/ConversationContinuation/ConversationContinuation.jsx'
 import ConversationTrail from '../../components/memory/ConversationTrail/ConversationTrail.jsx'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
-import ReflectionGuide from '../../components/memory/ReflectionGuide/ReflectionGuide.jsx'
 import ResponseEvaluation from '../../components/memory/ResponseEvaluation/ResponseEvaluation.jsx'
+import WorkingRecipe from '../../components/memory/WorkingRecipe/WorkingRecipe.jsx'
 import kitchenCards from '../../data/kitchenCards.js'
 import {
   createArchiveEntry,
@@ -20,10 +20,12 @@ import {
 import {
   requestContinuedReflection,
   requestReflection,
+  requestWorkingRecipe,
 } from '../../services/reflectionApi.js'
 import {
   addAIResponse,
   addMemoryFragment,
+  addWorkingRecipe,
   createConversation,
   createConversationRequest,
   skipQuestion,
@@ -35,12 +37,6 @@ const emptyEvaluation = {
   correction: '',
 }
 
-const MINIMUM_GUIDE_DURATION = 5500
-
-function waitForGuide() {
-  return new Promise((resolve) => setTimeout(resolve, MINIMUM_GUIDE_DURATION))
-}
-
 function KitchenPage() {
   const [activeCardId, setActiveCardId] = useState(null)
   const [submittedMemory, setSubmittedMemory] = useState('')
@@ -50,6 +46,8 @@ function KitchenPage() {
   const [isEvaluating, setIsEvaluating] = useState(false)
   const [focusArea, setFocusArea] = useState('memory')
   const [isReflecting, setIsReflecting] = useState(false)
+  const [isBuildingRecipe, setIsBuildingRecipe] = useState(false)
+  const [recipeError, setRecipeError] = useState('')
   const [reflectionError, setReflectionError] = useState('')
   const [evaluation, setEvaluation] = useState(emptyEvaluation)
   const [savedEntryId, setSavedEntryId] = useState('')
@@ -80,6 +78,7 @@ function KitchenPage() {
     setIsEvaluating(false)
     setFocusArea('memory')
     setReflectionError('')
+    setRecipeError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
   }
@@ -92,6 +91,7 @@ function KitchenPage() {
     setIsEvaluating(false)
     setFocusArea('memory')
     setReflectionError('')
+    setRecipeError('')
     setEvaluation(emptyEvaluation)
     resetSaveState()
   }
@@ -130,23 +130,13 @@ function KitchenPage() {
 
     try {
       setIsReflecting(true)
-      const responseRequest = requestContinuedReflection(
+      const response = await requestContinuedReflection(
         createConversationRequest({
           action: 'continue',
           cardId: activeCardId,
           conversation: nextConversation,
         }),
-      ).then(
-        (response) => ({ response }),
-        (error) => ({ error }),
       )
-      const [result] = await Promise.all([responseRequest, waitForGuide()])
-
-      if (result.error) {
-        throw result.error
-      }
-
-      const { response } = result
       const completedConversation = addAIResponse(nextConversation, response)
 
       setConversation(completedConversation)
@@ -195,10 +185,48 @@ function KitchenPage() {
     }
   }
 
-  function handleFinishReconstruction() {
-    setIsEvaluating(true)
+  async function handleBuildWorkingRecipe() {
+    if (!conversation || isBuildingRecipe) {
+      return
+    }
+
     clearTimeout(focusTimer.current)
-    setFocusArea('evaluation')
+    setRecipeError('')
+    setIsEvaluating(false)
+    setIsBuildingRecipe(true)
+    setFocusArea('continue')
+
+    try {
+      const response = await requestWorkingRecipe(
+        createConversationRequest({
+          action: 'build',
+          cardId: activeCardId,
+          conversation,
+        }),
+      )
+      setConversation(addWorkingRecipe(conversation, response.recipe))
+      setFocusArea('recipe')
+      setIsEvaluating(true)
+
+      requestAnimationFrame(() => {
+        document.getElementById('working-recipe')?.scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : 'smooth',
+          block: 'start',
+        })
+      })
+    } catch (error) {
+      setRecipeError(error.message)
+      setFocusArea('continue')
+    } finally {
+      setIsBuildingRecipe(false)
+    }
+  }
+
+  function handleReturnToConversation() {
+    setIsEvaluating(false)
+    setFocusArea('continue')
 
     requestAnimationFrame(() => {
       const prefersReducedMotion = window.matchMedia(
@@ -206,7 +234,7 @@ function KitchenPage() {
       ).matches
 
       document
-        .getElementById('response-evaluation')
+        .getElementById('conversation-continuation')
         ?.scrollIntoView({
           behavior: prefersReducedMotion ? 'auto' : 'smooth',
           block: 'start',
@@ -279,6 +307,8 @@ function KitchenPage() {
         targetId={
           focusArea === 'ai'
             ? 'ai-response'
+            : focusArea === 'recipe'
+              ? 'working-recipe'
             : focusArea === 'continue'
               ? 'conversation-continuation'
               : focusArea === 'evaluation'
@@ -336,25 +366,41 @@ function KitchenPage() {
                 <ConversationContinuation
                   conversation={conversation}
                   error={reflectionError}
-                  isSubmitting={isReflecting}
+                  isBuilding={isBuildingRecipe}
+                  isSubmitting={isReflecting || isBuildingRecipe}
                   onAnswer={handleFollowUpAnswer}
-                  onFinish={handleFinishReconstruction}
+                  onBuild={handleBuildWorkingRecipe}
                   onRetry={handleRetryContinuation}
                   onSkip={handleSkipQuestion}
                   pendingTurn={pendingTurn}
                 />
-                {isReflecting && <ReflectionGuide />}
               </div>
 
+              {recipeError && <p role="alert">{recipeError}</p>}
+
+              {conversation?.workingRecipe && (
+                <WorkingRecipe recipe={conversation.workingRecipe} />
+              )}
+
               {isEvaluating && (
-                <ResponseEvaluation
-                  evaluation={evaluation}
-                  isSaved={Boolean(savedEntryId)}
-                  onChange={handleEvaluationChange}
-                  onSave={handleSaveTrace}
-                  response={aiResponse}
-                  saveError={saveError}
-                />
+                <>
+                  <button
+                    className="button--gold-edge"
+                    type="button"
+                    onClick={handleReturnToConversation}
+                  >
+                    Return to the conversation
+                  </button>
+                  <ResponseEvaluation
+                    evaluation={evaluation}
+                    isSaved={Boolean(savedEntryId)}
+                    onChange={handleEvaluationChange}
+                    onSave={handleSaveTrace}
+                    response={aiResponse}
+                    saveError={saveError}
+                    workingRecipe={conversation.workingRecipe}
+                  />
+                </>
               )}
             </>
           )}

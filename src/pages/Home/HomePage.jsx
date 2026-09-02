@@ -56,8 +56,9 @@ function HomePage() {
           </p>
           <p>
             Use demonstration memories only. When the live AI is connected,
-            submitted text will be sent to an external model service. Saved
-            traces will remain in this browser on this device.
+            submitted text will be sent to Gemini or, when Gemini is
+            temporarily unavailable, the configured Groq fallback. Saved traces
+            remain in this browser on this device.
           </p>
         </section>
 

@@ -677,12 +677,54 @@ li + li {
 
 .memory-card,
 .response-evaluation,
-.archive-entry {
+.archive-entry,
+.working-recipe {
   padding: clamp(var(--space-5), 5vw, var(--space-6));
   background: var(--color-paper);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-soft);
+}
+
+.working-recipe {
+  margin-top: clamp(var(--space-6), 7vw, var(--space-8));
+  background: color-mix(in srgb, var(--color-user-surface) 55%, var(--color-paper));
+}
+
+.working-recipe__eyebrow {
+  color: var(--color-clay-dark);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.working-recipe__notice {
+  max-width: var(--reading-width);
+  color: var(--color-ink-muted);
+}
+
+.working-recipe__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.working-recipe__section {
+  padding: var(--space-4);
+  background: rgb(255 252 244 / 74%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.working-recipe__section--stillUnknown {
+  grid-column: 1 / -1;
+  background: var(--color-limitation-surface);
+}
+
+.working-recipe__section > :last-child {
+  margin-bottom: 0;
 }
 
 .memory-card__status,
@@ -846,34 +888,6 @@ li + li {
   gap: var(--space-5);
 }
 
-.reflection-guide {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.reflection-guide__path {
-  position: absolute;
-  top: 72%;
-  left: 84%;
-  display: block;
-  width: clamp(2.75rem, 6vw, 4.5rem);
-  height: clamp(2.75rem, 6vw, 4.5rem);
-  animation:
-    reflection-guide-travel 5.5s cubic-bezier(0.45, 0, 0.2, 1) forwards,
-    reflection-guide-arrival 1.8s ease-in-out 5.5s infinite;
-}
-
-.reflection-guide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 0 0.7rem rgb(240 213 108 / 75%));
-  animation: reflection-guide-turn 5.5s linear forwards;
-}
-
 @keyframes ai-response-loading-pulse {
   0%,
   100% {
@@ -895,45 +909,6 @@ li + li {
 
   50% {
     transform: translateY(-0.2rem);
-  }
-}
-
-@keyframes reflection-guide-travel {
-  0% {
-    opacity: 0;
-  }
-
-  18% {
-    opacity: 1;
-  }
-
-  100% {
-    top: 62%;
-    left: 25%;
-    opacity: 1;
-  }
-}
-
-@keyframes reflection-guide-turn {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes reflection-guide-arrival {
-  0%,
-  100% {
-    filter: brightness(1);
-    transform: scale(1);
-  }
-
-  50% {
-    filter: brightness(1.25);
-    transform: scale(1.12);
   }
 }
 
@@ -1259,6 +1234,14 @@ li + li {
     grid-template-columns: 1fr;
   }
 
+  .working-recipe__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .working-recipe__section--stillUnknown {
+    grid-column: auto;
+  }
+
   .conversation-continuation__actions {
     grid-template-columns: 1fr;
   }
@@ -1287,26 +1270,6 @@ li + li {
     grid-template-columns: 1fr;
   }
 
-  .reflection-guide__path {
-    top: 85%;
-    left: 50%;
-  }
-
-  @keyframes reflection-guide-travel {
-    0% {
-      opacity: 0;
-    }
-
-    18% {
-      opacity: 1;
-    }
-
-    100% {
-      top: 28%;
-      left: 50%;
-      opacity: 1;
-    }
-  }
 }
 
 @media (max-width: 35rem) {
@@ -1381,8 +1344,6 @@ li + li {
   .ai-response--loading,
   .ai-response--loading::after,
   .ai-response--loading .ai-response__section,
-  .reflection-guide__path,
-  .reflection-guide img,
   .focus-guide,
   .focus-guide__flower,
   .reconstruction-workspace--memory .conversation-trail,

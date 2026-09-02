@@ -1,5 +1,87 @@
 const archiveExamples = [
   {
+    id: 'example-kept-chammanthi-working-recipe',
+    isExample: true,
+    cardTitle: 'Measured by Memory',
+    decision: 'kept',
+    memoryFragments: [
+      {
+        text: 'My mom made chammanthi, how did she know how much coconut to add?',
+        questionAnswered: '',
+      },
+      {
+        text: 'She added by the handful of coconut. Then she added dry chillies as well, plus onions and curry leaves',
+        questionAnswered:
+          'How much coconut did you add when making that chammanthi?',
+      },
+      {
+        text: 'She would usually taste as she added when she used the ammiikkal',
+        questionAnswered:
+          'How many dry chillies did she add to the chammanthi?',
+      },
+      {
+        text: "Ammiikkal is the stone used to make that chammanthi. It's similar to a mortar and pastel",
+        questionAnswered:
+          'How many ammiikkal did she add to the chammanthi?',
+      },
+    ],
+    aiResponses: [
+      {
+        reflection:
+          'The memory notes that your mom’s chammanthi was guided by hands, sound, smell, and repetition instead of written measurements.',
+        question:
+          'How much coconut did you add when making that chammanthi?',
+      },
+      {
+        reflection:
+          'She described adding a handful of coconut, then dry chillies, onions, and curry leaves, suggesting a more tactile, less measured approach.',
+        question: 'How many dry chillies did she add to the chammanthi?',
+      },
+      {
+        reflection:
+          'She says she would taste as she added, especially when using the ammiikkal, so it sounds like the seasoning was guided by taste rather than a set measurement.',
+        question: 'How many ammiikkal did she add to the chammanthi?',
+      },
+      {
+        reflection:
+          'The newest fragment adds that the chammanthi was prepared using an ammiikkal, described as a stone similar to a mortar and pestle, which clarifies the tool involved in the process.',
+        limitation:
+          'I cannot know the exact size or shape of the ammiikkal that she used, nor any specific handling details that were not mentioned.',
+        question:
+          'How many times did she crush the coconut in the ammiikkal before adding the other ingredients?',
+      },
+    ],
+    workingRecipe: {
+      dishName: 'chammanthi',
+      rememberedIngredients: [
+        'coconut',
+        'dry chillies',
+        'onions',
+        'curry leaves',
+      ],
+      rememberedMethod: [
+        'Use the ammiikkal stone',
+        'Add a handful of coconut',
+        'Add dry chillies',
+        'Add onions',
+        'Add curry leaves',
+        'Taste as you add',
+      ],
+      sensoryCues: [],
+      familyNotes: [
+        "Ammiikkal is the stone used to make that chammanthi. It's similar to a mortar and pastel",
+      ],
+      stillUnknown: [
+        'Exact quantities of dry chillies, onions, curry leaves',
+        'Whether coconut is shredded, grated or sliced',
+        'Other ingredients used in chammanthi',
+        'Cooking procedure after adding ingredients',
+        'Heat level and duration',
+        'Final appearance and aroma',
+      ],
+    },
+  },
+  {
     id: 'example-kept-kadala',
     isExample: true,
     cardTitle: 'Measured by Memory',

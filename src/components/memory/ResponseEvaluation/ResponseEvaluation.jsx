@@ -1,9 +1,3 @@
-const decisions = [
-  { value: 'kept', label: 'Keep as a prompt' },
-  { value: 'edited', label: 'Edit in my words' },
-  { value: 'rejected', label: 'This does not fit' },
-]
-
 import { Link } from 'react-router-dom'
 
 function ResponseEvaluation({
@@ -13,11 +7,32 @@ function ResponseEvaluation({
   onSave,
   response,
   saveError,
+  workingRecipe,
 }) {
+  const decisions = [
+    {
+      value: 'kept',
+      label: workingRecipe
+        ? 'Keep as a working reconstruction'
+        : 'Keep as a prompt',
+    },
+    { value: 'edited', label: 'Edit in my words' },
+    { value: 'rejected', label: 'This does not fit' },
+  ]
+  const evaluatedText = workingRecipe
+    ? [
+        workingRecipe.dishName,
+        ...workingRecipe.rememberedIngredients,
+        ...workingRecipe.rememberedMethod,
+        ...workingRecipe.sensoryCues,
+        ...workingRecipe.familyNotes,
+      ].join('\n')
+    : response.reflection
+
   function selectDecision(decision) {
     onChange({
       decision,
-      editedReflection: decision === 'edited' ? response.reflection : '',
+      editedReflection: decision === 'edited' ? evaluatedText : '',
       correction: '',
     })
   }
@@ -35,10 +50,10 @@ function ResponseEvaluation({
       id="response-evaluation"
       aria-labelledby="evaluation-title"
     >
-      <h2 id="evaluation-title">What would you like to do with this?</h2>
+      <h2 id="evaluation-title">What would you like to do with this reconstruction?</h2>
       <p>
-        Keeping the response does not verify it. Editing or rejecting it keeps
-        the original AI response visible for comparison.
+        Keeping it does not verify it. Editing or rejecting it keeps the
+        provisional reconstruction visible for comparison.
       </p>
 
       <div
@@ -60,7 +75,9 @@ function ResponseEvaluation({
       </div>
 
       {evaluation.decision === 'kept' && (
-        <p role="status">Kept as a prompt, not as a verified account.</p>
+        <p role="status">
+          Kept as a working reconstruction, not as a verified account.
+        </p>
       )}
 
       {evaluation.decision === 'edited' && (

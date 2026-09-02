@@ -1,5 +1,6 @@
 import aiResponseDecoration from '../../../assets/decorations/AIResponse.svg'
 import yourMemoryDecoration from '../../../assets/decorations/YourMemory.svg'
+import WorkingRecipe from '../../memory/WorkingRecipe/WorkingRecipe.jsx'
 
 const decisionLabels = {
   kept: 'Kept as a prompt',
@@ -23,11 +24,15 @@ function formatCreatedAt(createdAt) {
 function ArchiveEntry({ entry }) {
   const titleId = `archive-entry-${entry.id}`
   const hasConversation = Array.isArray(entry.memoryFragments)
+  const decisionLabel =
+    entry.decision === 'kept' && entry.workingRecipe
+      ? 'Kept as a working reconstruction'
+      : decisionLabels[entry.decision] || 'Decision unavailable'
 
   return (
     <article className="archive-entry" aria-labelledby={titleId}>
       <header>
-        <p>{decisionLabels[entry.decision] || 'Decision unavailable'}</p>
+        <p>{decisionLabel}</p>
         <h2 id={titleId}>{entry.cardTitle || 'Kitchen memory trace'}</h2>
         {entry.isExample ? (
           <p>Demonstration conversation</p>
@@ -82,10 +87,12 @@ function ArchiveEntry({ entry }) {
                       <h3>Provisional AI reflection</h3>
                       <p>{response.reflection}</p>
                     </section>
-                    <section>
-                      <h3>Why this may be incomplete</h3>
-                      <p>{response.limitation}</p>
-                    </section>
+                    {response.limitation && (
+                      <section>
+                        <h3>Why this may be incomplete</h3>
+                        <p>{response.limitation}</p>
+                      </section>
+                    )}
                     <section>
                       <h3>AI question</h3>
                       <p>{response.question}</p>
@@ -110,6 +117,13 @@ function ArchiveEntry({ entry }) {
           <h3 id={`${titleId}-memory`}>Your memory</h3>
           <p>{entry.userMemory}</p>
         </section>
+      )}
+
+      {entry.workingRecipe && (
+        <WorkingRecipe
+          id={`${titleId}-working-recipe`}
+          recipe={entry.workingRecipe}
+        />
       )}
 
       {entry.userRevision && (

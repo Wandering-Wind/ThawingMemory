@@ -2,7 +2,9 @@ import {
   CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
   createContinuedReflectionInput,
   createReflectionInput,
+  createWorkingRecipeInput,
   REFLECTION_SYSTEM_INSTRUCTION,
+  WORKING_RECIPE_SYSTEM_INSTRUCTION,
 } from './reflectionPrompt.js'
 
 const GEMINI_API_BASE_URL =
@@ -39,6 +41,27 @@ const fieldLimits = {
   reflection: 700,
   limitation: 500,
   question: 300,
+}
+
+const recipeFields = [
+  'rememberedIngredients',
+  'rememberedMethod',
+  'sensoryCues',
+  'familyNotes',
+  'stillUnknown',
+]
+
+const recipeSchema = {
+  type: 'OBJECT',
+  properties: {
+    dishName: { type: 'STRING' },
+    rememberedIngredients: { type: 'ARRAY', items: { type: 'STRING' } },
+    rememberedMethod: { type: 'ARRAY', items: { type: 'STRING' } },
+    sensoryCues: { type: 'ARRAY', items: { type: 'STRING' } },
+    familyNotes: { type: 'ARRAY', items: { type: 'STRING' } },
+    stillUnknown: { type: 'ARRAY', items: { type: 'STRING' } },
+  },
+  required: ['dishName', ...recipeFields],
 }
 
 function createGeminiError(code, providerStatus) {
@@ -101,7 +124,7 @@ function extractOutputText(payload) {
   throw createGeminiError('INVALID_MODEL_RESPONSE')
 }
 
-function validateReflection(responseText) {
+export function validateReflection(responseText) {
   let reflection
 
   try {
@@ -129,7 +152,54 @@ function validateReflection(responseText) {
   return validatedReflection
 }
 
-async function generateStructuredReflection({ systemInstruction, input }) {
+export function validateWorkingRecipe(responseText) {
+  let recipe
+
+  try {
+    recipe = JSON.parse(responseText)
+  } catch {
+    throw createGeminiError('INVALID_MODEL_RESPONSE')
+  }
+
+  if (
+    !recipe ||
+    typeof recipe !== 'object' ||
+    Array.isArray(recipe) ||
+    typeof recipe.dishName !== 'string' ||
+    !recipe.dishName.trim() ||
+    recipe.dishName.length > 160
+  ) {
+    throw createGeminiError('INVALID_MODEL_RESPONSE')
+  }
+
+  const validatedRecipe = { dishName: recipe.dishName.trim() }
+
+  for (const field of recipeFields) {
+    const items = recipe[field]
+
+    if (
+      !Array.isArray(items) ||
+      items.length > 12 ||
+      items.some(
+        (item) =>
+          typeof item !== 'string' || !item.trim() || item.length > 400,
+      )
+    ) {
+      throw createGeminiError('INVALID_MODEL_RESPONSE')
+    }
+
+    validatedRecipe[field] = items.map((item) => item.trim())
+  }
+
+  return validatedRecipe
+}
+
+async function generateStructuredOutput({
+  systemInstruction,
+  input,
+  schema,
+  validate,
+}) {
   const apiKey = process.env.GEMINI_API_KEY
 
   if (!apiKey) {
@@ -150,7 +220,7 @@ async function generateStructuredReflection({ systemInstruction, input }) {
     ],
     generationConfig: {
       responseMimeType: 'application/json',
-      responseSchema,
+      responseSchema: schema,
     },
   })
   const providerResponse = await requestGemini(apiUrl, apiKey, requestBody)
@@ -171,13 +241,15 @@ async function generateStructuredReflection({ systemInstruction, input }) {
     throw createGeminiError('INVALID_MODEL_RESPONSE')
   }
 
-  return validateReflection(extractOutputText(payload))
+  return validate(extractOutputText(payload))
 }
 
 export function generateReflection(memory) {
-  return generateStructuredReflection({
+  return generateStructuredOutput({
     systemInstruction: REFLECTION_SYSTEM_INSTRUCTION,
     input: createReflectionInput(memory),
+    schema: responseSchema,
+    validate: validateReflection,
   })
 }
 
@@ -185,16 +257,29 @@ export async function generateContinuedReflection({
   memoryFragments,
   skippedQuestions = [],
 }) {
-  const reflection = await generateStructuredReflection({
+  const reflection = await generateStructuredOutput({
     systemInstruction: CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
     input: createContinuedReflectionInput({
       memoryFragments,
       skippedQuestions,
     }),
+    schema: responseSchema,
+    validate: validateReflection,
   })
 
   return {
     type: 'reflection',
     ...reflection,
   }
+}
+
+export async function generateWorkingRecipe({ memoryFragments }) {
+  const recipe = await generateStructuredOutput({
+    systemInstruction: WORKING_RECIPE_SYSTEM_INSTRUCTION,
+    input: createWorkingRecipeInput({ memoryFragments }),
+    schema: recipeSchema,
+    validate: validateWorkingRecipe,
+  })
+
+  return { type: 'working_recipe', recipe }
 }

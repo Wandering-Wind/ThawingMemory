@@ -9,9 +9,10 @@ const ANSWER_LIMIT = 2000
 function ConversationContinuation({
   conversation,
   error,
+  isBuilding,
   isSubmitting,
   onAnswer,
-  onFinish,
+  onBuild,
   onRetry,
   onSkip,
   pendingTurn,
@@ -92,9 +93,9 @@ function ConversationContinuation({
               className="button--gold-edge"
               type="button"
               disabled={isSubmitting}
-              onClick={onFinish}
+              onClick={onBuild}
             >
-              Finish and evaluate
+              {isBuilding ? 'Building working recipe...' : 'Build my working recipe'}
             </button>
           </div>
 
@@ -146,9 +147,10 @@ function ConversationContinuation({
           <button
             className="primary-action--ornate primary-action--inviting"
             type="button"
-            onClick={onFinish}
+            disabled={isSubmitting}
+            onClick={onBuild}
           >
-            Finish and evaluate
+            {isBuilding ? 'Building working recipe...' : 'Build my working recipe'}
           </button>
         </div>
       )}

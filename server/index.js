@@ -2,7 +2,8 @@ import { createServer } from 'node:http'
 import {
   generateContinuedReflection,
   generateReflection,
-} from './geminiClient.js'
+  generateWorkingRecipe,
+} from './reflectionProvider.js'
 import {
   validateConversationRequest,
   validateLegacyReflectionRequest,
@@ -84,12 +85,10 @@ async function handleReflectionRequest(request, response) {
     }
 
     if (isConversationRequest && body.action === 'build') {
-      sendError(
-        response,
-        501,
-        'WORKING_RECIPE_NOT_IMPLEMENTED',
-        'Working recipe generation will be added in the next server step.',
-      )
+      const workingRecipe = await generateWorkingRecipe({
+        memoryFragments: body.memoryFragments,
+      })
+      sendJson(response, 200, workingRecipe)
       return
     }
 
@@ -134,7 +133,7 @@ async function handleReflectionRequest(request, response) {
     if (error.code === 'MODEL_UNAVAILABLE') {
       if (Number.isInteger(error.providerStatus)) {
         console.error(
-          `Gemini request failed with provider status ${error.providerStatus}.`,
+          `AI provider request failed with status ${error.providerStatus}.`,
         )
       }
 

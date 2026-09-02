@@ -94,3 +94,57 @@ export async function requestContinuedReflection(request) {
 
   return body
 }
+
+export async function requestWorkingRecipe(request) {
+  let response
+
+  try {
+    response = await fetch(REFLECTION_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    })
+  } catch {
+    throw new Error(
+      'The recipe service could not be reached. Your memory fragments are still here.',
+    )
+  }
+
+  let body
+
+  try {
+    body = await response.json()
+  } catch {
+    throw new Error(
+      'The recipe service returned an unreadable response. Your fragments are still here.',
+    )
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      body?.error?.message ||
+        'The working recipe could not be built. Your fragments are still here.',
+    )
+  }
+
+  const recipe = body?.recipe
+  const listFields = [
+    'rememberedIngredients',
+    'rememberedMethod',
+    'sensoryCues',
+    'familyNotes',
+    'stillUnknown',
+  ]
+
+  if (
+    body.type !== 'working_recipe' ||
+    typeof recipe?.dishName !== 'string' ||
+    listFields.some((field) => !Array.isArray(recipe?.[field]))
+  ) {
+    throw new Error(
+      'The working recipe was incomplete and has not been displayed. Your fragments are still here.',
+    )
+  }
+
+  return body
+}

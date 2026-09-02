@@ -52,6 +52,7 @@ export function addMemoryFragment(conversation, { text, questionAnswered }) {
 
   return {
     ...conversation,
+    workingRecipe: null,
     memoryFragments: [
       ...conversation.memoryFragments,
       {
@@ -68,6 +69,7 @@ export function addMemoryFragment(conversation, { text, questionAnswered }) {
 export function skipQuestion(conversation, question) {
   return {
     ...conversation,
+    workingRecipe: null,
     skippedQuestions: [
       ...conversation.skippedQuestions,
       requireNonEmptyText(question, 'question'),

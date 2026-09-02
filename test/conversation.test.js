@@ -116,3 +116,20 @@ test('adds a working recipe without replacing user fragments', () => {
     'Exact quantities',
   ])
 })
+
+test('adding a new fragment invalidates an older working recipe', () => {
+  const conversation = addWorkingRecipe(createConversation('Curry'), {
+    dishName: 'Curry',
+    rememberedIngredients: [],
+    rememberedMethod: [],
+    sensoryCues: [],
+    familyNotes: [],
+    stillUnknown: ['Everything else'],
+  })
+  const updatedConversation = addMemoryFragment(conversation, {
+    text: 'It included yogurt.',
+    questionAnswered: 'What ingredient do you remember?',
+  })
+
+  assert.equal(updatedConversation.workingRecipe, null)
+})
