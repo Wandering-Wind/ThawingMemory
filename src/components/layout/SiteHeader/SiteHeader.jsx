@@ -1,5 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import logo from '../../../assets/decorations/logo.svg'
+
+const navigationItems = [
+  { label: 'Kitchen', to: '/kitchen' },
+  { label: 'Garden', to: '/garden' },
+  { label: 'Ritual', to: '/ritual' },
+  { label: 'Living Archive', to: '/archive' },
+]
 
 function SiteHeader() {
   return (
@@ -13,6 +20,18 @@ function SiteHeader() {
         />
         <span className="site-brand__name">Thawing Memory</span>
       </Link>
+
+      <nav className="site-navigation" aria-label="Primary navigation">
+        {navigationItems.map((item) => (
+          <NavLink
+            className="site-navigation__link"
+            key={item.to}
+            to={item.to}
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
     </header>
   )
 }
