@@ -635,6 +635,23 @@ li + li {
   height: calc(100% - var(--space-3));
 }
 
+.scene-hero--archive {
+  min-height: clamp(20rem, 38vw, 27rem);
+}
+
+.scene-hero--archive .scene-hero__content {
+  width: min(52%, var(--reading-width));
+}
+
+.scene-hero__feature--archive {
+  right: 0;
+  bottom: 0;
+  width: clamp(17rem, 42vw, 31rem);
+  height: 88%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
 .site-footer {
   padding-block: var(--space-5);
   color: var(--color-ink-muted);
@@ -1250,14 +1267,16 @@ li + li {
 @media (max-width: 55rem) {
   .scene-hero__content,
   .scene-hero--kitchen .scene-hero__content,
-  .scene-hero--coming-soon .scene-hero__content {
+  .scene-hero--coming-soon .scene-hero__content,
+  .scene-hero--archive .scene-hero__content {
     width: min(68%, 32rem);
     margin-left: clamp(var(--space-5), 9vw, 5rem);
   }
 
   .scene-hero__feature--boat,
   .scene-hero__feature--food,
-  .scene-hero__feature--coming-soon {
+  .scene-hero__feature--coming-soon,
+  .scene-hero__feature--archive {
     right: -13%;
     width: 48%;
     opacity: 0.88;
@@ -1299,7 +1318,8 @@ li + li {
 
   .scene-hero__content,
   .scene-hero--kitchen .scene-hero__content,
-  .scene-hero--coming-soon .scene-hero__content {
+  .scene-hero--coming-soon .scene-hero__content,
+  .scene-hero--archive .scene-hero__content {
     width: calc(100% - (2 * var(--space-5)));
     margin-inline: var(--space-5);
   }
@@ -1320,7 +1340,8 @@ li + li {
 
   .scene-hero__feature--boat,
   .scene-hero__feature--food,
-  .scene-hero__feature--coming-soon {
+  .scene-hero__feature--coming-soon,
+  .scene-hero__feature--archive {
     right: -6%;
     bottom: -1rem;
     width: 72%;

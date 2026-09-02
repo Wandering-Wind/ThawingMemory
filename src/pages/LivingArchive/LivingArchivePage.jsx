@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import archiveDecoration from '../../assets/decorations/archive-page.svg'
+import bananaLeafLeft from '../../assets/decorations/banana-leaf-left-cropped.svg'
 import ArchiveEntry from '../../components/archive/ArchiveEntry/ArchiveEntry.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
@@ -13,15 +15,32 @@ function LivingArchivePage() {
     <div className="site-shell">
       <SiteHeader />
 
-      <main>
-        <section aria-labelledby="archive-title">
-          <p>Traces around memory</p>
-          <PageHeading id="archive-title">Living Archive</PageHeading>
-          <p>
-            This is not an archive of culture itself. It gathers written
-            fragments, provisional AI responses, and the corrections that
-            return authority to you.
-          </p>
+      <main className="scene-main">
+        <section
+          className="scene-hero scene-hero--archive"
+          aria-labelledby="archive-title"
+        >
+          <img
+            className="scene-hero__leaf scene-hero__leaf--left"
+            src={bananaLeafLeft}
+            alt=""
+            aria-hidden="true"
+          />
+          <img
+            className="scene-hero__feature scene-hero__feature--archive"
+            src={archiveDecoration}
+            alt=""
+            aria-hidden="true"
+          />
+          <div className="scene-hero__content">
+            <p>Traces around memory</p>
+            <PageHeading id="archive-title">Living Archive</PageHeading>
+            <p>
+              This is not an archive of culture itself. It gathers written
+              fragments, provisional AI responses, and the corrections that
+              return authority to you.
+            </p>
+          </div>
         </section>
 
         {archiveData.hasUnreadableData && (
