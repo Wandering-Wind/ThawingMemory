@@ -22,7 +22,7 @@ function MemoryEntryForm({ card, isSubmitting, onMemoryChange, onSubmit }) {
     event.preventDefault()
 
     if (!memory.trim()) {
-      setError('Add a memory fragment before asking for a reflection.')
+      setError('Add a memory fragment, then reflect with the AI')
       return
     }
 

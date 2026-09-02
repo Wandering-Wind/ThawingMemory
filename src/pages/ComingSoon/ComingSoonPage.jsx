@@ -18,8 +18,8 @@ function ComingSoonPage({ sectionName }) {
             <p>{sectionName}</p>
             <PageHeading id={titleId}>Coming Soon</PageHeading>
             <p>
-              This part of the memory landscape is planned for a later project
-              iteration. The current prototype focuses on the Kitchen.
+              This part of the memory landscape is planned for the next project
+              iteration. This current prototype focuses on the Kitchen
             </p>
           </div>
         </section>

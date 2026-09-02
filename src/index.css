@@ -1038,6 +1038,12 @@ li + li {
   background: transparent;
 }
 
+.conversation-continuation__actions button:hover:not(:disabled) {
+  color: var(--color-white);
+  background: var(--color-clay-dark);
+  border-color: var(--color-clay-dark);
+}
+
 .conversation-continuation__form {
   margin-top: var(--space-5);
   padding-top: var(--space-4);

@@ -42,7 +42,7 @@ function ResponseEvaluation({
       <h2 id="evaluation-title">What would you like to do with this reconstruction?</h2>
       <p>
         Keeping it does not verify it. Editing or rejecting it keeps the
-        provisional reconstruction visible for comparison.
+        provisional reconstruction visible for comparison
       </p>
 
       <div
@@ -65,7 +65,7 @@ function ResponseEvaluation({
 
       {evaluation.decision === 'kept' && (
         <p role="status">
-          Kept as a working reconstruction, not as a verified account.
+          Kept as a working reconstruction, not as a verified account
         </p>
       )}
 
@@ -132,7 +132,7 @@ function ResponseEvaluation({
           <h3 id="save-trace-title">Save this trace</h3>
           <p>
             This saves the interaction in this browser on this device. It does
-            not upload the trace to a public archive.
+            not upload the trace to a public archive
           </p>
 
           {saveError && <p role="alert">{saveError}</p>}
@@ -149,7 +149,7 @@ function ResponseEvaluation({
           {isSaved && (
             <div role="status">
               <p>
-                Your trace has been added to the Living Archive on this device.
+                Your trace has been added to the Living Archive on this device
               </p>
               <Link to="/archive">View Living Archive</Link>
             </div>

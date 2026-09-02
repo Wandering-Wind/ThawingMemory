@@ -317,8 +317,8 @@ function KitchenPage() {
             <p>Kitchen Memory Reconstruction</p>
             <PageHeading id="kitchen-title">The Kitchen</PageHeading>
             <p>
-              Begin with a fragment of cooking knowledge remembered through
-              observation, repetition, or the senses.
+              Begin with a fragment of a cooking memory or recipe that you remembered through
+              observation, repetition, or your senses.
             </p>
           </div>
         </section>
@@ -393,7 +393,7 @@ function KitchenPage() {
                   <h2 id="review-next-title">Decide what fits your memory</h2>
                   <p>
                     Review the organised recipe, then keep it provisionally,
-                    rewrite it in your own words, or reject it.
+                    rewrite it in your own words, or reject it
                   </p>
                   <button
                     className="button--gold-edge"

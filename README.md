@@ -23,7 +23,7 @@ Missing quantities, ingredients, timings, and steps remain visible under **Still
 
 The prototype investigates whether interface design can make generative AI's limits visible while returning interpretive authority to the user. Its central principle is:
 
-> The safeguard is not the AI itself, but the interaction design around the AI.
+-The safeguard is not the AI itself, but the interaction design around the AI.
 
 AI and user writing remain separately labelled. Earlier AI questions are retained as context but excluded from recipe evidence
 

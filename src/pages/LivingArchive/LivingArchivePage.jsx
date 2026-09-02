@@ -33,12 +33,12 @@ function LivingArchivePage() {
             aria-hidden="true"
           />
           <div className="scene-hero__content">
-            <p>Traces around memory</p>
+            <p>Traces around memories</p>
             <PageHeading id="archive-title">Living Archive</PageHeading>
             <p>
-              This is not an archive of culture itself. It gathers written
-              fragments, provisional AI responses, and the corrections that
-              return authority to you.
+              This is not an archive of Kerala culture itself, however, it
+              gathers your written fragments, provisional AI responses, and
+              corrections that return authority to you
             </p>
           </div>
         </section>
@@ -53,8 +53,9 @@ function LivingArchivePage() {
         <section aria-labelledby="example-conversations-title">
           <h2 id="example-conversations-title">Example conversations</h2>
           <p>
-            These demonstration traces show how keeping, editing, and
-            rejecting can work. They are examples, not memories saved by you.
+            These demonstration traces show you how keeping, editing, and
+            rejecting in this project can work. Remember, they are examples,
+            not memories saved by you
           </p>
           <div className="archive-entry-list">
             {archiveExamples.map((entry) => (

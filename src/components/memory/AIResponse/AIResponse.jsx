@@ -68,3 +68,4 @@ function AIResponse({ isLoading = false, response }) {
 }
 
 export default AIResponse
+

@@ -42,7 +42,7 @@ export function validateLegacyReflectionRequest(body) {
   if (typeof body.memory !== 'string' || !body.memory.trim()) {
     return {
       code: 'INVALID_MEMORY',
-      message: 'Add a memory fragment before asking for a reflection.',
+      message: 'Add a memory fragment, then reflect with the AI',
     }
   }
 

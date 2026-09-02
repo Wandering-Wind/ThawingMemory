@@ -50,8 +50,8 @@ function ConversationContinuation({
       </p>
       <h2 id="continue-reflection-title">Continue the reconstruction</h2>
       <p>
-        Add what you remember next. Your answer remains separate from the AI's
-        wording, and “I do not remember” is a valid response.
+        Add what you remember next. Your answer still remains separate from the
+        AI's wording, and “I do not remember” is definitely a valid response
       </p>
       <p className="conversation-continuation__next">
         Choose one next step.
