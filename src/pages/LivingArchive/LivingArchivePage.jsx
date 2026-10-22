@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import archiveDecoration from '../../assets/decorations/archive-page.svg'
+import archiveDecoration from '../../assets/decorations/archive-page.webp'
 import bananaLeafLeft from '../../assets/decorations/banana-leaf-left-cropped.svg'
 import ArchiveEntry from '../../components/archive/ArchiveEntry/ArchiveEntry.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'

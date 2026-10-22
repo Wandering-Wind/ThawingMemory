@@ -351,6 +351,7 @@ function KitchenPage() {
         <section aria-labelledby="memory-cards-title">
           <p className="section-step">Step 1: Share what you remember</p>
           <h2 id="memory-cards-title">Start with a memory</h2>
+          <p>This prototype currently offers one Kitchen memory prompt.</p>
           <div className="reconstruction-workspace reconstruction-workspace--memory">
             <div className="memory-card-list">
               {kitchenCards.map((card) => (

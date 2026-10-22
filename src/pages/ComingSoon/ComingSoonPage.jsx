@@ -1,5 +1,5 @@
-import gardenDecoration from '../../assets/decorations/garden-page.svg'
-import ritualDecoration from '../../assets/decorations/ritual-page.svg'
+import gardenDecoration from '../../assets/decorations/garden-page.webp'
+import ritualDecoration from '../../assets/decorations/ritual-page.webp'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 
