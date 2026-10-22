@@ -53,8 +53,12 @@ export function getFollowUpAnswerCount(conversation) {
   return Math.max(0, conversation.memoryFragments.length - 1)
 }
 
+export function getFollowUpTurnCount(conversation) {
+  return getFollowUpAnswerCount(conversation) + conversation.skippedQuestions.length
+}
+
 export function canAnswerFollowUp(conversation) {
-  return getFollowUpAnswerCount(conversation) < MAX_FOLLOW_UP_ANSWERS
+  return getFollowUpTurnCount(conversation) < MAX_FOLLOW_UP_ANSWERS
 }
 
 export function addAIResponse(conversation, response) {
@@ -86,6 +90,10 @@ export function addMemoryFragment(conversation, { text, questionAnswered }) {
 }
 
 export function skipQuestion(conversation, question) {
+  if (!canAnswerFollowUp(conversation)) {
+    throw new RangeError('The conversation follow-up limit has been reached.')
+  }
+
   return {
     ...conversation,
     workingRecipe: null,

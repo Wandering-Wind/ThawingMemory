@@ -26,6 +26,7 @@ import {
   addAIResponse,
   addMemoryFragment,
   addWorkingRecipe,
+  canAnswerFollowUp,
   createConversation,
   createConversationRequest,
   skipQuestion,
@@ -165,7 +166,7 @@ function KitchenPage() {
     })
 
     setConversation(nextConversation)
-    submitContinuedReflection(nextConversation)
+    continueIfFollowUpRemains(nextConversation)
   }
 
   function handleSkipQuestion() {
@@ -177,7 +178,17 @@ function KitchenPage() {
     const nextConversation = skipQuestion(conversation, currentQuestion)
 
     setConversation(nextConversation)
-    submitContinuedReflection(nextConversation)
+    continueIfFollowUpRemains(nextConversation)
+  }
+
+  function continueIfFollowUpRemains(nextConversation) {
+    if (canAnswerFollowUp(nextConversation)) {
+      submitContinuedReflection(nextConversation)
+      return
+    }
+
+    setPendingTurn(false)
+    setFocusArea('continue')
   }
 
   function handleRetryContinuation() {

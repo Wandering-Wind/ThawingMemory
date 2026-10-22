@@ -2,6 +2,7 @@ export const MAX_MEMORY_LENGTH = 2000
 export const MAX_MEMORY_FRAGMENTS = 4
 export const MAX_QUESTION_LENGTH = 300
 export const MAX_SKIPPED_QUESTIONS = 3
+export const MAX_FOLLOW_UP_TURNS = 3
 
 const KNOWN_CARD_IDS = new Set(['kitchen-instinctive-measures'])
 const CONVERSATION_ACTIONS = new Set(['continue', 'build'])
@@ -81,7 +82,7 @@ export function validateConversationRequest(body) {
   if (body.memoryFragments.length > MAX_MEMORY_FRAGMENTS) {
     return {
       code: 'TOO_MANY_FOLLOW_UPS',
-      message: 'The prototype supports up to three follow-up answers.',
+      message: 'The prototype supports up to three follow-up turns.',
     }
   }
 
@@ -134,6 +135,19 @@ export function validateConversationRequest(body) {
         code: 'INVALID_SKIPPED_QUESTIONS',
         message: 'Skipped questions must use the supported conversation format.',
       }
+    }
+  }
+
+  const followUpTurnCount =
+    body.memoryFragments.length - 1 + (body.skippedQuestions?.length ?? 0)
+
+  if (
+    followUpTurnCount > MAX_FOLLOW_UP_TURNS ||
+    (body.action === 'continue' && followUpTurnCount >= MAX_FOLLOW_UP_TURNS)
+  ) {
+    return {
+      code: 'TOO_MANY_FOLLOW_UPS',
+      message: 'The prototype supports up to three follow-up turns.',
     }
   }
 

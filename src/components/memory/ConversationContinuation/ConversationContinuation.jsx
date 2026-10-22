@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   canAnswerFollowUp,
-  getFollowUpAnswerCount,
+  getFollowUpTurnCount,
 } from '../../../utils/conversation.js'
 
 const ANSWER_LIMIT = 2000
@@ -19,9 +19,8 @@ function ConversationContinuation({
 }) {
   const [isAnswering, setIsAnswering] = useState(false)
   const [answer, setAnswer] = useState('')
-  const answerCount = getFollowUpAnswerCount(conversation)
+  const followUpTurnCount = getFollowUpTurnCount(conversation)
   const canContinue = canAnswerFollowUp(conversation)
-  const canSkip = conversation.skippedQuestions.length < 3
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -46,7 +45,7 @@ function ConversationContinuation({
       aria-labelledby="continue-reflection-title"
     >
       <p className="conversation-continuation__step">
-        {answerCount} of 3 follow-up answers added
+        {followUpTurnCount} of 3 follow-up turns used
       </p>
       <h2 id="continue-reflection-title">Continue the reconstruction</h2>
       <p>
@@ -59,7 +58,7 @@ function ConversationContinuation({
 
       {error && <p role="alert">{error}</p>}
 
-      {pendingTurn ? (
+      {pendingTurn && canContinue ? (
         <button
           className="button--gold-edge"
           type="button"
@@ -79,16 +78,14 @@ function ConversationContinuation({
             >
               Answer this question
             </button>
-            {canSkip && (
-              <button
-                className="button--gold-edge"
-                type="button"
-                disabled={isSubmitting}
-                onClick={handleSkip}
-              >
-                Skip this question
-              </button>
-            )}
+            <button
+              className="button--gold-edge"
+              type="button"
+              disabled={isSubmitting}
+              onClick={handleSkip}
+            >
+              Skip this question
+            </button>
             <button
               className="button--gold-edge"
               type="button"
@@ -142,7 +139,8 @@ function ConversationContinuation({
       ) : (
         <div>
           <p role="status">
-            You have reached the three-answer limit for this reconstruction.
+            You have reached the three-turn limit for this reconstruction.
+            Build the working recipe when you are ready.
           </p>
           <button
             className="primary-action--ornate primary-action--inviting"
