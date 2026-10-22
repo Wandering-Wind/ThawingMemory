@@ -19,11 +19,23 @@ const reflectionSchema = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    reflection: { type: 'string' },
+    observation: { type: 'string' },
+    evidence: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          fragmentNumber: { type: 'integer' },
+          quote: { type: 'string' },
+        },
+        required: ['fragmentNumber', 'quote'],
+      },
+    },
     limitation: { type: 'string' },
     question: { type: 'string' },
   },
-  required: ['reflection', 'limitation', 'question'],
+  required: ['observation', 'evidence', 'limitation', 'question'],
 }
 
 const recipeFields = [

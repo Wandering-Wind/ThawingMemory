@@ -18,10 +18,29 @@ const RETRYABLE_PROVIDER_STATUSES = new Set([500, 502, 503, 504])
 const responseSchema = {
   type: 'OBJECT',
   properties: {
-    reflection: {
+    observation: {
       type: 'STRING',
       description:
-        'A concise and tentative reflection using only details supplied in the memory.',
+        'One concise, tentative observation about a detail supplied in a user-authored memory fragment.',
+    },
+    evidence: {
+      type: 'ARRAY',
+      description:
+        'One or more exact excerpts from user-authored memory fragments that support the observation.',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          fragmentNumber: {
+            type: 'INTEGER',
+            description: 'The one-based sequence number of the user fragment.',
+          },
+          quote: {
+            type: 'STRING',
+            description: 'An exact, continuous excerpt copied from that fragment.',
+          },
+        },
+        required: ['fragmentNumber', 'quote'],
+      },
     },
     limitation: {
       type: 'STRING',
@@ -34,11 +53,11 @@ const responseSchema = {
         'One gentle and specific sensory, embodied, or family-focused question.',
     },
   },
-  required: ['reflection', 'limitation', 'question'],
+  required: ['observation', 'evidence', 'limitation', 'question'],
 }
 
 const fieldLimits = {
-  reflection: 700,
+  observation: 700,
   limitation: 500,
   question: 300,
 }
@@ -149,7 +168,36 @@ export function validateReflection(responseText) {
     validatedReflection[field] = value.trim()
   }
 
-  return validatedReflection
+  const evidence = reflection.evidence
+
+  if (
+    !Array.isArray(evidence) ||
+    evidence.length < 1 ||
+    evidence.length > 4 ||
+    evidence.some(
+      (item) =>
+        !item ||
+        typeof item !== 'object' ||
+        Array.isArray(item) ||
+        !Number.isInteger(item.fragmentNumber) ||
+        item.fragmentNumber < 1 ||
+        typeof item.quote !== 'string' ||
+        !item.quote.trim() ||
+        item.quote.length > 300,
+    )
+  ) {
+    throw createGeminiError('INVALID_MODEL_RESPONSE')
+  }
+
+  return {
+    reflection: validatedReflection.observation,
+    evidence: evidence.map((item) => ({
+      fragmentNumber: item.fragmentNumber,
+      quote: item.quote.trim(),
+    })),
+    limitation: validatedReflection.limitation,
+    question: validatedReflection.question,
+  }
 }
 
 export function validateWorkingRecipe(responseText) {
