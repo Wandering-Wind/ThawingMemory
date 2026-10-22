@@ -865,6 +865,12 @@ li + li {
   margin-bottom: 0;
 }
 
+.ai-response__disclosure {
+  margin-top: var(--space-3);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+}
+
 .ai-response__section--limitation {
   background: var(--color-uncertainty-surface);
 }
