@@ -24,6 +24,14 @@ export function createArchiveEntry({ card, conversation, evaluation }) {
     })),
     aiResponses: conversation.aiResponses.map((response) => ({
       reflection: response.reflection,
+      ...(Array.isArray(response.evidence)
+        ? {
+            evidence: response.evidence.map((item) => ({
+              fragmentNumber: item.fragmentNumber,
+              quote: item.quote,
+            })),
+          }
+        : {}),
       limitation: response.limitation,
       question: response.question,
     })),

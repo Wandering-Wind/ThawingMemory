@@ -1,5 +1,6 @@
 import aiResponseDecoration from '../../../assets/decorations/AIResponse.svg'
 import yourMemoryDecoration from '../../../assets/decorations/YourMemory.svg'
+import EvidenceExcerpts from '../../memory/EvidenceExcerpts/EvidenceExcerpts.jsx'
 import WorkingRecipe from '../../memory/WorkingRecipe/WorkingRecipe.jsx'
 
 const decisionLabels = {
@@ -87,6 +88,7 @@ function ArchiveEntry({ entry }) {
                       <h3>Provisional AI reflection</h3>
                       <p>{response.reflection}</p>
                     </section>
+                    <EvidenceExcerpts items={response.evidence} />
                     {response.limitation && (
                       <section>
                         <h3>Why this may be incomplete</h3>

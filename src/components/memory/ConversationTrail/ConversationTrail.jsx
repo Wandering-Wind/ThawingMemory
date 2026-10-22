@@ -1,3 +1,5 @@
+import EvidenceExcerpts from '../EvidenceExcerpts/EvidenceExcerpts.jsx'
+
 function ConversationTrail({ conversation }) {
   const earlierResponses = conversation.aiResponses.slice(0, -1)
 
@@ -32,6 +34,7 @@ function ConversationTrail({ conversation }) {
             <article className="conversation-trail__ai-turn" key={`${index}-${response.question}`}>
               <h3>AI response {index + 1}</h3>
               <p>{response.reflection}</p>
+              <EvidenceExcerpts items={response.evidence} />
               <p>
                 <strong>Question:</strong> {response.question}
               </p>

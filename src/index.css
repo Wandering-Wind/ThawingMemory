@@ -869,6 +869,52 @@ li + li {
   background: var(--color-uncertainty-surface);
 }
 
+.evidence-excerpts {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-user-surface) 68%, white);
+  border: 1px solid var(--color-sand);
+  border-radius: var(--radius-sm);
+}
+
+.evidence-excerpts h4 {
+  margin-top: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evidence-excerpts > p {
+  margin-bottom: var(--space-3);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+}
+
+.evidence-excerpts ol {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.evidence-excerpts li {
+  padding-left: var(--space-2);
+}
+
+.evidence-excerpts__source {
+  margin-bottom: var(--space-1);
+  color: var(--color-leaf-dark);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.evidence-excerpts blockquote {
+  margin: 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--color-gold);
+}
+
 .ai-response--loading {
   isolation: isolate;
 }

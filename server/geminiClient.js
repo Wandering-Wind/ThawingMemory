@@ -143,7 +143,7 @@ function extractOutputText(payload) {
   throw createGeminiError('INVALID_MODEL_RESPONSE')
 }
 
-export function validateReflection(responseText) {
+export function validateReflection(responseText, memoryFragments = []) {
   let reflection
 
   try {
@@ -185,6 +185,21 @@ export function validateReflection(responseText) {
         !item.quote.trim() ||
         item.quote.length > 300,
     )
+  ) {
+    throw createGeminiError('INVALID_MODEL_RESPONSE')
+  }
+
+  if (
+    !Array.isArray(memoryFragments) ||
+    evidence.some((item) => {
+      const fragment = memoryFragments[item.fragmentNumber - 1]
+
+      return (
+        !fragment ||
+        typeof fragment.text !== 'string' ||
+        !fragment.text.includes(item.quote.trim())
+      )
+    })
   ) {
     throw createGeminiError('INVALID_MODEL_RESPONSE')
   }
@@ -247,6 +262,7 @@ async function generateStructuredOutput({
   input,
   schema,
   validate,
+  validationContext,
 }) {
   const apiKey = process.env.GEMINI_API_KEY
 
@@ -289,7 +305,7 @@ async function generateStructuredOutput({
     throw createGeminiError('INVALID_MODEL_RESPONSE')
   }
 
-  return validate(extractOutputText(payload))
+  return validate(extractOutputText(payload), validationContext)
 }
 
 export function generateReflection(memory) {
@@ -298,6 +314,7 @@ export function generateReflection(memory) {
     input: createReflectionInput(memory),
     schema: responseSchema,
     validate: validateReflection,
+    validationContext: [{ text: memory }],
   })
 }
 
@@ -313,6 +330,7 @@ export async function generateContinuedReflection({
     }),
     schema: responseSchema,
     validate: validateReflection,
+    validationContext: memoryFragments,
   })
 
   return {

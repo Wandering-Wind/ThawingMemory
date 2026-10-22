@@ -1,4 +1,5 @@
 import aiResponseDecoration from '../../../assets/decorations/AIResponse.svg'
+import EvidenceExcerpts from '../EvidenceExcerpts/EvidenceExcerpts.jsx'
 
 function ThinkingDots() {
   return (
@@ -41,6 +42,8 @@ function AIResponse({ isLoading = false, response }) {
         {isLoading && <ThinkingDots />}
         <p>{response.reflection}</p>
       </section>
+
+      <EvidenceExcerpts items={response.evidence} />
 
       <section
         className="ai-response__section ai-response__section--limitation"

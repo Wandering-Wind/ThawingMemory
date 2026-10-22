@@ -111,7 +111,13 @@ async function requestGroq(requestBody) {
   throw createGroqError('MODEL_UNAVAILABLE')
 }
 
-async function generateStructuredOutput({ systemInstruction, input, schema, validate }) {
+async function generateStructuredOutput({
+  systemInstruction,
+  input,
+  schema,
+  validate,
+  validationContext,
+}) {
   if (!isGroqConfigured()) {
     throw createGroqError('MODEL_UNAVAILABLE')
   }
@@ -155,7 +161,7 @@ async function generateStructuredOutput({ systemInstruction, input, schema, vali
     throw createGroqError('INVALID_MODEL_RESPONSE')
   }
 
-  return validate(output)
+  return validate(output, validationContext)
 }
 
 export function generateGroqReflection(memory) {
@@ -164,6 +170,7 @@ export function generateGroqReflection(memory) {
     input: createReflectionInput(memory),
     schema: reflectionSchema,
     validate: validateReflection,
+    validationContext: [{ text: memory }],
   })
 }
 
@@ -173,6 +180,7 @@ export async function generateGroqContinuedReflection({ memoryFragments, skipped
     input: createContinuedReflectionInput({ memoryFragments, skippedQuestions }),
     schema: reflectionSchema,
     validate: validateReflection,
+    validationContext: memoryFragments,
   })
 
   return { type: 'reflection', ...reflection }

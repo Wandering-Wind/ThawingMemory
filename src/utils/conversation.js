@@ -9,11 +9,30 @@ function requireNonEmptyText(value, fieldName) {
 }
 
 function copyAIResponse(response) {
-  return {
+  const copiedResponse = {
     reflection: requireNonEmptyText(response?.reflection, 'reflection'),
     limitation: requireNonEmptyText(response?.limitation, 'limitation'),
     question: requireNonEmptyText(response?.question, 'question'),
   }
+
+  if (Array.isArray(response?.evidence)) {
+    copiedResponse.evidence = response.evidence.map((item) => {
+      if (
+        !item ||
+        !Number.isInteger(item.fragmentNumber) ||
+        item.fragmentNumber < 1
+      ) {
+        throw new TypeError('Evidence must identify a memory fragment.')
+      }
+
+      return {
+        fragmentNumber: item.fragmentNumber,
+        quote: requireNonEmptyText(item.quote, 'evidence quote'),
+      }
+    })
+  }
+
+  return copiedResponse
 }
 
 export function createConversation(initialMemory) {

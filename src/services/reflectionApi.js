@@ -4,6 +4,17 @@ function isReflectionResponse(value) {
   return (
     value &&
     typeof value.reflection === 'string' &&
+    Array.isArray(value.evidence) &&
+    value.evidence.length > 0 &&
+    value.evidence.length <= 4 &&
+    value.evidence.every(
+      (item) =>
+        item &&
+        Number.isInteger(item.fragmentNumber) &&
+        item.fragmentNumber > 0 &&
+        typeof item.quote === 'string' &&
+        Boolean(item.quote.trim()),
+    ) &&
     typeof value.limitation === 'string' &&
     typeof value.question === 'string'
   )
