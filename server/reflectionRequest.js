@@ -4,7 +4,10 @@ export const MAX_QUESTION_LENGTH = 300
 export const MAX_SKIPPED_QUESTIONS = 3
 export const MAX_FOLLOW_UP_TURNS = 3
 
-const KNOWN_CARD_IDS = new Set(['kitchen-instinctive-measures'])
+const KNOWN_CARD_IDS = new Set([
+  'kitchen-instinctive-measures',
+  'garden-plant-memory',
+])
 const CONVERSATION_ACTIONS = new Set(['continue', 'build'])
 
 function validateRequestObject(body) {
@@ -72,6 +75,13 @@ export function validateConversationRequest(body) {
     }
   }
 
+  if (body.cardId === 'garden-plant-memory' && body.action === 'build') {
+    return {
+      code: 'INVALID_ACTION',
+      message: 'Garden maps are assembled from user-authored fragments.',
+    }
+  }
+
   if (!Array.isArray(body.memoryFragments) || body.memoryFragments.length < 1) {
     return {
       code: 'INVALID_FRAGMENTS',
@@ -119,6 +129,19 @@ export function validateConversationRequest(body) {
       return {
         code: 'INVALID_FRAGMENTS',
         message: 'Each follow-up fragment must identify the question it answers.',
+      }
+    }
+
+    if (
+      fragment.branchFromFragment !== undefined &&
+      (body.cardId !== 'garden-plant-memory' ||
+        !Number.isInteger(fragment.branchFromFragment) ||
+        fragment.branchFromFragment < 1 ||
+        fragment.branchFromFragment > index)
+    ) {
+      return {
+        code: 'INVALID_FRAGMENTS',
+        message: 'Each branch must connect to an earlier memory fragment.',
       }
     }
   }

@@ -46,7 +46,7 @@ function LivingArchivePage() {
         {archiveData.hasUnreadableData && (
           <p role="alert">
             Previous prototype data could not be read. Your current archive is
-            shown as empty, and you can return to the Kitchen to begin again.
+            shown as empty, and you can return to a memory space to begin again.
           </p>
         )}
 
@@ -68,10 +68,13 @@ function LivingArchivePage() {
           <section aria-labelledby="empty-archive-title">
             <h2 id="empty-archive-title">No traces saved yet</h2>
             <p>
-              Complete a Kitchen memory and choose how you want to respond to
-              the provisional AI reflection.
+              Complete a memory in the Kitchen or Garden and choose how you
+              want to respond to the provisional AI reflection.
             </p>
-            <Link to="/kitchen">Begin in the Kitchen</Link>
+            <div className="archive-entry-list">
+              <Link to="/kitchen">Begin in the Kitchen</Link>
+              <Link to="/garden">Begin in the Garden</Link>
+            </div>
           </section>
         ) : (
           <section aria-labelledby="saved-traces-title">

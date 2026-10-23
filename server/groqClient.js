@@ -1,9 +1,9 @@
 import {
-  CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
   createContinuedReflectionInput,
   createReflectionInput,
   createWorkingRecipeInput,
-  REFLECTION_SYSTEM_INSTRUCTION,
+  getContinuedReflectionSystemInstruction,
+  getReflectionSystemInstruction,
   WORKING_RECIPE_SYSTEM_INSTRUCTION,
 } from './reflectionPrompt.js'
 import { validateReflection, validateWorkingRecipe } from './geminiClient.js'
@@ -164,9 +164,9 @@ async function generateStructuredOutput({
   return validate(output, validationContext)
 }
 
-export function generateGroqReflection(memory) {
+export function generateGroqReflection(memory, cardId) {
   return generateStructuredOutput({
-    systemInstruction: REFLECTION_SYSTEM_INSTRUCTION,
+    systemInstruction: getReflectionSystemInstruction(cardId),
     input: createReflectionInput(memory),
     schema: reflectionSchema,
     validate: validateReflection,
@@ -174,10 +174,10 @@ export function generateGroqReflection(memory) {
   })
 }
 
-export async function generateGroqContinuedReflection({ memoryFragments, skippedQuestions = [] }) {
+export async function generateGroqContinuedReflection({ memoryFragments, skippedQuestions = [], cardId }) {
   const reflection = await generateStructuredOutput({
-    systemInstruction: CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
-    input: createContinuedReflectionInput({ memoryFragments, skippedQuestions }),
+    systemInstruction: getContinuedReflectionSystemInstruction(cardId),
+    input: createContinuedReflectionInput({ memoryFragments, skippedQuestions, cardId }),
     schema: reflectionSchema,
     validate: validateReflection,
     validationContext: memoryFragments,

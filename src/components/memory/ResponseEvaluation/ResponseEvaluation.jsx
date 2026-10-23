@@ -7,16 +7,26 @@ function ResponseEvaluation({
   onSave,
   saveError,
   workingRecipe,
+  domain = 'kitchen',
 }) {
+  const isGarden = domain === 'garden'
   const decisions = [
     {
       value: 'kept',
-      label: workingRecipe
-        ? 'Keep as a working reconstruction'
-        : 'Keep as a prompt',
+      label: isGarden
+        ? 'Keep the AI response as a prompt'
+        : workingRecipe
+          ? 'Keep as a working reconstruction'
+          : 'Keep as a prompt',
     },
-    { value: 'edited', label: 'Edit in my words' },
-    { value: 'rejected', label: 'This does not fit' },
+    {
+      value: 'edited',
+      label: isGarden ? 'Add my note' : 'Edit in my words',
+    },
+    {
+      value: 'rejected',
+      label: isGarden ? 'Reject this AI response' : 'This does not fit',
+    },
   ]
   function selectDecision(decision) {
     onChange({
@@ -39,10 +49,15 @@ function ResponseEvaluation({
       id="response-evaluation"
       aria-labelledby="evaluation-title"
     >
-      <h2 id="evaluation-title">What would you like to do with this reconstruction?</h2>
+      <h2 id="evaluation-title">
+        {isGarden
+          ? 'How do you want to respond to the AI reflection?'
+          : 'What would you like to do with this reconstruction?'}
+      </h2>
       <p>
-        Keeping it does not verify it. Editing or rejecting it keeps the
-        provisional reconstruction visible for comparison
+        {isGarden
+          ? 'Your memory map remains yours. Keeping the AI response does not verify it. You can add a note or reject the response.'
+          : 'Keeping it does not verify it. Editing or rejecting it keeps the provisional reconstruction visible for comparison'}
       </p>
 
       <div
@@ -65,7 +80,9 @@ function ResponseEvaluation({
 
       {evaluation.decision === 'kept' && (
         <p role="status">
-          Kept as a working reconstruction, not as a verified account
+          {isGarden
+            ? 'The AI response will be saved separately from your user-authored map.'
+            : 'Kept as a working reconstruction, not as a verified account'}
         </p>
       )}
 
@@ -74,9 +91,13 @@ function ResponseEvaluation({
           className="response-evaluation__user-panel"
           aria-labelledby="edit-response-title"
         >
-          <h3 id="edit-response-title">Write your reconstruction</h3>
+          <h3 id="edit-response-title">
+            {isGarden ? 'Add your note' : 'Write your reconstruction'}
+          </h3>
 
-          <label htmlFor="edited-reflection">Your version</label>
+          <label htmlFor="edited-reflection">
+            {isGarden ? 'Your note' : 'Your version'}
+          </label>
           <textarea
             id="edited-reflection"
             name="editedReflection"
@@ -88,7 +109,9 @@ function ResponseEvaluation({
           />
 
           <label htmlFor="edit-correction">
-            What is different in your family's version?
+            {isGarden
+              ? 'What should a reader understand about your map or the AI response?'
+              : "What is different in your family's version?"}
           </label>
           <textarea
             id="edit-correction"
@@ -105,14 +128,18 @@ function ResponseEvaluation({
           className="response-evaluation__user-panel"
           aria-labelledby="reject-response-title"
         >
-          <h3 id="reject-response-title">Rejected by you</h3>
+          <h3 id="reject-response-title">
+            {isGarden ? 'AI response rejected by you' : 'Rejected by you'}
+          </h3>
           <p>
             You can leave the response rejected without explaining, or add
             what it missed.
           </p>
 
           <label htmlFor="reject-correction">
-            What is different in your family's version?
+            {isGarden
+              ? 'What did the AI response misunderstand or miss?'
+              : "What is different in your family's version?"}
           </label>
           <textarea
             id="reject-correction"

@@ -16,11 +16,14 @@ export function createArchiveEntry({ card, conversation, evaluation }) {
     id: createEntryId(),
     cardId: card.id,
     cardTitle: card.title,
-    domain: 'kitchen',
+    domain: card.domain || 'kitchen',
     prompt: card.prompt,
     memoryFragments: conversation.memoryFragments.map((fragment) => ({
       text: fragment.text,
       questionAnswered: fragment.questionAnswered,
+      ...(Number.isInteger(fragment.branchFromFragment)
+        ? { branchFromFragment: fragment.branchFromFragment }
+        : {}),
     })),
     aiResponses: conversation.aiResponses.map((response) => ({
       reflection: response.reflection,

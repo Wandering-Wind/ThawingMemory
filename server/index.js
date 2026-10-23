@@ -96,8 +96,9 @@ async function handleReflectionRequest(request, response) {
       ? await generateContinuedReflection({
           memoryFragments: body.memoryFragments,
           skippedQuestions: body.skippedQuestions,
+            cardId: body.cardId,
         })
-      : await generateReflection(body.memory)
+      : await generateReflection(body.memory, body.cardId)
     sendJson(response, 200, reflection)
   } catch (error) {
     if (error.code === 'PAYLOAD_TOO_LARGE') {

@@ -1,9 +1,9 @@
 import {
-  CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
   createContinuedReflectionInput,
   createReflectionInput,
   createWorkingRecipeInput,
-  REFLECTION_SYSTEM_INSTRUCTION,
+  getContinuedReflectionSystemInstruction,
+  getReflectionSystemInstruction,
   WORKING_RECIPE_SYSTEM_INSTRUCTION,
 } from './reflectionPrompt.js'
 
@@ -308,9 +308,9 @@ async function generateStructuredOutput({
   return validate(extractOutputText(payload), validationContext)
 }
 
-export function generateReflection(memory) {
+export function generateReflection(memory, cardId) {
   return generateStructuredOutput({
-    systemInstruction: REFLECTION_SYSTEM_INSTRUCTION,
+    systemInstruction: getReflectionSystemInstruction(cardId),
     input: createReflectionInput(memory),
     schema: responseSchema,
     validate: validateReflection,
@@ -321,9 +321,10 @@ export function generateReflection(memory) {
 export async function generateContinuedReflection({
   memoryFragments,
   skippedQuestions = [],
+  cardId,
 }) {
   const reflection = await generateStructuredOutput({
-    systemInstruction: CONTINUED_REFLECTION_SYSTEM_INSTRUCTION,
+    systemInstruction: getContinuedReflectionSystemInstruction(cardId),
     input: createContinuedReflectionInput({
       memoryFragments,
       skippedQuestions,

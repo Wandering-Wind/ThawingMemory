@@ -1040,6 +1040,134 @@ li + li {
   animation: ai-response-reveal 0.85s ease-out both;
 }
 
+.garden-memory-workspace {
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.garden-memory-workspace--start {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.garden-memory-workspace--response {
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+  margin-top: var(--space-7);
+}
+
+.garden-privacy-note {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+}
+
+.garden-memory-map,
+.garden-branch-composer {
+  min-width: 0;
+  padding: clamp(var(--space-4), 4vw, var(--space-6));
+  background: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.garden-memory-map__heading > :last-child {
+  margin-bottom: 0;
+}
+
+.garden-memory-map__branches {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.garden-memory-map__branches--root {
+  margin-top: var(--space-5);
+}
+
+.garden-memory-map__branch {
+  min-width: 0;
+}
+
+.garden-memory-map__branches:not(.garden-memory-map__branches--root) {
+  margin-top: var(--space-3);
+  margin-left: var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 2px solid color-mix(in srgb, var(--color-leaf) 55%, white);
+}
+
+.garden-memory-map__node {
+  padding: var(--space-4);
+  overflow-wrap: anywhere;
+  background: color-mix(in srgb, var(--color-user-surface) 72%, white);
+  border: 1px solid var(--color-sand);
+  border-radius: var(--radius-sm);
+}
+
+.garden-memory-map__node.is-selected {
+  border-color: var(--color-leaf-dark);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-leaf) 20%, transparent);
+}
+
+.garden-memory-map__node > p {
+  margin-bottom: var(--space-2);
+}
+
+.garden-memory-map__label {
+  color: var(--color-leaf-dark);
+  font-size: var(--font-size-sm);
+  font-weight: 750;
+}
+
+.garden-memory-map__context {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+}
+
+.garden-memory-map__select {
+  margin-top: var(--space-2);
+  color: var(--color-leaf-dark);
+  background: transparent;
+  border-color: var(--color-leaf);
+}
+
+.garden-branch-composer__form {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.garden-branch-composer__form textarea {
+  width: 100%;
+  padding: var(--space-3);
+  color: var(--color-ink);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+}
+
+.garden-branch-composer__form p {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+}
+
+.garden-branch-composer__finish {
+  margin-top: var(--space-4);
+}
+
+.archive-garden-responses {
+  margin-top: var(--space-5);
+}
+
+.archive-garden-responses > details {
+  margin-top: var(--space-3);
+}
+
 @keyframes reconstruction-card-reveal {
   from {
     opacity: 0;
@@ -1380,6 +1508,11 @@ li + li {
 
   .reconstruction-workspace,
   .reconstruction-workspace--response {
+    grid-template-columns: 1fr;
+  }
+
+  .garden-memory-workspace,
+  .garden-memory-workspace--response {
     grid-template-columns: 1fr;
   }
 

@@ -68,7 +68,10 @@ export function addAIResponse(conversation, response) {
   }
 }
 
-export function addMemoryFragment(conversation, { text, questionAnswered }) {
+export function addMemoryFragment(
+  conversation,
+  { text, questionAnswered, branchFromFragment },
+) {
   if (!canAnswerFollowUp(conversation)) {
     throw new RangeError('The conversation follow-up limit has been reached.')
   }
@@ -84,6 +87,9 @@ export function addMemoryFragment(conversation, { text, questionAnswered }) {
           questionAnswered,
           'questionAnswered',
         ),
+        ...(Number.isInteger(branchFromFragment)
+          ? { branchFromFragment }
+          : {}),
       },
     ],
   }
@@ -118,6 +124,9 @@ export function createConversationRequest({
     memoryFragments: conversation.memoryFragments.map((fragment) => ({
       text: fragment.text,
       questionAnswered: fragment.questionAnswered,
+      ...(Number.isInteger(fragment.branchFromFragment)
+        ? { branchFromFragment: fragment.branchFromFragment }
+        : {}),
     })),
     skippedQuestions: [...conversation.skippedQuestions],
     action,

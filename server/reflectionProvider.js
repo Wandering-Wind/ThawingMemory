@@ -24,10 +24,10 @@ export async function runWithFallback(primary, fallback, fallbackConfigured = tr
   }
 }
 
-export function generateReflection(memory) {
+export function generateReflection(memory, cardId) {
   return runWithFallback(
-    () => generateGeminiReflection(memory),
-    () => generateGroqReflection(memory),
+    () => generateGeminiReflection(memory, cardId),
+    () => generateGroqReflection(memory, cardId),
     isGroqConfigured(),
   )
 }

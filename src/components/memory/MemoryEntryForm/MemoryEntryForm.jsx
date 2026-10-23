@@ -58,7 +58,10 @@ function MemoryEntryForm({ card, isSubmitting, onMemoryChange, onSubmit }) {
         aria-describedby={describedBy}
         aria-invalid={Boolean(error)}
         onChange={handleChange}
-        placeholder="For example: My grandmother listened for a change in the sound of the pan..."
+        placeholder={
+          card.placeholder ||
+          'For example: My grandmother listened for a change in the sound of the pan...'
+        }
       />
 
       <p id={countId}>
