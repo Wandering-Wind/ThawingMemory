@@ -41,6 +41,8 @@ const archiveExamples = [
         reflection:
           'She says she would taste as she added, especially when using the ammiikkal, so it sounds like the seasoning was guided by taste rather than a set measurement.',
         question: 'How many ammiikkal did she add to the chammanthi?',
+        editorialNote:
+          'The AI misreads the ammiikkal as something countable.',
       },
       {
         reflection:

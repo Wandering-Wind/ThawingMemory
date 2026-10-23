@@ -101,6 +101,14 @@ function ArchiveEntry({ entry }) {
                     )}
                     <section>
                       <h3>AI question</h3>
+                      {response.editorialNote && (
+                        <p
+                          className="archive-conversation__editorial-note"
+                          role="note"
+                        >
+                          {response.editorialNote}
+                        </p>
+                      )}
                       <p>{response.question}</p>
                     </section>
                   </details>

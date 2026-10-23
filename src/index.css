@@ -1268,6 +1268,13 @@ li + li {
   font-size: var(--font-size-sm);
 }
 
+.archive-conversation__editorial-note {
+  margin-bottom: var(--space-2);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
 .archive-conversation__ai-response {
   margin-top: var(--space-3);
 }
