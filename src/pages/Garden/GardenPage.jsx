@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import gardenDecoration from '../../assets/decorations/garden-page.webp'
 import FocusGuide from '../../components/layout/FocusGuide/FocusGuide.jsx'
@@ -47,20 +47,41 @@ function GardenPage() {
   const [evaluation, setEvaluation] = useState(emptyEvaluation)
   const [savedEntryId, setSavedEntryId] = useState('')
   const [saveError, setSaveError] = useState('')
-  const focusTimer = useRef(null)
   const currentStage = isEvaluating ? 3 : conversation ? 2 : 1
   const hasMap = Boolean(conversation && !isEvaluating)
 
-  useEffect(() => {
-    return () => clearTimeout(focusTimer.current)
-  }, [])
-
   function focusOnNextStep() {
-    clearTimeout(focusTimer.current)
-    setFocusArea('ai')
-    focusTimer.current = setTimeout(() => {
-      setFocusArea('continue')
-    }, 4000)
+    setFocusArea('map')
+    requestAnimationFrame(() => {
+      if (!window.matchMedia('(max-width: 35rem)').matches) {
+        return
+      }
+
+      document.getElementById('garden-memory-map')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      })
+    })
+  }
+
+  function handleSelectParent(parentNumber) {
+    setSelectedParentNumber(parentNumber)
+    setFocusArea('continue')
+
+    requestAnimationFrame(() => {
+      if (!window.matchMedia('(max-width: 35rem)').matches) {
+        return
+      }
+
+      document.getElementById('garden-branch-composer')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      })
+    })
   }
 
   function resetSaveState() {
@@ -107,7 +128,6 @@ function GardenPage() {
 
   async function submitContinuedReflection(nextConversation) {
     setReflectionError('')
-    clearTimeout(focusTimer.current)
 
     try {
       setFocusArea('ai')
@@ -179,7 +199,6 @@ function GardenPage() {
   }
 
   function handleFinishMap() {
-    clearTimeout(focusTimer.current)
     setIsEvaluating(true)
     setFocusArea('evaluation')
     requestAnimationFrame(() => {
@@ -234,6 +253,8 @@ function GardenPage() {
   const focusTarget =
     focusArea === 'ai'
       ? 'ai-response'
+      : focusArea === 'map'
+        ? 'garden-memory-map'
       : focusArea === 'continue'
         ? 'garden-branch-composer'
         : focusArea === 'evaluation'
@@ -260,11 +281,24 @@ function GardenPage() {
             <p>Garden memory</p>
             <PageHeading id="garden-title">The Garden</PageHeading>
             <p>
-              Begin with what you remember about a plant. You decide how each
-              detail connects to the others.
+              Use this space to connect fragments about a family plant across
+              people, places, and uses. You choose each connection and can leave
+              uncertain details open.
             </p>
           </div>
         </section>
+
+        <aside className="garden-reflection-note">
+          <p>
+            <em>
+              The aim is to help you remember from your own experience. You
+              choose what enters the map, while the AI may still interpret or
+              misread your words. Notice when you ask it to fill a detail you
+              cannot recall. How often does that happen, and what are you
+              hoping it can supply?
+            </em>
+          </p>
+        </aside>
 
         <nav className="reconstruction-progress" aria-label="Garden progress">
           {['Share a fragment', 'Grow your map', 'Review and save'].map(
@@ -284,9 +318,10 @@ function GardenPage() {
           <p className="section-step">Step 1: Start with your words</p>
           <h2 id="garden-card-title">A plant memory</h2>
           <p>
-            The AI is asked not to identify a plant. It cannot add branches to
-            your map; you write and connect each one. Its reflection may still
-            misunderstand your words.
+            This is a space for remembered details, not plant identification
+            or care advice. AI prompts may help you recall fragments, but the
+            AI can still infer or misunderstand. You write and connect every
+            branch yourself.
           </p>
           <p className="garden-privacy-note">
             Use demonstration text only. Your fragment is sent to the
@@ -313,11 +348,7 @@ function GardenPage() {
             {conversation && !isEvaluating && (
               <GardenMemoryMap
                 fragments={conversation.memoryFragments}
-                onSelectParent={
-                  isEvaluating || isReflecting
-                    ? undefined
-                    : setSelectedParentNumber
-                }
+                onSelectParent={isEvaluating || isReflecting ? undefined : handleSelectParent}
                 selectedParentNumber={selectedParentNumber}
               />
             )}

@@ -19,7 +19,9 @@ function ComingSoonPage({ sectionName }) {
             <PageHeading id={titleId}>Coming Soon</PageHeading>
             <p>
               This part of the memory landscape is planned for the next project
-              iteration. This current prototype focuses on the Kitchen
+              iteration. Across these spaces, AI is intended to prompt your own
+              remembering, not provide answers or fill gaps. Its responses can
+              still make unsupported inferences.
             </p>
           </div>
         </section>

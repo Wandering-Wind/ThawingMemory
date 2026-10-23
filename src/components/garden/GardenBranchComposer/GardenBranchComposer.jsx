@@ -20,6 +20,10 @@ function GardenBranchComposer({
   const [answer, setAnswer] = useState('')
   const followUpTurnCount = getFollowUpTurnCount(conversation)
   const canContinue = canAnswerFollowUp(conversation)
+  const selectedParent = Number.isInteger(selectedParentNumber)
+    ? conversation.memoryFragments[selectedParentNumber - 1]
+    : null
+  const latestQuestion = conversation.aiResponses.at(-1)?.question
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -45,6 +49,40 @@ function GardenBranchComposer({
         what you do not remember. Select a branch point in your map first. The
         AI does not write branches for you.
       </p>
+      {latestQuestion && (
+        <section
+          className="garden-branch-composer__question"
+          aria-labelledby="garden-branch-question-title"
+        >
+          <h3 id="garden-branch-question-title">Question for this map</h3>
+          <p>{latestQuestion}</p>
+          <p>
+            This question was generated from the conversation so far. It does
+            not change when you select a branch point.
+          </p>
+        </section>
+      )}
+      <section
+        className="garden-branch-composer__parent"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <h3>Selected branch point</h3>
+        {selectedParent ? (
+          <>
+            <p>
+              <strong>
+                {selectedParentNumber === 1
+                  ? 'Starting memory'
+                  : `Your branch ${selectedParentNumber - 1}`}
+              </strong>
+            </p>
+            <p>{selectedParent.text}</p>
+          </>
+        ) : (
+          <p>Select a detail in your map before adding a branch.</p>
+        )}
+      </section>
       {error && <p role="alert">{error}</p>}
 
       {pendingTurn && canContinue && (
@@ -84,6 +122,10 @@ function GardenBranchComposer({
           >
             {isSubmitting ? 'Adding your branch...' : 'Add this branch'}
           </button>
+          <p>
+            Skipping records that you passed on the question. It does not add
+            a memory fragment or a branch.
+          </p>
           <button
             className="button--gold-edge"
             type="button"

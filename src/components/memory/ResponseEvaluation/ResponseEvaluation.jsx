@@ -59,6 +59,11 @@ function ResponseEvaluation({
           ? 'Your memory map remains yours. Keeping the AI response does not verify it. You can add a note or reject the response.'
           : 'Keeping it does not verify it. Editing or rejecting it keeps the provisional reconstruction visible for comparison'}
       </p>
+      <p>
+        As you reflect, consider: How often did you notice yourself expecting
+        the AI model to author missing details, and in doing so, to co-author
+        your memories?
+      </p>
 
       <div
         className="response-evaluation__choices"

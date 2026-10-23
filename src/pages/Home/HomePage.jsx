@@ -19,9 +19,9 @@ function HomePage() {
             <p>A reflective cultural memory prototype</p>
             <PageHeading id="landing-title">Thawing Memory</PageHeading>
             <p>
-              Begin your journey with a fragment of a family cooking memory. An
-              AI reflection will help you notice, question, and describe what
-              remains, while you decide and author what fits and what does not
+              Begin with a fragment of family memory. AI prompts may help you
+              notice and describe what remains, while you decide what fits and
+              what does not.
             </p>
           </div>
         </section>
@@ -34,6 +34,22 @@ function HomePage() {
             sensory, or family-specific or regional forms. This project does
             not try to recover an authentic version of Malayali culture but
             rather creates a space to reflect on the traces you already hold
+          </p>
+          <p>
+            The aim is to prompt your own remembering, not to give answers or
+            fill gaps for you. AI can still infer or misread details, so treat
+            its responses as suggestions to check against your own words.
+          </p>
+        </section>
+
+        <section className="landing-introduction" aria-labelledby="spaces-title">
+          <h2 id="spaces-title">Two ways to trace a memory</h2>
+          <p>
+            The Kitchen helps you shape remembered cooking details into a
+            provisional recipe. The Garden helps you connect fragments about a
+            family plant across people, places, and uses, while leaving
+            uncertain details open. Neither space identifies a plant or gives
+            practical care advice.
           </p>
         </section>
 

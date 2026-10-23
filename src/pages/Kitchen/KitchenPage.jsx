@@ -331,6 +331,11 @@ function KitchenPage() {
               Begin with a fragment of a cooking memory or recipe that you remembered through
               observation, repetition, or your senses.
             </p>
+            <p>
+              AI prompts are here to help you recall and describe fragments,
+              not to supply missing ingredients or steps. Its reflection can
+              still make unsupported inferences.
+            </p>
           </div>
         </section>
 

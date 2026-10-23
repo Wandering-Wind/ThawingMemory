@@ -917,8 +917,10 @@ li + li {
 
 .evidence-excerpts blockquote {
   margin: 0;
-  padding-left: var(--space-3);
-  border-left: 2px solid var(--color-gold);
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in srgb, var(--color-gold-light) 24%, white);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 45%, white);
+  border-radius: var(--radius-sm);
 }
 
 .ai-response--loading {
@@ -1094,9 +1096,8 @@ li + li {
 
 .garden-memory-map__branches:not(.garden-memory-map__branches--root) {
   margin-top: var(--space-3);
-  margin-left: var(--space-4);
-  padding-left: var(--space-4);
-  border-left: 2px solid color-mix(in srgb, var(--color-leaf) 55%, white);
+  margin-left: var(--space-5);
+  padding-left: var(--space-3);
 }
 
 .garden-memory-map__node {
@@ -1134,6 +1135,26 @@ li + li {
   border-color: var(--color-leaf);
 }
 
+.garden-memory-map__select:hover:not(:disabled),
+.garden-memory-map__select:focus-visible {
+  color: var(--color-white);
+  background: var(--color-leaf-dark);
+  border-color: var(--color-leaf-dark);
+}
+
+.garden-reflection-note {
+  max-width: var(--reading-width);
+  margin: var(--space-4) auto;
+  padding: var(--space-3) 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
+.garden-reflection-note > :last-child {
+  margin-bottom: 0;
+}
+
 .garden-branch-composer__form {
   display: grid;
   gap: var(--space-3);
@@ -1158,6 +1179,28 @@ li + li {
 
 .garden-branch-composer__finish {
   margin-top: var(--space-4);
+}
+
+.garden-memory-map,
+.garden-branch-composer {
+  scroll-margin-top: var(--space-5);
+}
+
+.garden-branch-composer__question,
+.garden-branch-composer__parent {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-ai-surface) 55%, white);
+  border-radius: var(--radius-sm);
+}
+
+.garden-branch-composer__parent {
+  background: color-mix(in srgb, var(--color-user-surface) 75%, white);
+}
+
+.garden-branch-composer__question > :last-child,
+.garden-branch-composer__parent > :last-child {
+  margin-bottom: 0;
 }
 
 .archive-garden-responses {
