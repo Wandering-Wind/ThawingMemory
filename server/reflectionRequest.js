@@ -7,6 +7,7 @@ export const MAX_FOLLOW_UP_TURNS = 3
 const KNOWN_CARD_IDS = new Set([
   'kitchen-instinctive-measures',
   'garden-plant-memory',
+  'ritual-family-memory',
 ])
 const CONVERSATION_ACTIONS = new Set(['continue', 'build'])
 
@@ -79,6 +80,13 @@ export function validateConversationRequest(body) {
     return {
       code: 'INVALID_ACTION',
       message: 'Garden maps are assembled from user-authored fragments.',
+    }
+  }
+
+  if (body.cardId === 'ritual-family-memory' && body.action === 'build') {
+    return {
+      code: 'INVALID_ACTION',
+      message: 'Ritual timelines are assembled from user-authored moments.',
     }
   }
 
