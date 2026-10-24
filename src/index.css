@@ -627,6 +627,12 @@ li + li {
   margin-left: clamp(var(--space-4), 7vw, 6rem);
 }
 
+.scene-hero--garden .garden-reflection-note {
+  max-width: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+}
+
 .scene-hero__feature--coming-soon {
   right: -3%;
   top: var(--space-3);
@@ -1045,18 +1051,60 @@ li + li {
 .garden-memory-workspace {
   display: grid;
   grid-template-columns: minmax(17rem, 0.8fr) minmax(0, 1.2fr);
-  align-items: start;
+  align-items: stretch;
   gap: var(--space-5);
   margin-top: var(--space-5);
 }
 
+.scene-main > section.garden-interaction {
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
+}
+
+.garden-interaction > .section-step,
+.garden-interaction > h2,
+.garden-interaction > p,
+.garden-interaction > [role='status'],
+.garden-interaction > [role='alert'] {
+  max-width: var(--reading-width);
+}
+
+.garden-interaction > .garden-memory-workspace,
+.garden-interaction > .reconstruction-review {
+  width: min(100%, 60rem);
+  margin-inline: auto;
+}
+
 .garden-memory-workspace--start {
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, var(--reading-width));
+  justify-content: center;
 }
 
 .garden-memory-workspace--response {
   grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
   margin-top: var(--space-7);
+}
+
+.garden-memory-workspace--response > .ai-response {
+  margin-top: 0;
+}
+
+.garden-memory-workspace:not(.garden-memory-workspace--start) .memory-card-list {
+  display: flex;
+  min-width: 0;
+}
+
+.garden-memory-workspace:not(.garden-memory-workspace--start)
+  .memory-card-list > .memory-card {
+  flex: 1;
+}
+
+.garden-memory-workspace--reviewing {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.reconstruction-review > p:not(.section-step) {
+  max-width: var(--reading-width);
 }
 
 .garden-privacy-note {
@@ -1197,6 +1245,138 @@ li + li {
 
 .garden-reflection-note > :last-child {
   margin-bottom: 0;
+}
+
+.scene-main > nav.garden-links,
+.scene-main > nav.ritual-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  width: min(100%, var(--content-width));
+  margin: var(--space-6) auto 0;
+}
+
+.ritual-workspace {
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
+}
+
+.ritual-workspace > .section-step,
+.ritual-workspace > h2,
+.ritual-workspace__introduction {
+  max-width: var(--reading-width);
+}
+
+.ritual-entry,
+.ritual-sequence > section {
+  width: min(100%, 60rem);
+  margin: var(--space-5) auto 0;
+  padding: clamp(var(--space-5), 5vw, var(--space-6));
+  background: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.ritual-entry {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.ritual-entry label {
+  font-weight: 700;
+}
+
+.ritual-entry p {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.ritual-entry textarea,
+.ritual-entry select {
+  width: 100%;
+  padding: var(--space-3);
+  color: var(--color-ink);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.ritual-entry textarea {
+  resize: vertical;
+}
+
+.ritual-entry__count {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+}
+
+.ritual-sequence {
+  display: grid;
+  gap: var(--space-5);
+  width: min(100%, 60rem);
+  margin: var(--space-5) auto 0;
+}
+
+.ritual-sequence > section {
+  margin: 0;
+}
+
+.ritual-sequence > section > p {
+  max-width: var(--reading-width);
+  color: var(--color-ink-muted);
+}
+
+.ritual-sequence__list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ritual-moment {
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-user-surface) 72%, white);
+  border: 1px solid var(--color-sand);
+  border-radius: var(--radius-sm);
+}
+
+.ritual-moment__label {
+  color: var(--color-leaf-dark);
+  font-size: var(--font-size-sm);
+  font-weight: 750;
+}
+
+.ritual-moment > p {
+  margin: var(--space-2) 0 var(--space-3);
+  overflow-wrap: anywhere;
+}
+
+.ritual-moment__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ritual-moment__secondary {
+  width: auto;
+  min-height: 2.25rem;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-leaf-dark);
+  background: transparent;
+  border-color: var(--color-leaf);
+  font-size: var(--font-size-sm);
+}
+
+.ritual-moment__secondary:hover:not(:disabled) {
+  color: var(--color-white);
+  background: var(--color-leaf-dark);
+  border-color: var(--color-leaf-dark);
+}
+
+.ritual-sequence__open {
+  background: color-mix(in srgb, var(--color-uncertainty-surface) 68%, white);
 }
 
 .garden-branch-composer__form {

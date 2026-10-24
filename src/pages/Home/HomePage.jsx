@@ -43,13 +43,15 @@ function HomePage() {
         </section>
 
         <section className="landing-introduction" aria-labelledby="spaces-title">
-          <h2 id="spaces-title">Two ways to trace a memory</h2>
+          <h2 id="spaces-title">Three ways to trace a memory</h2>
           <p>
-            The Kitchen helps you shape remembered cooking details into a
-            provisional recipe. The Garden helps you connect fragments about a
-            family plant across people, places, and uses, while leaving
-            uncertain details open. Neither space identifies a plant or gives
-            practical care advice.
+            The Kitchen traces a recipe from remembered cooking details. The
+            Garden connects fragments about a family plant across people,
+            places, and uses. Ritual traces remembered moments and their order
+            across family celebrations and everyday routines. The Ritual space
+            focuses on family memory, not religious rituals or instruction.
+            The Garden does not identify plants or give care advice. Across all
+            spaces, you decide what fits and what remains uncertain.
           </p>
         </section>
 

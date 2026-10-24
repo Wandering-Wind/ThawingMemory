@@ -285,20 +285,19 @@ function GardenPage() {
               people, places, and uses. You choose each connection and can leave
               uncertain details open.
             </p>
+            <aside className="garden-reflection-note">
+              <p>
+                <em>
+                  The aim is to help you remember from your own experience. You
+                  choose what enters the map, while the AI may still interpret
+                  or misread your words. Notice when you ask it to fill a detail
+                  you cannot recall. How often does that happen, and what are
+                  you hoping it can supply?
+                </em>
+              </p>
+            </aside>
           </div>
         </section>
-
-        <aside className="garden-reflection-note">
-          <p>
-            <em>
-              The aim is to help you remember from your own experience. You
-              choose what enters the map, while the AI may still interpret or
-              misread your words. Notice when you ask it to fill a detail you
-              cannot recall. How often does that happen, and what are you
-              hoping it can supply?
-            </em>
-          </p>
-        </aside>
 
         <nav className="reconstruction-progress" aria-label="Garden progress">
           {['Share a fragment', 'Grow your map', 'Review and save'].map(
@@ -314,7 +313,10 @@ function GardenPage() {
           )}
         </nav>
 
-        <section aria-labelledby="garden-card-title">
+        <section
+          className="garden-interaction"
+          aria-labelledby="garden-card-title"
+        >
           <p className="section-step">Step 1: Start with your words</p>
           <h2 id="garden-card-title">A plant memory</h2>
           <p>
@@ -360,7 +362,11 @@ function GardenPage() {
           )}
 
           {aiResponse && (
-            <div className="garden-memory-workspace garden-memory-workspace--response">
+            <div
+              className={`garden-memory-workspace garden-memory-workspace--response${
+                isEvaluating ? ' garden-memory-workspace--reviewing' : ''
+              }`}
+            >
               <AIResponse isLoading={isReflecting} response={aiResponse} />
               {conversation && !isEvaluating && (
                 <GardenBranchComposer
