@@ -1892,6 +1892,28 @@ li + li {
     width: 100%;
   }
 
+  .back-to-top {
+    width: 3rem;
+    min-height: 3rem;
+    padding: 0;
+    justify-content: center;
+    background-color: color-mix(
+      in srgb,
+      var(--color-clay-dark) 72%,
+      transparent
+    );
+    border-radius: var(--radius-sm);
+  }
+
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    background-color: var(--color-clay-dark);
+  }
+
+  .back-to-top > span:not([aria-hidden='true']) {
+    display: none;
+  }
+
   .primary-action {
     width: 100%;
   }
