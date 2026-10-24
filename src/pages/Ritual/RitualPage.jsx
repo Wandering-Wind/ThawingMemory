@@ -522,7 +522,12 @@ function RitualPage() {
                   id="ritual-reflection-status"
                   role="status"
                 >
-                  Generating a provisional reflection from your words...
+                  Generating a provisional reflection from your words
+                  <span className="thinking-dots" aria-hidden="true">
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                  </span>
                 </p>
               )}
               {reflectionError && (
@@ -540,7 +545,7 @@ function RitualPage() {
               )}
               {aiResponse && (
                 <div className="ritual-reflection" id="ritual-ai-response">
-                  <AIResponse response={aiResponse} />
+                  <AIResponse isLoading={isReflecting} response={aiResponse} />
                 </div>
               )}
               {conversation && !canAnswerFollowUp(conversation) && (
