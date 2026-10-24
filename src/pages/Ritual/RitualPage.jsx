@@ -349,8 +349,8 @@ function RitualPage() {
             <p>
               This space is for remembering family rituals and everyday
               routines, not religious rituals or teaching. You might remember
-              what snacks accompanied evening tea, or when your family gathered
-              flowers for Onam pookallam. Your family account does not need to
+              what snacks came with evening tea, or when your family gathered
+              flowers for Onam pookallams. Also just a note, your family account does not need to
               match anyone else&apos;s.
             </p>
           </div>
@@ -362,12 +362,12 @@ function RitualPage() {
           <p className="ritual-workspace__introduction">
             Add moments in the order you remember them, or leave their order
             open. The sequence shows your choices, not a complete or definitive
-            account of a family practice.
+            account of a family practice
           </p>
           <p className="ritual-privacy-note">
             Use demonstration text only. When you request a reflection, your
             relevant fragments are sent to the configured AI provider. The
-            timeline stays in this browser while the page is open.
+            timeline stays in this browser while the page is open
           </p>
 
           {!hasMoments ? (
@@ -389,7 +389,7 @@ function RitualPage() {
                   setError('')
                 }}
                 maxLength={MAX_FRAGMENT_LENGTH}
-                placeholder="For example: I remember part of a family practice, but not every detail."
+                placeholder="For example: I remember having a pookkallam for Onam, but the memory of how it came to be is fuzzy. Can you help me remember?"
                 rows={5}
               />
               <span className="ritual-entry__count">
@@ -410,7 +410,7 @@ function RitualPage() {
                     </h3>
                     <p>
                       Move moments to change their order, or leave a moment open
-                      if you cannot place it.
+                      if you cannot place it
                     </p>
                   </div>
                   {!isRestartConfirming && (
@@ -547,7 +547,7 @@ function RitualPage() {
                 <p className="ritual-ai-limit">
                   The AI follow-up limit has been reached. New moments can
                   still be added to your timeline, but they will not receive
-                  another AI reflection.
+                  another AI reflection
                 </p>
               )}
 
@@ -562,7 +562,7 @@ function RitualPage() {
                 <p>
                   The AI question is only a prompt. You can add a memory, a
                   correction, or something you do not remember. You choose
-                  where the moment belongs.
+                  where the moment belongs
                 </p>
                 <textarea
                   id="ritual-next-fragment"
@@ -625,7 +625,7 @@ function RitualPage() {
                   <p>
                     Your chosen order and moments left open are saved as your
                     arrangement. The AI reflection is stored separately and is
-                    not a record of the practice itself.
+                    not a record of the practice itself
                   </p>
                   <ol className="ritual-sequence__list">
                     {moments.map((moment, index) => (

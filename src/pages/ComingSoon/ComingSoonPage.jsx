@@ -10,6 +10,7 @@ function ComingSoonPage({ sectionName }) {
   return (
     <div className="site-shell">
       <SiteHeader />
+      {/* Do not need since all the pages are now filled */}
 
       <main className="scene-main">
         <section className={`scene-hero scene-hero--coming-soon scene-hero--${sectionName.toLowerCase()}`} aria-labelledby={titleId}>
@@ -17,6 +18,7 @@ function ComingSoonPage({ sectionName }) {
           <div className="scene-hero__content">
             <p>{sectionName}</p>
             <PageHeading id={titleId}>Coming Soon</PageHeading>
+            {/* Do not need since we finished the sectionnnnsss */}
             <p>
               This part of the memory landscape is planned for the next project
               iteration. Across these spaces, AI is intended to prompt your own
@@ -31,3 +33,5 @@ function ComingSoonPage({ sectionName }) {
 }
 
 export default ComingSoonPage
+
+{/* Coming soon, has come forth */}

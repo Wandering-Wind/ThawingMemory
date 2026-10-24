@@ -47,7 +47,7 @@ export function validateLegacyReflectionRequest(body) {
   if (typeof body.memory !== 'string' || !body.memory.trim()) {
     return {
       code: 'INVALID_MEMORY',
-      message: 'Add a memory fragment, then reflect with the AI',
+      message: 'Add a memory fragment, then try reflecting with the AI model',
     }
   }
 
@@ -55,7 +55,7 @@ export function validateLegacyReflectionRequest(body) {
     return {
       code: 'MEMORY_TOO_LONG',
       message:
-        'This memory is too long for the prototype. Shorten it to 2,000 characters or fewer.',
+        'This memory is too long for the prototype. Try shortening it to 2,000 characters or less.',
     }
   }
 
@@ -79,14 +79,14 @@ export function validateConversationRequest(body) {
   if (body.cardId === 'garden-plant-memory' && body.action === 'build') {
     return {
       code: 'INVALID_ACTION',
-      message: 'Garden maps are assembled from user-authored fragments.',
+      message: 'Garden maps are assembled from your user-authored fragments.',
     }
   }
 
   if (body.cardId === 'ritual-family-memory' && body.action === 'build') {
     return {
       code: 'INVALID_ACTION',
-      message: 'Ritual timelines are assembled from user-authored moments.',
+      message: 'Ritual timelines are assembled from your user-authored moments.',
     }
   }
 
@@ -100,7 +100,7 @@ export function validateConversationRequest(body) {
   if (body.memoryFragments.length > MAX_MEMORY_FRAGMENTS) {
     return {
       code: 'TOO_MANY_FOLLOW_UPS',
-      message: 'The prototype supports up to three follow-up turns.',
+      message: 'This current prototype only supports up to three follow-up turns.',
     }
   }
 

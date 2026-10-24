@@ -113,7 +113,7 @@ function ArchiveEntry({ entry }) {
               <h3 id={`${titleId}-sequence-title`}>Your remembered sequence</h3>
               <p>
                 This order reflects how you arranged these moments. It is not
-                presented as a definitive account of the family practice.
+                presented as a definitive account of your family practice.
               </p>
               <ol className="ritual-sequence__list">
                 {(entry.ritualSequence?.orderedMoments ||

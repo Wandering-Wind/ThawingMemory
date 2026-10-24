@@ -21,7 +21,7 @@ function HomePage() {
             <p>
               Begin with a fragment of family memory. AI prompts may help you
               notice and describe what remains, while you decide what fits and
-              what does not.
+              what does not
             </p>
           </div>
         </section>
@@ -38,7 +38,9 @@ function HomePage() {
           <p>
             The aim is to prompt your own remembering, not to give answers or
             fill gaps for you. AI can still infer or misread details, so treat
-            its responses as suggestions to check against your own words.
+            its responses as suggestions to check against your own words. But do notice
+            when you ask the AI model to complete a memory, therefore allowing it to co-author 
+            a memory
           </p>
         </section>
 
@@ -51,7 +53,7 @@ function HomePage() {
             across family celebrations and everyday routines. The Ritual space
             focuses on family memory, not religious rituals or instruction.
             The Garden does not identify plants or give care advice. Across all
-            spaces, you decide what fits and what remains uncertain.
+            spaces, you decide what fits and what remains uncertain
           </p>
         </section>
 
@@ -103,7 +105,7 @@ function HomePage() {
       </main>
 
       <footer className="site-footer">
-        <p>Research proof of concept. No human testing or public data collection.</p>
+        <p>Research proof-of-concept. No human testing or public data collection.</p>
       </footer>
     </div>
   )

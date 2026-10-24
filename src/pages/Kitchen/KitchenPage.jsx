@@ -334,7 +334,9 @@ function KitchenPage() {
             <p>
               AI prompts are here to help you recall and describe fragments,
               not to supply missing ingredients or steps. Its reflection can
-              still make unsupported inferences.
+              still make unsupported inferences. But do notice how often you end up 
+              relying on AI to fill in gaps, therefore co-authoring memories, knowledge and 
+              culture
             </p>
           </div>
         </section>

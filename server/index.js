@@ -106,7 +106,7 @@ async function handleReflectionRequest(request, response) {
         response,
         413,
         'PAYLOAD_TOO_LARGE',
-        'The request is too large for the prototype.',
+        'The request is currently too large for the current prototype.',
       )
       return
     }
@@ -126,7 +126,7 @@ async function handleReflectionRequest(request, response) {
         response,
         429,
         'RATE_LIMITED',
-        'The free AI service is temporarily at its limit. Your memory is still here. Please try again shortly.',
+        'The free AI service is temporarily at its limit. Your memory is still here, but please try again shortly.',
       )
       return
     }
@@ -142,7 +142,7 @@ async function handleReflectionRequest(request, response) {
         response,
         503,
         'MODEL_UNAVAILABLE',
-        'The AI service is unavailable right now. Your memory has not been lost.',
+        'The AI service is currently unavailable right now, althought your memory has not been lost.',
       )
       return
     }

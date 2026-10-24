@@ -18,8 +18,8 @@ function WorkingRecipe({ id = 'working-recipe', recipe }) {
       <p className="working-recipe__eyebrow">Built from your fragments</p>
       <h2 id={titleId}>Working Family Recipe</h2>
       <p className="working-recipe__notice">
-        This organises what you supplied. It is not a complete, verified, or
-        culturally authoritative recipe.
+        This organises what you supplied. It is not a complete, verified, or a
+        culturally authoritative recipe
       </p>
       <h3>{recipe.dishName}</h3>
 

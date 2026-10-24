@@ -282,17 +282,16 @@ function GardenPage() {
             <PageHeading id="garden-title">The Garden</PageHeading>
             <p>
               Use this space to connect fragments about a family plant across
-              people, places, and uses. You choose each connection and can leave
+              people, places, and uses. You choose each connection and can leave any 
               uncertain details open.
             </p>
             <aside className="garden-reflection-note">
               <p>
                 <em>
-                  The aim is to help you remember from your own experience. You
+                  Note: The aim is to help you remember from your own experience. You
                   choose what enters the map, while the AI may still interpret
                   or misread your words. Notice when you ask it to fill a detail
-                  you cannot recall. How often does that happen, and what are
-                  you hoping it can supply?
+                  you cannot recall. How often does that happen, and how used to allowing AI to co-author are we?
                 </em>
               </p>
             </aside>
@@ -323,7 +322,7 @@ function GardenPage() {
             This is a space for remembered details, not plant identification
             or care advice. AI prompts may help you recall fragments, but the
             AI can still infer or misunderstand. You write and connect every
-            branch yourself.
+            branch yourself
           </p>
           <p className="garden-privacy-note">
             Use demonstration text only. Your fragment is sent to the
@@ -394,7 +393,7 @@ function GardenPage() {
               <p>
                 The map contains your fragments and the connections you chose.
                 The AI response is reviewed separately and does not become a
-                map branch.
+                map branch
               </p>
               <GardenMemoryMap
                 fragments={conversation.memoryFragments}

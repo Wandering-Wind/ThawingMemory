@@ -124,7 +124,7 @@ function GardenBranchComposer({
           </button>
           <p>
             Skipping records that you passed on the question. It does not add
-            a memory fragment or a branch.
+            a memory fragment or a branch
           </p>
           <button
             className="button--gold-edge"
@@ -140,7 +140,7 @@ function GardenBranchComposer({
       {!canContinue && (
         <p role="status">
           You have reached the three-turn limit. Your map is made from your
-          fragments and is ready for review.
+          fragments and is ready for review
         </p>
       )}
 

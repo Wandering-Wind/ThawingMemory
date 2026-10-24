@@ -50,10 +50,10 @@ function ConversationContinuation({
       <h2 id="continue-reflection-title">Continue the reconstruction</h2>
       <p>
         Add what you remember next. Your answer still remains separate from the
-        AI's wording, and “I do not remember” is definitely a valid response
+        AI's wording, and “I do not remember” is most definitely a valid response
       </p>
       <p className="conversation-continuation__next">
-        Choose one next step.
+        Choose one next step
       </p>
 
       {error && <p role="alert">{error}</p>}
@@ -140,7 +140,7 @@ function ConversationContinuation({
         <div>
           <p role="status">
             You have reached the three-turn limit for this reconstruction.
-            Build the working recipe when you are ready.
+            Build the working recipe when you are ready
           </p>
           <button
             className="primary-action--ornate primary-action--inviting"

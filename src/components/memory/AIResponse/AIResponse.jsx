@@ -30,8 +30,8 @@ function AIResponse({ isLoading = false, response }) {
       </p>
       <h2 id="ai-response-title">AI response</h2>
       <p>
-        This is a provisional reflection, not a verification or cultural
-        authority.
+        This is only a provisional reflection, and should not be treated as verification or a cultural
+        authority
       </p>
 
       <section
@@ -70,7 +70,7 @@ function AIResponse({ isLoading = false, response }) {
       </section>
 
       <p className="ai-response__reminder">
-        This response may generalise, flatten, or misunderstand your memory.
+        This response may generalise, flatten, or misunderstand your memory
       </p>
     </section>
   )
