@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import ritualDecoration from '../../assets/decorations/ritual-page.webp'
+import FocusGuide from '../../components/layout/FocusGuide/FocusGuide.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SectionNavigation from '../../components/layout/SectionNavigation/SectionNavigation.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
+import ResponseEvaluation from '../../components/memory/ResponseEvaluation/ResponseEvaluation.jsx'
 import {
   requestContinuedReflection,
   requestReflection,
@@ -15,9 +17,24 @@ import {
   createConversation,
   createConversationRequest,
 } from '../../utils/conversation.js'
+import {
+  createArchiveEntry,
+  saveArchiveEntry,
+} from '../../services/archiveStorage.js'
 
 const MAX_FRAGMENT_LENGTH = 2000
 const RITUAL_CARD_ID = 'ritual-family-memory'
+const ritualCard = {
+  id: RITUAL_CARD_ID,
+  domain: 'ritual',
+  title: 'A Practice Remembered',
+  prompt: 'Build a sequence from remembered family moments.',
+}
+const emptyEvaluation = {
+  decision: '',
+  editedReflection: '',
+  correction: '',
+}
 
 function createMoment(text) {
   return {
@@ -38,6 +55,11 @@ function RitualPage() {
   const [error, setError] = useState('')
   const [reflectionError, setReflectionError] = useState('')
   const [isRestartConfirming, setIsRestartConfirming] = useState(false)
+  const [isEvaluating, setIsEvaluating] = useState(false)
+  const [focusArea, setFocusArea] = useState('memory')
+  const [evaluation, setEvaluation] = useState(emptyEvaluation)
+  const [savedEntryId, setSavedEntryId] = useState('')
+  const [saveError, setSaveError] = useState('')
   const firstFragmentInput = useRef(null)
 
   function addFirstMoment(event) {
@@ -53,6 +75,7 @@ function RitualPage() {
     setMoments([firstMoment])
     setFirstFragment('')
     setError('')
+    setFocusArea('ai')
     requestInitialReflection(text)
   }
 
@@ -69,8 +92,10 @@ function RitualPage() {
       const nextConversation = addAIResponse(createConversation(text), response)
       setConversation(nextConversation)
       setAIResponse(response)
+      setFocusArea('continue')
     } catch (requestError) {
       setReflectionError(requestError.message)
+      setFocusArea('ai')
     } finally {
       setIsReflecting(false)
     }
@@ -91,9 +116,11 @@ function RitualPage() {
       const completedConversation = addAIResponse(nextConversation, response)
       setConversation(completedConversation)
       setAIResponse(response)
+      setFocusArea('continue')
     } catch (requestError) {
       setConversation(nextConversation)
       setReflectionError(requestError.message)
+      setFocusArea('ai')
     } finally {
       setIsReflecting(false)
     }
@@ -206,13 +233,103 @@ function RitualPage() {
     setError('')
     setReflectionError('')
     setIsRestartConfirming(false)
+    setIsEvaluating(false)
+    setEvaluation(emptyEvaluation)
+    setSavedEntryId('')
+    setSaveError('')
+    setFocusArea('memory')
     requestAnimationFrame(() => firstFragmentInput.current?.focus())
   }
 
   const hasMoments = moments.length > 0 || unplacedMoments.length > 0
+  const focusTarget =
+    focusArea === 'ai'
+      ? isReflecting
+        ? 'ritual-reflection-status'
+        : reflectionError
+          ? 'ritual-reflection-error'
+          : 'ritual-ai-response'
+      : focusArea === 'continue'
+        ? 'ritual-follow-up'
+        : focusArea === 'review'
+          ? 'ritual-review'
+          : hasMoments
+            ? 'ritual-sequence'
+            : 'ritual-first-fragment'
+
+  useEffect(() => {
+    if (focusArea === 'memory') {
+      return
+    }
+
+    const frame = requestAnimationFrame(() => {
+      if (!window.matchMedia('(max-width: 35rem)').matches) {
+        return
+      }
+
+      document.getElementById(focusTarget)?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      })
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [focusArea, focusTarget])
+
+  function handleFinishMemory() {
+    setIsEvaluating(true)
+    setFocusArea('review')
+    requestAnimationFrame(() => {
+      document.getElementById('ritual-review')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      })
+    })
+  }
+
+  function handleEvaluationChange(nextEvaluation) {
+    setEvaluation(nextEvaluation)
+    setSavedEntryId('')
+    setSaveError('')
+  }
+
+  function handleSaveTrace() {
+    if (!conversation || !evaluation.decision || savedEntryId) {
+      return
+    }
+
+    if (evaluation.decision === 'edited' && !evaluation.editedReflection.trim()) {
+      setSaveError('Add your note before saving an edited trace.')
+      return
+    }
+
+    try {
+      const entry = createArchiveEntry({
+        card: ritualCard,
+        conversation,
+        evaluation,
+      })
+      entry.ritualSequence = {
+        orderedMoments: moments.map(({ text }) => text),
+        unplacedMoments: unplacedMoments.map(({ text }) => text),
+      }
+      saveArchiveEntry(entry)
+      setSavedEntryId(entry.id)
+      setSaveError('')
+    } catch {
+      setSaveError(
+        'This trace could not be saved in the browser. Your current memory is still here.',
+      )
+    }
+  }
 
   return (
     <div className="site-shell">
+      <FocusGuide targetId={focusTarget} />
       <SiteHeader />
 
       <main className="scene-main">
@@ -284,7 +401,7 @@ function RitualPage() {
               </button>
             </form>
           ) : (
-            <div className="ritual-sequence">
+            <div className="ritual-sequence" id="ritual-sequence">
               <section aria-labelledby="ritual-ordered-title">
                 <div className="ritual-sequence__section-heading">
                   <div>
@@ -301,7 +418,7 @@ function RitualPage() {
                       className="ritual-moment__secondary"
                       type="button"
                       onClick={() => setIsRestartConfirming(true)}
-                      disabled={isReflecting}
+                      disabled={isReflecting || isEvaluating}
                     >
                       Start a different memory
                     </button>
@@ -349,7 +466,7 @@ function RitualPage() {
                           type="button"
                           className="ritual-moment__secondary"
                           onClick={() => moveMoment(moment.id, -1)}
-                          disabled={index === 0}
+                          disabled={isEvaluating || index === 0}
                         >
                           Move earlier
                         </button>
@@ -357,7 +474,7 @@ function RitualPage() {
                           type="button"
                           className="ritual-moment__secondary"
                           onClick={() => moveMoment(moment.id, 1)}
-                          disabled={index === moments.length - 1}
+                          disabled={isEvaluating || index === moments.length - 1}
                         >
                           Move later
                         </button>
@@ -365,6 +482,7 @@ function RitualPage() {
                           type="button"
                           className="ritual-moment__secondary"
                           onClick={() => leaveOrderOpen(moment.id)}
+                          disabled={isEvaluating}
                         >
                           Leave order open
                         </button>
@@ -388,6 +506,7 @@ function RitualPage() {
                           type="button"
                           className="ritual-moment__secondary"
                           onClick={() => placeMoment(moment.id)}
+                          disabled={isEvaluating}
                         >
                           Place at the end of the sequence
                         </button>
@@ -398,12 +517,16 @@ function RitualPage() {
               )}
 
               {isReflecting && (
-                <p className="ritual-reflection-status" role="status">
+                <p
+                  className="ritual-reflection-status"
+                  id="ritual-reflection-status"
+                  role="status"
+                >
                   Generating a provisional reflection from your words...
                 </p>
               )}
               {reflectionError && (
-                <div className="ritual-reflection-error">
+                <div className="ritual-reflection-error" id="ritual-reflection-error">
                   <p role="alert">{reflectionError}</p>
                   <button
                     className="ritual-moment__secondary"
@@ -416,7 +539,7 @@ function RitualPage() {
                 </div>
               )}
               {aiResponse && (
-                <div className="ritual-reflection">
+                <div className="ritual-reflection" id="ritual-ai-response">
                   <AIResponse response={aiResponse} />
                 </div>
               )}
@@ -428,7 +551,11 @@ function RitualPage() {
                 </p>
               )}
 
-              <form className="ritual-entry ritual-entry--follow-up" onSubmit={addMoment}>
+              <form
+                className="ritual-entry ritual-entry--follow-up"
+                id="ritual-follow-up"
+                onSubmit={addMoment}
+              >
                 <label htmlFor="ritual-next-fragment">
                   Add another remembered moment
                 </label>
@@ -441,7 +568,7 @@ function RitualPage() {
                   id="ritual-next-fragment"
                   name="ritualNextFragment"
                   value={nextFragment}
-                  disabled={isReflecting || Boolean(reflectionError) || !aiResponse}
+                  disabled={isReflecting || Boolean(reflectionError) || !aiResponse || isEvaluating}
                   onChange={(event) => {
                     setNextFragment(event.target.value)
                     setError('')
@@ -456,7 +583,7 @@ function RitualPage() {
                 <select
                   id="ritual-moment-placement"
                   value={placement}
-                  disabled={isReflecting || Boolean(reflectionError) || !aiResponse}
+                  disabled={isReflecting || Boolean(reflectionError) || !aiResponse || isEvaluating}
                   onChange={(event) => setPlacement(event.target.value)}
                 >
                   <option value="before">Before the current sequence</option>
@@ -470,19 +597,82 @@ function RitualPage() {
                 <button
                   className="primary-action"
                   type="submit"
-                  disabled={isReflecting || Boolean(reflectionError) || !aiResponse}
+                  disabled={isReflecting || Boolean(reflectionError) || !aiResponse || isEvaluating}
                 >
                   Add this moment
                 </button>
               </form>
+
+              {!isEvaluating && conversation && aiResponse && (
+                <button
+                  className="primary-action ritual-sequence__finish"
+                  type="button"
+                  onClick={handleFinishMemory}
+                  disabled={isReflecting}
+                >
+                  Finish this sequence and review
+                </button>
+              )}
+
+              {isEvaluating && conversation && (
+                <section
+                  className="ritual-review"
+                  id="ritual-review"
+                  aria-labelledby="ritual-review-title"
+                >
+                  <p className="section-step">Review and save</p>
+                  <h3 id="ritual-review-title">Review your remembered sequence</h3>
+                  <p>
+                    Your chosen order and moments left open are saved as your
+                    arrangement. The AI reflection is stored separately and is
+                    not a record of the practice itself.
+                  </p>
+                  <ol className="ritual-sequence__list">
+                    {moments.map((moment, index) => (
+                      <li className="ritual-moment" key={moment.id}>
+                        <span className="ritual-moment__label">Moment {index + 1}</span>
+                        <p>{moment.text}</p>
+                      </li>
+                    ))}
+                  </ol>
+                  {unplacedMoments.length > 0 && (
+                    <section className="ritual-sequence__open">
+                      <h4>Order not remembered</h4>
+                      <ul className="ritual-sequence__list">
+                        {unplacedMoments.map((moment) => (
+                          <li className="ritual-moment" key={moment.id}>
+                            <p>{moment.text}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  )}
+                  <ResponseEvaluation
+                    evaluation={evaluation}
+                    isSaved={Boolean(savedEntryId)}
+                    onChange={handleEvaluationChange}
+                    onSave={handleSaveTrace}
+                    saveError={saveError}
+                    domain="ritual"
+                  />
+                  <button
+                    className="ritual-moment__secondary"
+                    type="button"
+                    onClick={() => {
+                      setIsEvaluating(false)
+                      setFocusArea('continue')
+                    }}
+                    disabled={Boolean(savedEntryId)}
+                  >
+                    Return to the sequence
+                  </button>
+                </section>
+              )}
             </div>
           )}
         </section>
 
-        <nav className="ritual-links" aria-label="Ritual links">
-          <Link to="/garden">Visit the Garden</Link>
-          <Link to="/archive">View Living Archive</Link>
-        </nav>
+        <SectionNavigation current="ritual" />
       </main>
     </div>
   )

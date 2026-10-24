@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import gardenDecoration from '../../assets/decorations/garden-page.webp'
 import FocusGuide from '../../components/layout/FocusGuide/FocusGuide.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SectionNavigation from '../../components/layout/SectionNavigation/SectionNavigation.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import MemoryCard from '../../components/memory/MemoryCard/MemoryCard.jsx'
@@ -415,10 +415,7 @@ function GardenPage() {
           )}
         </section>
 
-        <nav className="garden-links" aria-label="Garden links">
-          <Link to="/archive">View Living Archive</Link>
-          <Link to="/kitchen">Visit the Kitchen</Link>
-        </nav>
+        <SectionNavigation current="garden" />
       </main>
     </div>
   )

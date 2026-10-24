@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import bananaLeafLeft from '../../assets/decorations/banana-leaf-left-cropped.svg'
 import bananaLeafRight from '../../assets/decorations/banana-leaf-right-cropped.svg'
 import kitchenFood from '../../assets/decorations/kitchen-food-cropped.svg'
 import FocusGuide from '../../components/layout/FocusGuide/FocusGuide.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SectionNavigation from '../../components/layout/SectionNavigation/SectionNavigation.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import AIResponse from '../../components/memory/AIResponse/AIResponse.jsx'
 import ConversationContinuation from '../../components/memory/ConversationContinuation/ConversationContinuation.jsx'
@@ -433,9 +433,7 @@ function KitchenPage() {
           )}
         </section>
 
-        <nav aria-label="Kitchen links">
-          <Link to="/archive">View Living Archive</Link>
-        </nav>
+        <SectionNavigation current="kitchen" />
       </main>
     </div>
   )

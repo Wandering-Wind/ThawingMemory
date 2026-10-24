@@ -4,6 +4,7 @@ import archiveDecoration from '../../assets/decorations/archive-page.webp'
 import bananaLeafLeft from '../../assets/decorations/banana-leaf-left-cropped.svg'
 import ArchiveEntry from '../../components/archive/ArchiveEntry/ArchiveEntry.jsx'
 import PageHeading from '../../components/layout/PageHeading/PageHeading.jsx'
+import SectionNavigation from '../../components/layout/SectionNavigation/SectionNavigation.jsx'
 import SiteHeader from '../../components/layout/SiteHeader/SiteHeader.jsx'
 import archiveExamples from '../../data/archiveExamples.js'
 import { readArchiveData } from '../../services/archiveStorage.js'
@@ -68,8 +69,8 @@ function LivingArchivePage() {
           <section aria-labelledby="empty-archive-title">
             <h2 id="empty-archive-title">No traces saved yet</h2>
             <p>
-              Complete a memory in the Kitchen or Garden and choose how you
-              want to respond to the provisional AI reflection.
+              Complete a memory in the Kitchen, Garden, or Ritual space and
+              choose how you want to respond to the provisional AI reflection.
             </p>
             <div className="archive-entry-list">
               <Link to="/kitchen">Begin in the Kitchen</Link>
@@ -93,9 +94,7 @@ function LivingArchivePage() {
           </section>
         )}
 
-        <nav aria-label="Living Archive links">
-          <Link to="/kitchen">Return to the Kitchen</Link>
-        </nav>
+        <SectionNavigation current="archive" />
       </main>
     </div>
   )
