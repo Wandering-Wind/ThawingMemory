@@ -1,61 +1,71 @@
 # Thawing Memory
 
-Thawing Memory is a generative AI prototype for first-generation Malayalis in South Africa who carry partial, sensory, or family-specific cooking memories
+Thawing Memory is a research proof-of-concept exploring how generative AI might prompt reflection on family memory without being treated as a source of verified cultural knowledge. It is designed around first-generation Malayali diaspora experiences in South Africa. The prototype does not claim to preserve a complete or authoritative account of Malayali culture.
 
-## This is a research proof-of-concept, not a cultural authority or verified recipe source
+## Project spaces
 
-Rather than asking AI to declare or give an authentic recipe, the Kitchen in this project treats the model as a limited interviewer and organiser
-The user supplies every piece of recipe evidence, evaluates the model's interpretation, and retains authority over the recipe
+- **Kitchen:** Users add fragments of a remembered cooking practice and can build a provisional Working Family Recipe. The current prototype has one Kitchen memory prompt. Unremembered recipe details can remain under **Still unknown**.
+- **Garden:** Users write plant-related fragments and choose how to connect them in a memory map. The AI can reflect and ask questions. The intended interaction does not identify plants or provide care advice.
+- **Ritual:** Users add remembered family practices and everyday routines, then arrange moments in sequence or leave their order open. This space is about family practices, not religious instruction.
+- **Living Archive:** Demonstration traces are labelled as examples. User-saved traces are stored in browser storage on the current device.
 
-## Core interaction
+The three spaces use different structures. Users decide what enters their map, sequence, recipe, and saved trace. AI responses remain separate and provisional.
 
-1. Share a remembered cooking fragment
-2. Receive a reflection, limitation, and focused question from a live model 
-NOTE: the AI sometimes responds weirdly, like gives you words, but still isn't answering the question
-3. Answer or skip up to three follow-up questions.
-4. Build a Working Family Recipe from user-authored fragments only
-5. Keep, edit, or reject the reconstruction
-6. Save the complete trace to the browser-local Living Archive
+## Research and limitations
 
-Missing quantities, ingredients, timings, and steps remain visible under **Still unknown**. The model is instructed not to silently complete them, so that it does not alter the recipe
+The project examines how interface design can make AI contributions visible and open to review. It does not guarantee that a model will avoid unsupported details, misunderstand a family term, or follow every instruction. Evidence excerpts are checked to confirm that the quoted text appears in the cited user fragment. This does not verify that the AI interpretation is supported by that text.
 
-## Design argument
+Gemini is the primary provider. Groq can be configured as a fallback when Gemini is rate-limited or unavailable. The providers may produce different responses, and the prototype has not established that they behave equivalently. Submitted memory text is sent to the configured AI provider to generate a response. Saved traces remain in browser storage on the current device and are not uploaded to a public archive.
 
-The prototype investigates whether interface design can make generative AI's limits visible while returning interpretive authority to the user. Its central principle is:
-
--The safeguard is not the AI itself, but the interaction design around the AI.
-
-AI and user writing remain separately labelled. Earlier AI questions are retained as context but excluded from recipe evidence
-
-## Current scope
-
-- The Kitchen is the only functional reconstruction domain for this prototype
-- Garden and Ritual sections help communicate the concept but are intentionally marked Coming Soon for the upcoming prototype
-- Saved traces remain in `localStorage` on the current device
-- No accounts, cloud database, community archive, analytics, or participant study are included
-
-
-
+This is a local proof-of-concept, not a production service. It has no user accounts, cloud archive, community sharing, or participant study. Browser storage is not permanent preservation of cultural memory or embodied practice.
 
 ## Technology
 
-- React Vite and React Router
-- Gemini primary API with automatic Groq fallback API
+- React, Vite, and React Router
+- Node.js HTTP server for AI requests
+- Gemini API with optional Groq fallback
+- Browser `localStorage` for saved traces
 
 ## Local setup
 
-``` Terminal: npm install
-Please run the server and client in separate terminals:
-```Terminal:
+Use Node.js 22.9 or later and npm. From the project directory, install dependencies and create a local environment file:
+
+```powershell
+npm install
+Copy-Item .env.example .env
+```
+
+Open `.env` and add your provider keys. Gemini is required for the primary provider. Groq is optional and enables fallback.
+
+```dotenv
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-3-flash-preview
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=openai/gpt-oss-20b
+AI_SERVER_PORT=3001
+```
+
+Keep `.env` private. Do not put provider keys in React code or variables prefixed with `VITE_`. The browser calls the local Node server, which makes the provider requests.
+
+Start the server and client in separate terminals:
+
+```powershell
 npm run server
 ```
-```Terminal:
+
+```powershell
 npm run dev
 ```
 
+Open the local URL printed by Vite. The development server proxies `/api` requests to the Node server on port 3001 by default.
 
-## API fallback
+## Project checks
 
-Gemini is the primary API. Groq only comes in after the Gemini rate limit, timeout, network failure, or temporary provider error
-Invalid structured output is communicated to the user
+```powershell
+npm test
+npm run lint
+npm run build
+```
+
+The automatic Groq fallback applies to rate-limit and provider-unavailable errors. Invalid or malformed model responses are rejected rather than treated as evidence that the other provider will produce an equivalent answer.
 
